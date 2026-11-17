@@ -96,7 +96,7 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
   }
   function pintar(p) {
     document.body.classList.toggle('legado', !!p.legado);
-    document.title = (p.titulo || 'Tu respuesta') + ' · Tribu Henko V-120';
+    document.title = p.titulo && p.titulo !== 'Tribu Henko V-120' ? p.titulo + ' · Tribu Henko V-120' : 'Tu respuesta · Tribu Henko V-120';
     card.innerHTML = '';
     card.appendChild(el('h1', {}, txt(p.titulo)));
     if (p.sub) card.appendChild(el('p', { 'class': 'sub' }, txt(p.sub)));
