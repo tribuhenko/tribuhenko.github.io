@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Registro de Líderes · Tribu Henko V-120</title>
+<meta name="description" content="Líderes, Seniors y SVT: regístrate en la Tribu Henko V-120. Te toma unos 3 minutos.">
+<meta name="theme-color" content="#D21F1F">
+<link rel="icon" type="image/png" href="../assets/logo.png">
+<link rel="apple-touch-icon" href="../assets/logo.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tribu Henko V-120">
+<meta property="og:title" content="Registro de Líderes · Tribu Henko V-120">
+<meta property="og:description" content="Líderes, Seniors y SVT: regístrate en la Tribu Henko V-120. Te toma unos 3 minutos.">
+<meta property="og:url" content="https://tribuhenko.github.io/registro/">
+<meta property="og:image" content="https://tribuhenko.github.io/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:#F4F1ED;--card:#FFFFFF;--tx:#1C1A19;--tx2:#5E5853;--tx3:#8F8882;--bd:#E4DFD9;--bd2:#CDC5BC;--in:#FFFFFF;--rojo:#D21F1F;--rojo2:#B01717;--boton:#D21F1F;--boton2:#B01717;--suave:#FCEDED;--tost:#A8794F;--ok:#1E7F4F;--oks:#E7F5EE;--err:#C0262D;--sombra:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.06)}
+@media (prefers-color-scheme:dark){:root{--bg:#0D0C0C;--card:#191717;--tx:#F4F1EE;--tx2:#BDB5AD;--tx3:#8A827B;--bd:#2F2B29;--bd2:#4A4542;--in:#211E1D;--rojo:#FF5A5A;--rojo2:#FF7A7A;--boton:#C62828;--boton2:#A81F1F;--suave:#3A1B1B;--tost:#C99A6E;--ok:#5BC48B;--oks:#16291F;--err:#FF7B7B;--sombra:none}}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--tx);font-family:Montserrat,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto;padding:max(16px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(40px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+.card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--sombra);border:1px solid var(--bd);animation:sube .5s var(--ease) both}
+.banner{display:block;width:100%;height:auto;aspect-ratio:4/1;background:#000;object-fit:cover}
+.barra{display:flex;gap:4px;padding:14px 20px 0}
+.barra span{position:relative;flex:1;height:4px;border-radius:4px;background:var(--bd);overflow:hidden}
+.barra span::after{content:'';position:absolute;inset:0;background:var(--rojo);transform:scaleX(0);transform-origin:left center;transition:transform .45s var(--ease)}
+.barra span.on::after{transform:scaleX(1)}
+:root{--ease:cubic-bezier(.2,.8,.2,1)}
+@keyframes sube{from{opacity:0;transform:translateY(14px)}}
+@keyframes entraAd{from{opacity:0;transform:translateX(18px)}}
+@keyframes entraAt{from{opacity:0;transform:translateX(-18px)}}
+@keyframes funde{from{opacity:0}}
+@keyframes aparece{from{opacity:0;transform:scale(1.04)}}
+.anim-ad{animation:entraAd .32s var(--ease) both}
+.anim-at{animation:entraAt .32s var(--ease) both}
+.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cuerpo{padding:18px 20px 22px}
+.paso{font-size:13px;font-weight:600;color:var(--tost);letter-spacing:.02em;margin:0 0 4px}
+h1{font-size:22px;line-height:1.25;font-weight:700;margin:0 0 6px}
+.intro{font-size:15px;line-height:1.6;color:var(--tx2);margin:0 0 18px}
+.f{margin:0 0 18px}
+.lb{display:block;font-size:15px;font-weight:600;margin:0 0 7px;color:var(--tx)}
+.lb small{font-weight:500;color:var(--tx3)}
+.ayuda{font-size:13px;line-height:1.45;color:var(--tx3);margin:6px 0 0}
+.vista{font-size:13px;line-height:1.45;color:var(--ok);margin:6px 0 0;font-weight:500}
+.er{font-size:13px;color:var(--err);margin:6px 0 0;font-weight:500}
+.er:empty,.vista:empty,.ayuda:empty{display:none}
+input[type=text],input[type=email],input[type=tel],input[type=number],select{width:100%;height:48px;padding:0 14px;font:inherit;font-size:16px;color:var(--tx);background:var(--in);border:1.5px solid var(--bd2);border-radius:12px;outline:none;-webkit-appearance:none;appearance:none}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--tx3) 50%),linear-gradient(135deg,var(--tx3) 50%,transparent 50%);background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+textarea{width:100%;min-height:76px;padding:12px 14px;font:inherit;font-size:16px;line-height:1.45;color:var(--tx);background:var(--in);border:1.5px solid var(--bd2);border-radius:12px;outline:none;resize:vertical;display:block}
+input,select,textarea{transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--rojo);box-shadow:0 0 0 3px var(--suave)}
+input.mal,select.mal,textarea.mal{border-color:var(--err)}
+.roles{margin:-6px 0 6px;padding:12px 14px;border-radius:12px;background:var(--in);border:1px solid var(--bd)}
+.roles p{margin:0;padding:5px 0;font-size:13.5px;line-height:1.45;color:var(--tx3)}
+.roles p b{color:var(--tx2)}
+.roles p.on{color:var(--tx)}
+.roles p.on b{color:var(--rojo)}
+.er:not(:empty){animation:funde .2s ease both}
+button:focus-visible,.slot:focus-within{outline:3px solid var(--rojo);outline-offset:2px}
+h1:focus{outline:none}
+.g3{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.45fr) minmax(0,1.2fr);gap:8px}
+.g3 select{padding-left:12px;padding-right:28px;background-position:calc(100% - 15px) 21px,calc(100% - 10px) 21px}
+.g2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,2fr);gap:8px}
+.op{display:flex;flex-wrap:wrap;gap:8px}
+.ch{font:inherit;font-size:15px;font-weight:500;min-height:44px;padding:9px 16px;border-radius:999px;border:1.5px solid var(--bd2);background:var(--in);color:var(--tx);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ch.on{border-color:var(--rojo);background:var(--suave);color:var(--rojo);font-weight:600}
+.rol{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:14px 16px;margin:0 0 10px;border-radius:14px;border:1.5px solid var(--bd2);background:var(--in);color:var(--tx);font:inherit;cursor:pointer}
+.rol b{display:block;font-size:16px;font-weight:600}
+.rol span{display:block;font-size:14px;color:var(--tx2);margin-top:2px}
+.rol i{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--bd2)}
+.rol.on{border-color:var(--rojo);background:var(--suave)}
+.rol.on i{border:7px solid var(--rojo)}
+.caja{border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin:0 0 14px;background:var(--card)}
+.caja h3{font-size:15px;font-weight:600;margin:0 0 12px}
+.pv{font-size:15px;line-height:1.5;padding:12px 14px;border-radius:12px;background:var(--suave);color:var(--tx);font-weight:600;border-left:4px solid var(--rojo)}
+.dist{border:1.5px solid var(--tost);border-radius:16px;padding:16px;margin:0 0 18px}
+.dist .t{font-size:13px;font-weight:600;color:var(--tost);margin:0 0 6px}
+.dist .n{font-size:20px;font-weight:700;margin:0 0 8px;line-height:1.3}
+.dist p{font-size:14.5px;line-height:1.55;color:var(--tx2);margin:0 0 14px}
+.res{display:flex;flex-direction:column;gap:6px;margin:8px 0 0}
+.res button{font:inherit;font-size:15px;text-align:left;padding:11px 14px;border-radius:10px;border:1px solid var(--bd);background:var(--in);color:var(--tx);cursor:pointer}
+.res button b{font-weight:600}
+.elegida{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:12px;background:var(--oks);color:var(--ok);font-weight:600;font-size:15px}
+.multi{margin:0 0 10px}
+.multi-fila{display:flex;gap:8px;align-items:center}
+.multi-fila select{flex:1;min-width:0}
+.quitar{flex:none;width:48px;height:48px;border-radius:12px;border:1.5px solid var(--bd2);background:var(--in);color:var(--tx2);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.multi-otro{margin-top:8px}
+.lnk{font:inherit;font-size:14px;font-weight:600;color:var(--rojo);background:none;border:0;padding:4px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.check{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;cursor:pointer}
+.check input{width:22px;height:22px;margin:0;flex:none;accent-color:var(--rojo)}
+.fotos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.slot{position:relative;aspect-ratio:1;border:1.5px dashed var(--bd2);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:13px;color:var(--tx2);text-align:center;cursor:pointer;overflow:hidden;background:var(--in);padding:6px}
+.slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:aparece .35s ease both}
+.slot .x{position:absolute;top:4px;right:4px;width:36px;height:36px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.slot .x .ic{width:16px;height:16px}
+.slot .mas{color:var(--tost)}
+.slot .mas .ic{width:28px;height:28px;stroke-width:1.8}
+.slot.obl{border-color:var(--tost)}
+.fila{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--bd);font-size:14.5px;line-height:1.45}
+.fila span:first-child{color:var(--tx2);flex:none}
+.fila span:last-child{text-align:right;word-break:break-word}
+.sec{border:1px solid var(--bd);border-radius:14px;padding:12px 14px 6px;margin:0 0 12px}
+.sec .cab{display:flex;justify-content:space-between;align-items:center;margin:0 0 6px}
+.sec .cab b{font-size:15px;font-weight:600}
+.nav{display:flex;gap:10px;margin-top:22px}
+.btn{font:inherit;font-size:16px;font-weight:600;height:52px;border-radius:14px;border:0;cursor:pointer;padding:0 20px}
+.btn.pri{flex:1;background:var(--boton);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.pri:active{background:var(--boton2)}
+.btn.pri .ic{width:18px;height:18px;transition:transform .2s var(--ease)}
+.btn,.ch,.rol,.quitar,.lnk,.slot{transition:transform .12s ease,background-color .2s,border-color .2s,opacity .2s}
+.btn:active,.quitar:active,.slot:active{transform:scale(.97)}
+@media (hover:hover){.btn.pri:hover{background:var(--boton2)}.btn.pri:hover .ic{transform:translateX(3px)}.slot:hover{border-color:var(--tost)}}
+.btn.sec2{background:transparent;color:var(--tx);border:1.5px solid var(--bd2)}
+.btn[disabled]{opacity:.6;cursor:default}
+.fin{position:relative;text-align:center;padding:10px 0 6px}
+.fin .ok{position:relative;width:72px;height:72px;border-radius:50%;background:var(--oks);color:var(--ok);display:flex;align-items:center;justify-content:center;margin:6px auto 16px;animation:late .5s cubic-bezier(.3,1.6,.5,1) both}
+.fin .ok .ic{width:38px;height:38px;stroke-width:3;stroke-dasharray:30;stroke-dashoffset:30;animation:traza .45s .25s ease-out forwards}
+@keyframes late{from{opacity:0;transform:scale(.4)}}
+@keyframes traza{to{stroke-dashoffset:0}}
+.chispas{position:absolute;left:50%;top:42px;width:0;height:0;pointer-events:none}
+.chispas i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:2px;background:var(--c);opacity:0;animation:chispa .9s .2s var(--ease) forwards}
+@keyframes chispa{0%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(200deg) scale(.6)}}
+.fin h1{font-size:24px}
+.fin p{font-size:15.5px;line-height:1.6;color:var(--tx2);margin:0 0 10px}
+.fin b{color:var(--tx)}
+.aviso{font-size:14px;line-height:1.5;padding:12px 14px;border-radius:12px;background:var(--suave);color:var(--tx);margin:0 0 16px}
+.pie{text-align:center;font-size:12px;color:var(--tx3);margin:16px 0 0}
+.oculto{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.cargando{display:inline-block;width:18px;height:18px;border:2.5px solid rgba(255,255,255,.45);border-top-color:#fff;border-radius:50%;animation:g .8s linear infinite;vertical-align:-3px;margin-right:8px}
+@keyframes g{to{transform:rotate(360deg)}}
+@media (max-width:380px){.cuerpo{padding:16px 16px 20px}.barra{padding:12px 16px 0}.ch{padding:8px 13px;font-size:14.5px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important;scroll-behavior:auto!important}.chispas{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <img class="banner" src="../assets/banner.jpg" width="1200" height="300" alt="Registro de Líderes · Tribu Henko V-120">
+    <div class="barra" id="barra" aria-hidden="true"></div>
+    <div class="cuerpo">
+      <div id="mov">
+        <p class="paso" id="paso"></p>
+        <h1 id="tit" tabindex="-1"></h1>
+        <div id="vista"></div>
+      </div>
+      <div class="er" id="e_gen" role="alert"></div>
+      <div class="nav" id="nav">
+        <button class="btn sec2" id="atras" type="button" onclick="atras()">Atrás</button>
+        <button class="btn pri" id="sig" type="button" onclick="sig()">Siguiente</button>
+      </div>
+    </div>
+  </div>
+  <p class="pie">Tribu Henko V-120 · Tus datos se usan solo dentro de la tribu.</p>
+  <input class="oculto" id="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+</div>
+<script>
+const D = {"link":null,"visiones":[[119,"Spectra"],[118,"Metanoia"],[117,"Andrómeda"],[116,"Spazi"],[115,"Caelum"],[114,"Ocron"],[113,"Nova"],[112,"Luna"],[111,"Centella"],[110,"Rayos"],[109,"Dialvi"],[108,"Celestia"],[107,"Aurum"],[106,"D' Electus"],[105,"Sirius"],[104,"Excelsus"],[103,"Masai"],[102,"Thempus"],[101,"Adamanstis"],[100,"Dacapo"],[99,"Magnus"],[98,"Navi"],[97,"Abisaí"],[96,"Zenith"],[95,"Anahata"],[94,"Wakanda"],[93,"Surf"],[92,"Lotus"],[91,"Orion"],[90,"Te Fiti"],[89,"Akitil"],[88,"Elite"],[87,"Renatus"],[86,"Quantum"],[85,"Dunamys"],[84,"Luxem"],[83,"Warriors"],[82,"Hikari"],[81,"Fenix"],[80,"Love"],[79,"Carei"],[78,"Letya"],[77,"Litrán"],[76,"Alef"],[75,"Avix"],[74,"Áncora"],[73,"Mandala"],[72,"Henkan"],[71,"Hopis"],[70,"Kaizen"],[69,"Moana"],[68,"Kairos"],[67,"Atlas"],[66,"Entheos"],[65,"Meraki"],[64,"Jedi"],[63,"Lego"],[62,"Nagual"],[61,"Nirvana"],[60,"Mirmidones"],[59,"Namasté"],[58,"Philia"],[57,"Flama"],[56,"Omnia"],[55,"Alpha"],[54,"Ágape"],[53,"Mazi"],[52,"Beresit"],[51,"Sutti"],[50,"Tucavi"],[49,"Shikoba"],[48,"Sawabona"],[47,"Somnium du Vita"],[46,"Aqua Vit"],[45,"Alius"],[44,"Vita Eminentia"],[43,"Invictus"],[42,"Gaia"],[41,"Éxodo"],[40,"Dreamers"],[39,"Halley"],[38,"Vórtice"],[37,"Ohana"],[36,"Paxion"],[35,"Illuninati Coquus"],[34,"Fenix"],[33,"Hakuna Matata"],[32,"Bohiti"],[31,"Quantum"],[30,"Upanishad"],[29,"Omaha"],[27,"Azlan"],[26,"Indivisa Manent"],[25,"Luvea"],[24,"Ubuntu"],[23,"Creo en Ti"],[22,"Huellas de Luz"]],"estiramientos":["Azúcar Moreno","Bailarina","Celia Cruz","Celia Cruz Playero","Cupido","Damas de Rojo","Emmanuel Enmascarado","JLo","Mariposa","Máscara","Mujer Maravilla","Mujeres Liberadas","Musa de Amor","Paulina Rubio","Paz Mundial","Servicio","Shakira","YMCA","Zorro"],"api":"https://script.google.com/macros/s/AKfycbx65fG9CJsgVDX0rhgzdNXwJ52ahDx_A92Zlg9dGRraegVWk8PQhcDVQP788giDitxw6Q/exec"};
+if (!D.link) D.link = /[?&]link=oficina\b/i.test(location.search) ? 'of' : 'tr';
+const OF = D.link === 'of';
+const GAS = !!(window.google && google.script && google.script.run);
+const ICO = {
+  x: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  foto: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.6l1.4-2h5l1.4 2h1.6A2.5 2.5 0 0 1 20 8.5v9A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  flecha: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  ok: '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+};
+// Habla con el Apps Script. Dentro de Google usa google.script.run; desde la página
+// publicada (GitHub Pages) manda un POST sin cookies, así que no importa cuántas
+// cuentas de Google tenga abiertas la persona.
+function llamar(accion, datos, ms){
+  return new Promise((ok, ko) => {
+    if (GAS) {
+      const r = google.script.run.withSuccessHandler(ok).withFailureHandler(ko);
+      return accion === 'buscarDistincion' ? r.buscarDistincion(datos.nombre, datos.apellidos) : r[accion](datos);
+    }
+    if (!D.api) return ko(new Error('sin servidor'));
+    const ctl = window.AbortController ? new AbortController() : null;
+    const t = ctl ? setTimeout(() => ctl.abort(), ms || 20000) : 0;
+    fetch(D.api, {method: 'POST', headers: {'Content-Type': 'text/plain;charset=utf-8'}, body: JSON.stringify({accion: accion, datos: datos}), credentials: 'omit', cache: 'no-store', redirect: 'follow', signal: ctl ? ctl.signal : undefined})
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(r => { clearTimeout(t); if (accion === 'registrar') return ok(r); if (!r || !r.ok) throw new Error((r && r.error) || 'error'); ok(accion === 'buscarDistincion' ? r.dist : r.datos); })
+      .catch(e => { clearTimeout(t); ko(e); });
+  });
+}
+const hayServidor = () => GAS || !!D.api;
+const HOY = new Date(); HOY.setHours(0,0,0,0);
+const AN = HOY.getFullYear();
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const PAISES = [['República Dominicana','+1',10,10,1],['Alemania','+49',10,11],['Argentina','+54',10,10],['Aruba','+297',7,7],['Bolivia','+591',8,8],['Brasil','+55',10,11],['Canadá','+1',10,10],['Chile','+56',9,9],['Colombia','+57',10,10],['Costa Rica','+506',8,8],['Cuba','+53',8,8],['Curazao','+599',7,8],['Ecuador','+593',9,9],['El Salvador','+503',8,8],['España','+34',9,9],['Estados Unidos','+1',10,10],['Francia','+33',9,9],['Guatemala','+502',8,8],['Haití','+509',8,8],['Honduras','+504',8,8],['Italia','+39',9,10],['México','+52',10,10],['Nicaragua','+505',8,8],['Países Bajos','+31',9,9],['Panamá','+507',8,8],['Paraguay','+595',9,9],['Perú','+51',9,9],['Portugal','+351',9,9],['Puerto Rico','+1',10,10],['Reino Unido','+44',10,10],['Suiza','+41',9,9],['Uruguay','+598',8,8],['Venezuela','+58',10,10]];
+const DOMINIOS = ['gmail.com','hotmail.com','outlook.com','yahoo.com','icloud.com','live.com','hotmail.es','yahoo.es'];
+const ROLES = OF
+  ? [['Coordinador del PL','Coordinaste o coordinas el PL.'],['Entrenador','Le diste a Henko alguna etapa de su proceso.'],['Personal administrativo','Trabajas en la oficina de VIVE.']]
+  : [['Líder','Hiciste tu proceso en Henko V-120.'],['Senior','Eres de otra tribu y fuiste Senior de Henko.'],['SVT','Eres de otra tribu y serviste en nuestro proceso.']];
+const TIT = {inicio: OF ? 'Registro del Equipo VIVE' : 'Registro de Líderes', rol: OF ? '¿Cuál es tu cargo?' : '¿Quién eres?', datos:'Tus datos', sobre:'Sobre ti', tribu:'Tu tribu', contrato:'Tu contrato', proceso:'Tu proceso', fotos:'Tus fotos', revisa:'Revisa y envía', fin:''};
+
+let S = {pais:0, dob:{}, kids:[], estTA:[], est2:[], f:[null,null,null], buscaV:''};
+let paso = 0, enviando = false, buscando = false, ultimo = '', dir = 1;
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim();
+const cap = s => String(s || '').trim().replace(/\s+/g,' ').toLowerCase().split(' ').filter(Boolean).map((w,k) => (k > 0 && ['y','e','de','del','la','las','los'].includes(w)) ? w : w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+const esLider = () => !OF && S.rol === 'Líder';
+const primerNombre = () => cap(S.nombre);
+function lev(a,b){let p=Array.from({length:b.length+1},(_,j)=>j);for(let i=1;i<=a.length;i++){const c=[i];for(let j=1;j<=b.length;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[b.length]}
+
+const esEntrenador = () => OF && S.rol === 'Entrenador';
+function pasos(){
+  if (esEntrenador()) return ['inicio','rol','datos','tribu','contrato','fotos','revisa','fin'];
+  const p = ['inicio','rol','datos','sobre'];
+  if (S.rol && (OF || S.rol !== 'Líder')) p.push('tribu');
+  return p.concat(['contrato','proceso','fotos','revisa','fin']);
+}
+
+function saludo(){
+  const n = primerNombre(), F = S.sexo === 'F';
+  return n;
+}
+const prefijo = () => S.sexo === 'F' ? 'Yo soy una Mujer' : 'Yo soy un Hombre';
+const sinPrefijo = s => { let t = String(s || '').trim(); for (let i = 0; i < 2; i++) t = t.replace(/^(yo\s+)?soy\s+(un|una)\s+(hombre|mujer)\s*[,:]?\s*/i, ''); return t; };
+const CON = ['a','al','de','del','el','la','las','lo','los','que','y','e','o','u','en','con','para','por','sin','mi','mis','su','sus','tu','tus','un','una','unos','unas','se','me','te','le','les','nos','como'];
+const capC = s => String(s || '').trim().replace(/\s+,/g, ',').replace(/,(?=\S)/g, ', ').replace(/\s+/g, ' ').toLowerCase().split(' ').filter(Boolean).map(w => CON.includes(w) ? w : w.replace(/^([^a-záéíóúüñ]*)([a-záéíóúüñ])/, (x, a, b) => a + b.toUpperCase())).join(' ');
+const contrato = () => prefijo() + ' ' + capC(sinPrefijo(S.contrato));
+function fechaOk(o){ if(!o || !o.d || !o.m || !o.y) return false; const f = new Date(+o.y, o.m-1, +o.d); return f.getDate() == o.d && f.getMonth() == o.m-1 && f <= HOY; }
+function edad(o){ let a = AN - o.y; const m = HOY.getMonth()+1; if (m < o.m || (m == o.m && HOY.getDate() < o.d)) a--; return a; }
+const iso = o => o.y + '-' + String(o.m).padStart(2,'0') + '-' + String(o.d).padStart(2,'0');
+function waTexto(){ const p = PAISES[S.pais], d = S.wa || ''; if (p[1] === '+1' && d.length === 10) return '+1 (' + d.slice(0,3) + ') ' + d.slice(3,6) + '-' + d.slice(6); return p[1] + ' ' + d; }
+function ig(s){ s = String(s || '').trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/^(www\.)?instagram\.com\//i,'').replace(/[/?#].*$/,'').replace(/^@+/,'').toLowerCase().replace(/[^a-z0-9._]/g,''); return s ? '@' + s : ''; }
+function sugerencia(e){ const m = /^([^@\s]+)@([^@\s]+)$/.exec(String(e || '').trim()); if (!m) return ''; const d = m[2].toLowerCase(); if (DOMINIOS.includes(d)) return ''; let b = '', bd = 9; DOMINIOS.forEach(x => { const l = lev(d, x); if (l < bd) { bd = l; b = x; } }); return bd <= 2 ? m[1] + '@' + b : ''; }
+function tribu(){
+  if (esLider()) return 'Tribu Henko V-120';
+  if (S.vis === 'no') return S.visT && S.visN ? 'Tribu ' + cap(S.visT) + ' V-' + S.visN : '';
+  if (S.vis === 'otro') return cap(S.visO);
+  const v = D.visiones.find(x => String(x[0]) === String(S.vis));
+  return v ? 'Tribu ' + v[1] + ' V-' + v[0] : '';
+}
+function parejaTxt(){ const F = S.sexo === 'F'; return {cas: F ? 'Casada' : 'Casado', ul:'En unión libre', rel:'En una relación', sol: F ? 'Soltera' : 'Soltero'}[S.pareja] || ''; }
+function versionHijo(a){ return a <= 12 ? 'Henkids infantil' : a <= 17 ? 'Henkids juvenil' : 'de adulto'; }
+
+// ---------- piezas ----------
+const sel = (id, ops, valor, js, ph) => `<select id="${id}" onchange="${js}"><option value="">${ph || 'Elige una opción'}</option>${ops.map(([v, l]) => `<option value="${esc(v)}" ${valor !== undefined && valor !== null && String(valor) === String(v) ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
+const chip = (txt, on, js) => `<button type="button" class="ch ${on ? 'on' : ''}" aria-pressed="${on}" onclick="${js}">${txt}</button>`;
+const campo = (id, lab, html, ayuda) => `<div class="f"><label class="lb" for="${id}">${lab}</label>${html}<p class="ayuda" id="a_${id}">${ayuda || ''}</p><p class="er" id="e_${id}"></p></div>`;
+const entrada = (id, tipo, ph, extra) => `<input id="${id}" type="${tipo}" placeholder="${esc(ph || '')}" value="${esc(S[id])}" oninput="S.${id}=this.value;suave()" ${extra || ''}>`;
+function selFecha(ruta, o, y0, y1){
+  const op = (v, l, c) => `<option value="${v}" ${String(c) === String(v) ? 'selected' : ''}>${l}</option>`;
+  let a = `<select aria-label="Día" onchange="${ruta}.d=this.value;suave()"><option value="">Día</option>`; for (let i = 1; i <= 31; i++) a += op(i, i, o.d);
+  a += `</select><select aria-label="Mes" onchange="${ruta}.m=this.value;suave()"><option value="">Mes</option>`; MESES.forEach((m, i) => a += op(i+1, m.charAt(0).toUpperCase() + m.slice(1), o.m));
+  a += `</select><select aria-label="Año" onchange="${ruta}.y=this.value;suave()"><option value="">Año</option>`; for (let y = y1; y >= y0; y--) a += op(y, y, o.y);
+  return `<div class="g3">${a}</select></div>`;
+}
+function estiramientos(k, lab){
+  if (!S[k].length) S[k].push({v: ''});
+  const ops = D.estiramientos.map(e => [e, e]).concat([['__otro', 'Otro, lo escribo']]);
+  let h = `<div class="f"><span class="lb">${lab} <small>(opcional)</small></span>`;
+  S[k].forEach((x, i) => {
+    const usados = S[k].filter((y, j) => j !== i && y.v !== '__otro').map(y => y.v);
+    const lista = ops.filter(o => o[0] === '__otro' || !usados.includes(o[0]));
+    const quitar = S[k].length > 1 || x.v ? `<button type="button" class="quitar" aria-label="Quitar estiramiento" onclick="estQuitar('${k}',${i})">${ICO.x}</button>` : '';
+    h += `<div class="multi"><div class="multi-fila">${sel(k + '_' + i, lista, x.v, `estElegir('${k}',${i},this.value)`, 'Elige un estiramiento')}${quitar}</div>`;
+    if (x.v === '__otro') h += `<input type="text" class="multi-otro" autocapitalize="words" placeholder="Escribe tu estiramiento" value="${esc(x.t)}" oninput="S.${k}[${i}].t=this.value"><p class="ayuda">Lo vamos a confirmar y agregar a la lista.</p>`;
+    h += '</div>';
+  });
+  if (S[k][S[k].length - 1].v && S[k].length < 6) h += `<button type="button" class="lnk" onclick="estAgregar('${k}')">+ Agregar otro estiramiento</button>`;
+  return h + `<p class="er" id="e_${k}"></p></div>`;
+}
+function estElegir(k, i, v){ S[k][i].v = v; if (v !== '__otro') S[k][i].t = ''; pintar(); }
+function estQuitar(k, i){ S[k].splice(i, 1); if (!S[k].length) S[k].push({v: ''}); pintar(); }
+function estAgregar(k){ S[k].push({v: ''}); pintar(); }
+const estLista = k => S[k].filter(x => x.v && (x.v !== '__otro' || String(x.t || '').trim())).map(x => x.v === '__otro' ? cap(x.t) : x.v);
+
+// ---------- pasos ----------
+const V = {
+  inicio: () => `<p class="intro">${OF ? 'Ustedes también vivieron su proceso con nosotros. Este registro nos ayuda a mantenernos conectados y a celebrar tu cumpleaños con la tribu.' : 'Este registro nos ayuda a mantenernos conectados, celebrar tu cumpleaños y avisarte de todo lo que pasa en la tribu.'}</p><div class="aviso">Te toma unos 3 minutos. Ten a mano de 1 a 3 fotos tuyas.</div>`,
+  rol: () => campo('rol', OF ? '¿Cuál es tu cargo?' : '¿Cuál es tu rol en Henko?', sel('rol', ROLES.map(x => [x[0], x[0]]), S.rol, "S.rol=this.value;pintar()", OF ? 'Elige tu cargo' : 'Elige tu rol'))
+    + `<div class="roles" aria-label="Qué significa cada ${OF ? 'cargo' : 'rol'}">${ROLES.map(r => `<p class="${S.rol === r[0] ? 'on' : ''}"><b>${esc(r[0])}:</b> ${esc(r[1])}</p>`).join('')}</div>`,
+  datos: () => campo('nombre', 'Tu nombre', entrada('nombre', 'text', 'María José', 'autocomplete="given-name" autocapitalize="words"'))
+    + campo('apellidos', 'Tus apellidos', entrada('apellidos', 'text', 'Pérez Gómez', 'autocomplete="family-name" autocapitalize="words"'))
+    + campo('sexo', 'Sexo', sel('sexo', [['F', 'Femenino'], ['M', 'Masculino']], S.sexo, "S.sexo=this.value;pintar()"))
+    + `<div class="f"><span class="lb">¿Cuándo naciste?</span>${selFecha('S.dob', S.dob, 1930, AN - 15)}<p class="vista" id="v_dob"></p><p class="er" id="e_dob"></p></div>`
+    + campo('correo', 'Tu correo', entrada('correo', 'email', 'nombre@hotmail.com', 'autocomplete="email" autocapitalize="off" spellcheck="false"'), 'Cualquier correo: Gmail, Hotmail, Outlook, iCloud…')
+    + `<div class="f"><label class="lb" for="wa">Tu WhatsApp</label><div class="g2"><select aria-label="País" onchange="S.pais=+this.value;suave()">${PAISES.map((p, i) => `<option value="${i}" ${S.pais === i ? 'selected' : ''}>${p[1]} · ${p[0]}</option>`).join('')}</select><input id="wa" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="8095550101" value="${esc(S.wa)}" oninput="this.value=this.value.replace(/\\D/g,'');S.wa=this.value;suave()"></div><p class="vista" id="v_wa"></p><p class="er" id="e_wa"></p></div>`
+    + campo('ig', 'Tu usuario de Instagram <small>(opcional)</small>', entrada('ig', 'text', 'tu_usuario', 'autocapitalize="off" spellcheck="false"'), 'Lo usamos para etiquetarte en los posts de la tribu'),
+  sobre: () => {
+    const F = S.sexo === 'F', g = (a, b) => S.sexo ? (F ? b : a) : a + '/a';
+    let h = campo('color', '¿Cuál es tu color favorito? <small>(opcional)</small>', entrada('color', 'text', 'Azul marino'));
+    h += campo('pareja', '¿Tienes pareja? <small>(opcional)</small>', sel('pareja', [['cas', g('Casado', 'Casada')], ['ul', 'En unión libre'], ['rel', 'En una relación'], ['sol', g('Soltero', 'Soltera')]], S.pareja, "S.pareja=this.value;pintar()"));
+    if (S.pareja && S.pareja !== 'sol') h += campo('parejaNombre', '¿Cómo se llama tu pareja? <small>(opcional)</small>', entrada('parejaNombre', 'text', 'Nombre', 'autocapitalize="words"'));
+    h += campo('hijos', '¿Tienes hijos? <small>(opcional)</small>', sel('hijos', [['no', 'No'], ['si', 'Sí']], S.hijos, "S.hijos=this.value;pintar()"));
+    if (S.hijos === 'si') {
+      h += campo('nk', '¿Cuántos?', sel('nk', [1,2,3,4,5,6,7,8,9,10].map(n => [n, n]), S.nk, 'cuantos(this.value)'));
+      S.kids.forEach((k, i) => {
+        h += `<div class="caja"><h3>${k.s === 'F' ? 'Hija' : k.s === 'M' ? 'Hijo' : 'Hijo o hija'} ${i + 1}</h3>
+          <div class="f"><label class="lb" for="kn${i}">Nombre</label><input id="kn${i}" type="text" autocapitalize="words" placeholder="Nombre" value="${esc(k.n)}" oninput="S.kids[${i}].n=this.value;suave()"></div>
+          <div class="f"><label class="lb" for="ks${i}">Niño o niña</label>${sel('ks' + i, [['M', 'Niño'], ['F', 'Niña']], k.s, `S.kids[${i}].s=this.value;pintar()`)}</div>
+          <div class="f" style="margin:0"><span class="lb">Fecha de nacimiento</span>${selFecha(`S.kids[${i}]`, k, 1950, AN)}<p class="vista" id="v_k${i}"></p><p class="er" id="e_k${i}"></p></div></div>`;
+      });
+    }
+    return h;
+  },
+  tribu: () => {
+    const ops = D.visiones.map(v => [v[0], 'V-' + v[0] + ' · ' + v[1]]).concat([['no', 'Mi Visión no aparece, la escribo']]).concat(OF ? [['otro', 'Hice mi proceso en otro lugar, lo escribo']] : []);
+    let h = campo('vis', OF ? '¿Dónde hiciste tu proceso?' : '¿De qué Visión eres?', sel('vis', ops, S.vis, "S.vis=this.value;pintar()", 'Elige tu Visión'), S.vis === 'no' ? 'La vamos a confirmar y agregar a la lista.' : '');
+    if (S.vis === 'otro') h += campo('visO', '¿Dónde lo hiciste y cómo se llama tu tribu?', `<textarea id="visO" rows="2" maxlength="160" placeholder="Ej.: VIVE Puerto Rico, Tribu Aurora" oninput="S.visO=this.value;suave()">${esc(S.visO)}</textarea>`);
+    if (S.vis === 'no') h += campo('visN', 'Número de tu Visión', `<input id="visN" type="number" inputmode="numeric" min="1" max="119" placeholder="105" value="${esc(S.visN)}" oninput="S.visN=this.value;suave()">`, 'Del 1 al 119') + campo('visT', 'Nombre de tu tribu', entrada('visT', 'text', 'Sirius', 'autocapitalize="words"'));
+    h += `<div class="pv" id="v_tr" style="margin:0 0 16px"></div>`;
+    h += `<div class="f"><label class="check"><input type="checkbox" ${S.conf ? 'checked' : ''} onchange="S.conf=this.checked;suave()"><span>${S.vis === 'otro' ? 'Confirmo que este es mi proceso y mi tribu' : 'Confirmo que esta es mi Visión y mi Tribu'}</span></label><p class="er" id="e_conf"></p></div>`;
+    return h;
+  },
+  contrato: () => campo('contrato', `<span style="font-size:18px">${prefijo()}…</span>`, `<textarea id="contrato" rows="3" maxlength="400" autocapitalize="words" placeholder="Valiente, Alegre y Libre" oninput="S.contrato=this.value;suave()">${esc(S.contrato)}</textarea>`, 'Escribe las palabras de tu contrato tal como lo declaraste') + `<div class="pv" id="v_ct"></div>`,
+  proceso: () => {
+    let h = estiramientos('estTA', '¿Cuál fue tu estiramiento en el Taller Avanzado?') + estiramientos('est2', '¿Y en el 2do Fin de Semana?');
+    if (!esLider()) return h;
+    if (S.dist) {
+      h += `<div class="dist"><p class="t">La distinción que viviste en tu 3er Fin de Semana</p><p class="n">${esc(S.dist.emoji)} ${esc(S.dist.titulo)}</p><p>${esc(S.dist.significado)}</p>`
+        + campo('dc', '¿Es correcta?', sel('dc', [['si', 'Sí, es mi distinción'], ['no', 'No, fue otra']], S.dc, "S.dc=this.value;pintar()"));
+      if (S.dc === 'no') h += campo('dco', '¿Cuál fue tu distinción?', `<input id="dco" type="text" value="${esc(S.dco)}" oninput="S.dco=this.value;suave()">`, 'Lo vamos a confirmar.');
+      return h + '</div>';
+    }
+    return h;
+  },
+  fotos: () => `<p class="intro" style="margin-bottom:14px">Sube hasta 3 fotos tuyas para celebrar tu cumpleaños. Que se vea bien tu cara. La primera es obligatoria.</p><div class="fotos">${[0,1,2].map(i => S.f[i]
+      ? `<div class="slot"><img src="${S.f[i]}" alt="Foto ${i + 1}"><button type="button" class="x" aria-label="Quitar foto ${i + 1}" onclick="S.f[${i}]=null;pintar()">${ICO.x}</button></div>`
+      : `<label class="slot ${i === 0 ? 'obl' : ''}" for="foto${i}"><span class="mas">${ICO.foto}</span><span id="t_foto${i}">Foto ${i + 1}${i ? '<br>(opcional)' : ''}</span></label>`).join('')}</div>${[0,1,2].map(i => `<input class="oculto" id="foto${i}" type="file" accept="image/*" onchange="foto(${i},this)">`).join('')}<p class="er" id="e_f"></p>`,
+  revisa: () => {
+    const P = pasos(), sec = (pg, t, filas) => P.includes(pg) ? `<div class="sec"><div class="cab"><b>${t}</b><button type="button" class="lnk" onclick="ir('${pg}')">Editar</button></div>${filas.map(([a, b]) => `<div class="fila"><span>${a}</span><span>${b || '—'}</span></div>`).join('')}</div>` : '';
+    const k = S.hijos === 'si' ? S.kids.map(x => esc(cap(x.n)) + (fechaOk(x) ? ' (' + edad(x) + ')' : '')).join(', ') : S.hijos === 'no' ? 'No' : '';
+    const ap = esLider() && S.dist ? (S.dc === 'si' ? esc(S.dist.titulo) : 'No es correcta: ' + esc(S.dco)) : null;
+    return `<p class="intro">Revisa que todo esté bien. Puedes corregir cualquier parte antes de enviar.</p>`
+      + sec('rol', OF ? 'Tu cargo' : 'Tu rol', [['Rol', esc(S.rol)]])
+      + sec('datos', 'Tus datos', [['Nombre', esc(cap(S.nombre) + ' ' + cap(S.apellidos))], ['Sexo', S.sexo === 'F' ? 'Femenino' : 'Masculino'], ['Nacimiento', fechaOk(S.dob) ? S.dob.d + ' de ' + MESES[S.dob.m - 1] + ' de ' + S.dob.y : ''], ['Correo', esc(S.correo)], ['WhatsApp', esc(waTexto())], ['Instagram', esc(ig(S.ig))]])
+      + sec('sobre', 'Sobre ti', [['Color favorito', esc(S.color)], ['Pareja', parejaTxt() + (S.pareja && S.pareja !== 'sol' && S.parejaNombre ? ' · ' + esc(cap(S.parejaNombre)) : '')], ['Hijos', k]])
+      + sec('tribu', 'Tu tribu', [['Tribu', esc(tribu())]])
+      + sec('contrato', 'Tu contrato', [['Contrato', esc(contrato())]])
+      + sec('proceso', 'Tu proceso', [['Taller Avanzado', esc(estLista('estTA').join(', '))], ['2do Fin de Semana', esc(estLista('est2').join(', '))]].concat(ap === null ? [] : [['Aprecio', ap]]))
+      + sec('fotos', 'Tus fotos', [['Fotos', S.f.filter(Boolean).length + ' de 3']]);
+  },
+  fin: () => `<div class="fin"><div class="chispas" aria-hidden="true">${chispas()}</div><div class="ok">${ICO.ok}</div><h1 tabindex="-1">¡Listo, ${esc(S.saludoFinal || saludo())}!</h1><p>Recibimos tu registro.</p><p>Te enviamos un correo de confirmación a <b>${esc(S.correoFinal || S.correo)}</b>. Si no lo ves, revisa tu carpeta de spam.</p></div>`,
+};
+
+// ---------- pintar ----------
+function pintar(){
+  const P = pasos();
+  if (paso >= P.length) paso = P.length - 1;
+  const pg = P[paso];
+  const dentro = P.filter(p => p !== 'inicio' && p !== 'fin'), ix = dentro.indexOf(pg);
+  const bar = $('barra'), nb = pg === 'inicio' || pg === 'fin' ? 0 : dentro.length;
+  if (bar.children.length !== nb) { bar.innerHTML = '<span></span>'.repeat(nb); void bar.offsetWidth; }
+  Array.prototype.forEach.call(bar.children, (s, k) => s.classList.toggle('on', k <= ix));
+  $('paso').textContent = pg === 'inicio' ? 'Bienvenida' : pg === 'fin' ? 'Registro enviado' : 'Paso ' + (ix + 1) + ' de ' + (S.rol || OF ? (OF && !S.rol ? 8 : dentro.length) : '…');
+  $('paso').style.display = pg === 'fin' ? 'none' : '';
+  $('tit').textContent = TIT[pg];
+  $('tit').style.display = pg === 'fin' ? 'none' : '';
+  $('vista').innerHTML = V[pg]();
+  $('e_gen').textContent = '';
+  $('atras').style.display = pg === 'inicio' || pg === 'fin' ? 'none' : '';
+  $('nav').style.display = pg === 'fin' ? 'none' : '';
+  const b = $('sig');
+  b.disabled = enviando || buscando;
+  b.innerHTML = enviando ? '<span class="cargando"></span>Enviando…' : buscando ? '<span class="cargando"></span>Un momento…' : pg === 'inicio' ? 'Empezar' + ICO.flecha : pg === 'revisa' ? 'Enviar mi registro' : S.volver ? 'Guardar y volver al resumen' : 'Siguiente' + ICO.flecha;
+  suave();
+  if (pg !== ultimo) {
+    const m = $('mov');
+    m.classList.remove('anim-ad', 'anim-at'); void m.offsetWidth;
+    if (ultimo) {
+      m.classList.add(dir < 0 ? 'anim-at' : 'anim-ad');
+      const foco = pg === 'fin' ? $('vista').querySelector('h1') : $('tit');
+      if (foco) try { foco.focus({preventScroll: true}); } catch (e) { foco.focus(); }
+    }
+    ultimo = pg;
+  }
+}
+
+function chispas(){
+  const c = ['#D21F1F', '#A8794F', '#F2B705', '#1E7F4F', '#D21F1F', '#C99A6E'];
+  let h = '';
+  for (let i = 0; i < 16; i++) { const a = (i / 16) * Math.PI * 2 + (i % 2 ? .2 : 0), d = 70 + (i % 3) * 22; h += `<i style="--c:${c[i % c.length]};--x:${Math.round(Math.cos(a) * d)}px;--y:${Math.round(Math.sin(a) * d)}px"></i>`; }
+  return h;
+}
+
+function suave(){
+  document.querySelectorAll('.er').forEach(e => { if (e.id !== 'e_gen') e.textContent = ''; });
+  document.querySelectorAll('.mal').forEach(e => { e.classList.remove('mal'); e.removeAttribute('aria-invalid'); });
+  const pon = (id, t) => { const e = $(id); if (e) e.textContent = t; };
+  pon('v_dob', fechaOk(S.dob) ? 'Tienes ' + edad(S.dob) + ' años · cumples el ' + (+S.dob.d) + ' de ' + MESES[S.dob.m - 1] : '');
+  const ac = $('a_correo');
+  if (ac) { const s = sugerencia(S.correo); ac.innerHTML = s ? `¿Quisiste decir <b>${esc(s)}</b>? <button type="button" class="lnk" onclick="S.correo='${esc(s)}';pintar()">Corregir</button>` : 'Cualquier correo: Gmail, Hotmail, Outlook, iCloud…'; }
+  pon('v_wa', S.wa ? 'Se guarda como ' + waTexto() : '');
+  const ai = $('a_ig'); if (ai) ai.textContent = ig(S.ig) ? 'Se guarda como ' + ig(S.ig) : 'Lo usamos para etiquetarte en los posts de la tribu';
+  pon('v_ct', S.contrato ? contrato() : 'Aquí verás tu contrato completo');
+  const vt = $('v_tr'); if (vt) { const t = tribu(); vt.textContent = t ? 'Se guarda como: ' + t : 'Elige tu Visión'; }
+  S.kids.forEach((k, i) => pon('v_k' + i, fechaOk(k) ? (cap(k.n) || (k.s === 'F' ? 'Tu hija' : 'Tu hijo')) + ' · ' + edad(k) + ' años' : ''));
+}
+
+function resultados(){
+  const r = $('res'); if (!r) return;
+  const q = norm(S.buscaV).replace(/^v-?\s*/, '');
+  if (!q) { r.innerHTML = ''; return; }
+  const lista = D.visiones.filter(v => String(v[0]).startsWith(q) || norm(v[1]).includes(q)).slice(0, 8);
+  r.innerHTML = lista.length ? lista.map(v => `<button type="button" onclick="S.vis='${v[0]}';pintar()"><b>V-${v[0]}</b> · ${esc(v[1])}</button>`).join('') : '<p class="ayuda" style="display:block">No la encontramos. Si no aparece, toca “Mi Visión no aparece”.</p>';
+}
+
+function marcar(k, v){ const a = S[k], i = a.indexOf(v); if (i < 0) a.push(v); else a.splice(i, 1); pintar(); }
+function cuantos(v){ S.nk = +v || 0; while (S.kids.length < S.nk) S.kids.push({}); S.kids.length = S.nk; pintar(); }
+function ir(pg){ S.volver = true; dir = -1; paso = pasos().indexOf(pg); pintar(); window.scrollTo(0, 0); }
+function atras(){ if (paso > 0) { S.volver = false; dir = -1; paso--; pintar(); window.scrollTo(0, 0); } }
+
+function foto(i, input){
+  const f = input.files && input.files[0];
+  input.value = '';
+  if (!f) return;
+  const t = $('t_foto' + i); if (t) t.textContent = 'Cargando…';
+  const url = URL.createObjectURL(f);
+  const img = new Image();
+  img.onload = () => {
+    const max = 1400, k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+    S.f[i] = c.toDataURL('image/jpeg', 0.82);
+    URL.revokeObjectURL(url);
+    pintar();
+  };
+  img.onerror = () => { URL.revokeObjectURL(url); pintar(); const e = $('e_f'); if (e) e.textContent = 'No pudimos abrir esa foto. Prueba con otra.'; };
+  img.src = url;
+}
+
+// ---------- validar y avanzar ----------
+function mal(id, t, campoId){ const e = $('e_' + id); if (e) e.textContent = t; const c = $(campoId || id); if (c) { c.classList.add('mal'); c.setAttribute('aria-invalid', 'true'); if (e) c.setAttribute('aria-describedby', e.id); } return 1; }
+
+function validar(pg){
+  let b = 0;
+  if (pg === 'rol' && !S.rol) b |= mal('rol', OF ? 'Elige tu cargo' : 'Elige tu rol');
+  if (pg === 'datos') {
+    if (!String(S.nombre || '').trim()) b |= mal('nombre', 'Escribe tu nombre');
+    if (!String(S.apellidos || '').trim()) b |= mal('apellidos', 'Escribe tus apellidos');
+    if (!S.sexo) b |= mal('sexo', 'Elige una opción');
+    if (!fechaOk(S.dob)) b |= mal('dob', 'Elige una fecha válida');
+    else if (edad(S.dob) < 15 || edad(S.dob) > 100) b |= mal('dob', 'Revisa el año');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(S.correo || '').trim())) b |= mal('correo', 'Escribe un correo válido');
+    const p = PAISES[S.pais], d = S.wa || '';
+    if (d.length < p[2] || d.length > p[3]) b |= mal('wa', 'Debe tener ' + (p[2] === p[3] ? p[2] : p[2] + ' a ' + p[3]) + ' números');
+    else if (p[4] && !/^(809|829|849)/.test(d)) b |= mal('wa', 'En República Dominicana empieza con 809, 829 u 849');
+  }
+  if (pg === 'sobre' && S.hijos === 'si') {
+    if (!S.nk) b |= mal('nk', 'Elige cuántos');
+    S.kids.forEach((k, i) => { if (!String(k.n || '').trim() || !k.s || !fechaOk(k)) b |= mal('k' + i, 'Completa el nombre, niño o niña y la fecha'); });
+  }
+  if (pg === 'tribu') {
+    if (!S.vis) b |= mal('vis', 'Elige tu Visión');
+    if (S.vis === 'otro' && !String(S.visO || '').trim()) b |= mal('visO', 'Escribe dónde hiciste tu proceso y tu tribu');
+    if (S.vis === 'no') { const n = +S.visN; if (!(n >= 1 && n <= 119)) b |= mal('visN', 'Del 1 al 119'); if (!String(S.visT || '').trim()) b |= mal('visT', 'Escribe el nombre de tu tribu'); }
+    if (!S.conf) b |= mal('conf', S.vis === 'otro' ? 'Confirma tu proceso y tu tribu' : 'Confirma tu Visión y tu Tribu');
+  }
+  if (pg === 'contrato' && !String(S.contrato || '').trim()) b |= mal('contrato', 'Escribe tu contrato');
+  if (pg === 'proceso') {
+    ['estTA', 'est2'].forEach(k => { if (S[k].some(x => x.v === '__otro' && !String(x.t || '').trim())) b |= mal(k, 'Escribe tu estiramiento o quítalo'); });
+    if (esLider()) {
+      if (S.dist) { if (!S.dc) b |= mal('dc', 'Elige una opción'); else if (S.dc === 'no' && !String(S.dco || '').trim()) b |= mal('dco', 'Escribe cuál fue'); }
+    }
+  }
+  if (pg === 'fotos' && !S.f[0]) b |= mal('f', 'La foto 1 es obligatoria');
+  return !b;
+}
+
+function sig(){
+  if (enviando || buscando) return;
+  const pg = pasos()[paso];
+  if (!validar(pg)) {
+    $('e_gen').textContent = 'Revisa lo que está marcado en rojo.';
+    const e = document.querySelector('.er:not(:empty):not(#e_gen)');
+    if (e) e.scrollIntoView({block: 'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    return;
+  }
+  if (pg === 'revisa') return enviar();
+  if (pg === 'datos' && esLider()) {
+    const clave = norm(S.nombre + ' ' + S.apellidos);
+    if (S.distDe !== clave) {
+      buscando = true; pintar();
+      const listo = d => { buscando = false; S.dist = d || null; S.distDe = clave; S.dc = ''; avanzar(); };
+      if (hayServidor()) llamar('buscarDistincion', {nombre: cap(S.nombre), apellidos: cap(S.apellidos)}, 20000).then(listo, () => listo(null));
+      else listo(null);
+      return;
+    }
+  }
+  avanzar();
+}
+
+function avanzar(){
+  const pg = pasos()[paso];
+  dir = 1;
+  if (S.volver && pg !== 'revisa') { S.volver = false; paso = pasos().indexOf('revisa'); }
+  else paso++;
+  pintar();
+  window.scrollTo(0, 0);
+}
+
+function enviar(){
+  enviando = true; pintar();
+  const ap = esLider() && S.dist ? {tipo: S.dc, texto: S.dc === 'no' ? S.dco : S.dist.titulo} : {};
+  const datos = {
+    link: D.link, rol: S.rol, nombre: S.nombre, apellidos: S.apellidos, sexo: S.sexo, nac: iso(S.dob),
+    correo: String(S.correo || '').trim(), codigo: PAISES[S.pais][1], wa: S.wa, ig: S.ig, color: S.color,
+    pareja: S.pareja || '', parejaNombre: S.parejaNombre || '', hijos: S.hijos || '',
+    kids: S.hijos === 'si' ? S.kids.map(k => ({n: k.n, s: k.s, f: fechaOk(k) ? iso(k) : ''})) : [],
+    vision: S.vis === 'otro' ? {otro: S.visO} : S.vis === 'no' ? {num: S.visN, nombre: S.visT} : S.vis ? {num: S.vis} : null,
+    contrato: sinPrefijo(S.contrato), estTA: esEntrenador() ? [] : estLista('estTA'), est2: esEntrenador() ? [] : estLista('est2'), aprecio: ap,
+    fotos: S.f.filter(Boolean).map(d => ({data: d})), web: $('web').value,
+  };
+  const fallo = msg => { enviando = false; pintar(); $('e_gen').textContent = msg || 'No pudimos enviar tu registro. Revisa tu conexión e intenta de nuevo.'; };
+  const ok = r => {
+    if (!r || !r.ok) return fallo(r && r.error);
+    enviando = false; S.saludoFinal = r.saludo; S.correoFinal = r.correo;
+    dir = 1; paso = pasos().indexOf('fin'); pintar(); window.scrollTo(0, 0);
+  };
+  if (hayServidor()) llamar('registrar', datos, 150000).then(ok, () => fallo());
+  else setTimeout(() => ok({ok: true, saludo: saludo(), correo: datos.correo}), 400);
+}
+
+if (!GAS) document.title = OF ? 'Registro del Equipo VIVE · Tribu Henko V-120' : 'Registro de Líderes · Tribu Henko V-120';
+pintar();
+// Desde la página publicada: despierta el Apps Script y trae la lista más reciente
+// de Visiones y estiramientos (si alguien agregó uno en la hoja).
+if (!GAS && D.api) llamar('datos', {link: D.link}, 20000).then(d => { if (d && d.visiones && d.visiones.length) { D.visiones = d.visiones; D.estiramientos = d.estiramientos; } }).catch(() => {});
+</script>
+</body>
+</html>
