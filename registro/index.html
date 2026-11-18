@@ -71,6 +71,17 @@ h1:focus{outline:none}
 .g3{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.45fr) minmax(0,1.2fr);gap:8px}
 .g3 select{padding-left:12px;padding-right:28px;background-position:calc(100% - 15px) 21px,calc(100% - 10px) 21px}
 .g2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,2fr);gap:8px}
+.tel{display:flex;gap:8px;position:relative}
+.tel .cod{flex:0 0 auto;width:6em;height:48px;padding:0 12px;font:inherit;font-size:16px;color:var(--tx);background:var(--in);border:1.5px solid var(--bd2);border-radius:12px;text-align:left;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.tel .cod[aria-expanded=true]{border-color:var(--rojo);box-shadow:0 0 0 3px var(--suave)}
+.tel input{flex:1;min-width:0}
+.lista{position:absolute;left:0;right:0;top:100%;margin-top:6px;max-height:280px;overflow:auto;background:var(--card);border:1.5px solid var(--bd2);border-radius:12px;z-index:5;box-shadow:0 10px 28px rgba(0,0,0,.14)}
+.lista .buscar{position:sticky;top:0;z-index:1;border-width:0 0 1.5px;border-radius:0;font-size:15px}
+.lista .buscar:focus{box-shadow:none}
+.lista .op{display:flex;justify-content:space-between;gap:10px;width:100%;padding:12px 14px;border:0;border-bottom:1px solid var(--bd);background:none;font:inherit;font-size:15px;color:var(--tx);text-align:left;cursor:pointer}
+.lista .op:last-child{border-bottom:0}
+.lista .op.on{background:var(--bg);font-weight:600}
+.lista .op span+span{color:var(--tx2)}
 .op{display:flex;flex-wrap:wrap;gap:8px}
 .ch{font:inherit;font-size:15px;font-weight:500;min-height:44px;padding:9px 16px;border-radius:999px;border:1.5px solid var(--bd2);background:var(--in);color:var(--tx);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ch.on{border-color:var(--rojo);background:var(--suave);color:var(--rojo);font-weight:600}
@@ -197,7 +208,8 @@ const hayServidor = () => GAS || !!D.api;
 const HOY = new Date(); HOY.setHours(0,0,0,0);
 const AN = HOY.getFullYear();
 const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-const PAISES = [['República Dominicana','+1',10,10,1],['Alemania','+49',10,11],['Argentina','+54',10,10],['Aruba','+297',7,7],['Bolivia','+591',8,8],['Brasil','+55',10,11],['Canadá','+1',10,10],['Chile','+56',9,9],['Colombia','+57',10,10],['Costa Rica','+506',8,8],['Cuba','+53',8,8],['Curazao','+599',7,8],['Ecuador','+593',9,9],['El Salvador','+503',8,8],['España','+34',9,9],['Estados Unidos','+1',10,10],['Francia','+33',9,9],['Guatemala','+502',8,8],['Haití','+509',8,8],['Honduras','+504',8,8],['Italia','+39',9,10],['México','+52',10,10],['Nicaragua','+505',8,8],['Países Bajos','+31',9,9],['Panamá','+507',8,8],['Paraguay','+595',9,9],['Perú','+51',9,9],['Portugal','+351',9,9],['Puerto Rico','+1',10,10],['Reino Unido','+44',10,10],['Suiza','+41',9,9],['Uruguay','+598',8,8],['Venezuela','+58',10,10]];
+// v39: todos los países (como en Amigos del Legado); el 5.º dato marca República Dominicana (809, 829 u 849)
+const PAISES = [['República Dominicana','+1',10,10,1],['Afganistán','+93',7,12],['Albania','+355',7,12],['Alemania','+49',10,11],['Andorra','+376',7,12],['Angola','+244',7,12],['Anguila','+1',10,10],['Antigua y Barbuda','+1',10,10],['Arabia Saudita','+966',7,12],['Argelia','+213',7,12],['Argentina','+54',10,11],['Armenia','+374',7,12],['Aruba','+297',7,7],['Australia','+61',9,9],['Austria','+43',7,12],['Azerbaiyán','+994',7,12],['Bahamas','+1',10,10],['Bangladés','+880',7,12],['Barbados','+1',10,10],['Baréin','+973',7,12],['Bélgica','+32',8,9],['Belice','+501',7,7],['Benín','+229',7,12],['Bermudas','+1',10,10],['Bielorrusia','+375',7,12],['Bolivia','+591',8,8],['Bonaire','+599',7,7],['Bosnia y Herzegovina','+387',7,12],['Botsuana','+267',7,12],['Brasil','+55',10,11],['Brunéi','+673',7,12],['Bulgaria','+359',7,12],['Burkina Faso','+226',7,12],['Burundi','+257',7,12],['Bután','+975',7,12],['Cabo Verde','+238',7,12],['Camboya','+855',7,12],['Camerún','+237',7,12],['Canadá','+1',10,10],['Catar','+974',7,12],['Chad','+235',7,12],['Chile','+56',9,9],['China','+86',11,11],['Chipre','+357',7,12],['Colombia','+57',10,10],['Comoras','+269',7,12],['Congo','+242',7,12],['Corea del Sur','+82',7,12],['Costa de Marfil','+225',7,12],['Costa Rica','+506',8,8],['Croacia','+385',7,12],['Cuba','+53',8,8],['Curazao','+599',7,8],['Dinamarca','+45',8,8],['Dominica','+1',10,10],['Ecuador','+593',9,9],['Egipto','+20',7,12],['El Salvador','+503',8,8],['Emiratos Árabes Unidos','+971',7,12],['Eritrea','+291',7,12],['Eslovaquia','+421',7,12],['Eslovenia','+386',7,12],['España','+34',9,9],['Estados Unidos','+1',10,10],['Estonia','+372',7,12],['Esuatini','+268',7,12],['Etiopía','+251',7,12],['Filipinas','+63',7,12],['Finlandia','+358',7,12],['Fiyi','+679',7,12],['Francia','+33',9,9],['Gabón','+241',7,12],['Gambia','+220',7,12],['Georgia','+995',7,12],['Ghana','+233',7,12],['Granada','+1',10,10],['Grecia','+30',10,10],['Groenlandia','+299',7,12],['Guadalupe','+590',9,9],['Guam','+1',10,10],['Guatemala','+502',8,8],['Guayana Francesa','+594',9,9],['Guinea','+224',7,12],['Guinea Ecuatorial','+240',7,12],['Guinea-Bisáu','+245',7,12],['Guyana','+592',7,7],['Haití','+509',8,8],['Honduras','+504',8,8],['Hong Kong','+852',8,8],['Hungría','+36',7,12],['India','+91',10,10],['Indonesia','+62',7,12],['Irak','+964',7,12],['Irán','+98',7,12],['Irlanda','+353',7,12],['Islandia','+354',7,12],['Islas Caimán','+1',10,10],['Islas Turcas y Caicos','+1',10,10],['Islas Vírgenes (EE. UU.)','+1',10,10],['Islas Vírgenes Británicas','+1',10,10],['Israel','+972',7,12],['Italia','+39',9,11],['Jamaica','+1',10,10],['Japón','+81',10,10],['Jordania','+962',7,12],['Kazajistán','+7',7,12],['Kenia','+254',7,12],['Kirguistán','+996',7,12],['Kuwait','+965',7,12],['Laos','+856',7,12],['Lesoto','+266',7,12],['Letonia','+371',7,12],['Líbano','+961',7,12],['Liberia','+231',7,12],['Libia','+218',7,12],['Liechtenstein','+423',7,12],['Lituania','+370',7,12],['Luxemburgo','+352',7,12],['Macao','+853',7,12],['Macedonia del Norte','+389',7,12],['Madagascar','+261',7,12],['Malasia','+60',7,12],['Malaui','+265',7,12],['Maldivas','+960',7,12],['Malí','+223',7,12],['Malta','+356',7,12],['Marruecos','+212',7,12],['Martinica','+596',9,9],['Mauricio','+230',7,12],['Mauritania','+222',7,12],['México','+52',10,10],['Moldavia','+373',7,12],['Mónaco','+377',7,12],['Mongolia','+976',7,12],['Montenegro','+382',7,12],['Montserrat','+1',10,10],['Mozambique','+258',7,12],['Myanmar','+95',7,12],['Namibia','+264',7,12],['Nepal','+977',7,12],['Nicaragua','+505',8,8],['Níger','+227',7,12],['Nigeria','+234',7,12],['Noruega','+47',8,8],['Nueva Zelanda','+64',7,12],['Omán','+968',7,12],['Países Bajos','+31',9,9],['Pakistán','+92',7,12],['Panamá','+507',8,8],['Papúa Nueva Guinea','+675',7,12],['Paraguay','+595',9,9],['Perú','+51',9,9],['Polonia','+48',9,9],['Portugal','+351',9,9],['Puerto Rico','+1',10,10],['Reino Unido','+44',10,10],['República Centroafricana','+236',7,12],['República Checa','+420',7,12],['República Democrática del Congo','+243',7,12],['Ruanda','+250',7,12],['Rumania','+40',7,12],['Rusia','+7',7,12],['San Cristóbal y Nieves','+1',10,10],['San Martín (Sint Maarten)','+1',10,10],['San Vicente y las Granadinas','+1',10,10],['Santa Lucía','+1',10,10],['Senegal','+221',7,12],['Serbia','+381',7,12],['Seychelles','+248',7,12],['Sierra Leona','+232',7,12],['Singapur','+65',8,8],['Siria','+963',7,12],['Somalia','+252',7,12],['Sri Lanka','+94',7,12],['Sudáfrica','+27',9,9],['Sudán','+249',7,12],['Suecia','+46',7,12],['Suiza','+41',9,9],['Surinam','+597',7,7],['Tailandia','+66',7,12],['Taiwán','+886',7,12],['Tanzania','+255',7,12],['Togo','+228',7,12],['Trinidad y Tobago','+1',10,10],['Túnez','+216',7,12],['Turkmenistán','+993',7,12],['Turquía','+90',10,10],['Ucrania','+380',7,12],['Uganda','+256',7,12],['Uruguay','+598',8,8],['Uzbekistán','+998',7,12],['Venezuela','+58',10,10],['Vietnam','+84',7,12],['Yemen','+967',7,12],['Zambia','+260',7,12],['Zimbabue','+263',7,12]];
 const DOMINIOS = ['gmail.com','hotmail.com','outlook.com','yahoo.com','icloud.com','live.com','hotmail.es','yahoo.es'];
 const ROLES_TODOS = OF
   ? [['Entrenador','Le diste a Henko alguna etapa de su proceso.'],['Oficina','Trabajas en la oficina de VIVE.']]
@@ -237,6 +249,33 @@ const contrato = () => prefijo() + ' ' + capC(sinPrefijo(S.contrato));
 function fechaOk(o){ if(!o || !o.d || !o.m || !o.y) return false; const f = new Date(+o.y, o.m-1, +o.d); return f.getDate() == o.d && f.getMonth() == o.m-1 && f <= HOY; }
 function edad(o){ let a = AN - o.y; const m = HOY.getMonth()+1; if (m < o.m || (m == o.m && HOY.getDate() < o.d)) a--; return a; }
 const iso = o => o.y + '-' + String(o.m).padStart(2,'0') + '-' + String(o.d).padStart(2,'0');
+// v39: lista de países con buscador (se abre al tocar el código)
+const sinTilde = t => String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+function abrirPais(){
+  const ls = $('lp'), b = $('cod'); if (!ls || !b) return;
+  if (!ls.hidden) return cerrarPais();
+  if (!ls.firstChild) ls.innerHTML = '<input type="text" class="buscar" id="bp" placeholder="Buscar país o código" autocomplete="off" aria-label="Buscar país" oninput="filtrarPais(this.value)">'
+    + PAISES.map((p, i) => `<button type="button" class="op" role="option" data-i="${i}" onclick="elegirPais(${i})"><span>${esc(p[0])}</span><span>${esc(p[1])}</span></button>`).join('');
+  ls.querySelectorAll('.op').forEach(o => { const on = +o.dataset.i === S.pais; o.classList.toggle('on', on); o.setAttribute('aria-selected', on ? 'true' : 'false'); });
+  ls.hidden = false; b.setAttribute('aria-expanded', 'true');
+  const bp = $('bp'); bp.value = ''; filtrarPais('');
+  const on = ls.querySelector('.op.on'); ls.scrollTop = on ? Math.max(0, on.offsetTop - 56) : 0;
+  try { bp.focus({preventScroll: true}); } catch (e) { bp.focus(); }
+}
+function cerrarPais(){ const ls = $('lp'), b = $('cod'); if (ls) ls.hidden = true; if (b) b.setAttribute('aria-expanded', 'false'); }
+function filtrarPais(v){
+  const q = sinTilde(String(v || '').trim()), cod = /^\+?\d+$/.test(q) ? '+' + q.replace(/^\+/, '') : '';
+  document.querySelectorAll('#lp .op').forEach(o => { const p = PAISES[+o.dataset.i]; o.style.display = !q || sinTilde(p[0]).indexOf(q) >= 0 || (cod && p[1].indexOf(cod) === 0) ? '' : 'none'; });
+}
+function elegirPais(i){
+  S.pais = i; cerrarPais();
+  const b = $('cod'), w = $('wa');
+  if (b) b.textContent = PAISES[i][1] + ' ▾';
+  if (w) w.placeholder = PAISES[i][1] === '+1' ? '8095550101' : 'Solo el número, sin el código';
+  suave(); if (w) w.focus();
+}
+document.addEventListener('click', e => { const ls = $('lp'); if (ls && !ls.hidden && !e.target.closest('.tel')) cerrarPais(); });
+document.addEventListener('keydown', e => { const ls = $('lp'); if (e.key === 'Escape' && ls && !ls.hidden) { cerrarPais(); const b = $('cod'); if (b) b.focus(); } });
 function waTexto(){ const p = PAISES[S.pais], d = S.wa || ''; if (p[1] === '+1' && d.length === 10) return '+1 (' + d.slice(0,3) + ') ' + d.slice(3,6) + '-' + d.slice(6); return p[1] + ' ' + d; }
 function ig(s){ s = String(s || '').trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/^(www\.)?instagram\.com\//i,'').replace(/[/?#].*$/,'').replace(/^@+/,'').toLowerCase().replace(/[^a-z0-9._]/g,''); return s ? '@' + s : ''; }
 function sugerencia(e){ const m = /^([^@\s]+)@([^@\s]+)$/.exec(String(e || '').trim()); if (!m) return ''; const d = m[2].toLowerCase(); if (DOMINIOS.includes(d)) return ''; let b = '', bd = 9; DOMINIOS.forEach(x => { const l = lev(d, x); if (l < bd) { bd = l; b = x; } }); return bd <= 2 ? m[1] + '@' + b : ''; }
@@ -292,7 +331,7 @@ const V = {
     + campo('sexo', 'Sexo', sel('sexo', [['F', 'Femenino'], ['M', 'Masculino']], S.sexo, "S.sexo=this.value;pintar()"))
     + `<div class="f"><span class="lb">¿Cuándo naciste?</span>${selFecha('S.dob', S.dob, 1930, AN - 15)}<p class="vista" id="v_dob"></p><p class="er" id="e_dob"></p></div>`
     + campo('correo', 'Tu correo', entrada('correo', 'email', 'nombre@hotmail.com', 'autocomplete="email" autocapitalize="off" spellcheck="false"'), 'Cualquier correo: Gmail, Hotmail, Outlook, iCloud…')
-    + `<div class="f"><label class="lb" for="wa">Tu WhatsApp</label><div class="g2"><select aria-label="País" onchange="S.pais=+this.value;suave()">${PAISES.map((p, i) => `<option value="${i}" ${S.pais === i ? 'selected' : ''}>${p[1]} · ${p[0]}</option>`).join('')}</select><input id="wa" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="8095550101" value="${esc(S.wa)}" oninput="this.value=this.value.replace(/\\D/g,'');S.wa=this.value;suave()"></div><p class="vista" id="v_wa"></p><p class="er" id="e_wa"></p></div>`
+    + `<div class="f"><label class="lb" for="wa">Tu WhatsApp</label><div class="tel"><button type="button" class="cod" id="cod" aria-label="Código de país" aria-haspopup="listbox" aria-expanded="false" onclick="abrirPais()">${esc(PAISES[S.pais][1])} ▾</button><input id="wa" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="${PAISES[S.pais][1] === '+1' ? '8095550101' : 'Solo el número, sin el código'}" value="${esc(S.wa)}" oninput="this.value=this.value.replace(/\\D/g,'');S.wa=this.value;suave()"><div class="lista" id="lp" role="listbox" hidden></div></div><p class="vista" id="v_wa"></p><p class="er" id="e_wa"></p></div>`
     + campo('ig', 'Tu usuario de Instagram <small>(opcional)</small>', entrada('ig', 'text', 'tu_usuario', 'autocapitalize="off" spellcheck="false"'), 'Lo usamos para etiquetarte en los posts de la tribu'),
   sobre: () => {
     const F = S.sexo === 'F', g = (a, b) => S.sexo ? (F ? b : a) : a + '/a';
