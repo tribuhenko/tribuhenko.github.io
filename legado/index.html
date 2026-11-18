@@ -56,7 +56,7 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
 </head>
 <body>
 <main>
-  <div class="logos"><img class="piel" src="../assets/logo-legado.png" alt="Legado Piel de Ángel"><img class="henko" src="../assets/logo.png" alt="Tribu Henko V-120"></div>
+  <div class="logos"><img class="piel" src="../assets/logo-legado.png" alt="Legado Piel de Ángel"></div>
   <div class="card" id="card" aria-live="polite"><div class="cargando"><span class="punto"></span><span class="punto"></span><span class="punto"></span><p>Cargando…</p></div></div>
   <footer>Legado Piel de Ángel · Tribu Henko V-120</footer>
 </main>
@@ -80,7 +80,6 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     card.innerHTML = '';
     card.appendChild(el('h1', {}, txt(INFO.titulo)));
     if (INFO.sub) card.appendChild(el('p', { 'class': 'sub' }, txt(INFO.sub)));
-    if (INFO.detalles) card.appendChild(el('p', { 'class': 'det' }, txt(INFO.detalles.replace(/^📅[^\n]*\n?/, ''))));
   }
   function campo(id, label, tipo, valor, extra) {
     var w = el('div', { 'class': 'f' });
@@ -96,18 +95,18 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     cabecera();
     card.appendChild(el('p', { 'class': 'intro' }, 'Gracias por querer sumarte 💙 Cuéntanos quién eres y luego cómo te gustaría apoyar.'));
     card.appendChild(el('p', { 'class': 'paso' }, 'Paso 1 de 2 · Tus datos'));
-    var c = campo('correo', 'Correo', 'email', P.correo, { autocomplete: 'email', inputmode: 'email', maxlength: '120' });
     var n = campo('nombre', 'Nombre', 'text', P.nombre, { autocomplete: 'given-name', autocapitalize: 'words', maxlength: '60' });
     var a = campo('apellido', 'Apellido', 'text', P.apellido, { autocomplete: 'family-name', autocapitalize: 'words', maxlength: '80' });
     var w = campo('wa', 'WhatsApp', 'tel', P.wa, { autocomplete: 'tel', inputmode: 'tel', placeholder: '809 000 0000', maxlength: '25' });
-    [c, n, a, w].forEach(function (x) { card.appendChild(x.w); });
+    var c = campo('correo', 'Correo', 'email', P.correo, { autocomplete: 'email', inputmode: 'email', maxlength: '120' });
+    [n, a, w, c].forEach(function (x) { card.appendChild(x.w); });
     var hp = el('input', { 'class': 'hp', id: 'web', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' }); card.appendChild(hp);
     var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
     card.appendChild(boton('Continuar', function () {
       P = { correo: c.i.value.trim(), nombre: n.i.value.trim(), apellido: a.i.value.trim(), wa: w.i.value.trim() };
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(P.correo)) { er.textContent = 'Revisa tu correo.'; c.i.focus(); return; }
       if (!P.nombre || !P.apellido) { er.textContent = 'Escribe tu nombre y tu apellido.'; (P.nombre ? a : n).i.focus(); return; }
       if (P.wa.replace(/\D/g, '').length < 10) { er.textContent = 'Revisa tu número de WhatsApp.'; w.i.focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(P.correo)) { er.textContent = 'Revisa tu correo.'; c.i.focus(); return; }
       if (hp.value) return;
       cargando();
       api('legadoId', Object.assign({ a: id }, P)).then(function (j) {
@@ -139,12 +138,9 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
       l.appendChild(i); l.appendChild(el('span', {}, txt(ar))); c2.appendChild(l);
     });
     card.appendChild(c2); card.appendChild(mw); verMonto();
-    card.appendChild(el('p', { 'class': 'preg' }, '¿Quieres especificar cómo puedes colaborar?'));
+    card.appendChild(el('p', { 'class': 'preg' }, '¿Puedes especificar cómo puedes colaborar?'));
     var det = el('textarea', { 'class': 'campo', rows: '3', maxlength: '600', placeholder: 'Opcional: qué vas a aportar, cuánto o cualquier detalle' }); det.value = S.detalle;
     card.appendChild(det);
-    var nota = 'Si quieres ir presencialmente, coordínalo con <strong>' + txt(INFO.coordina) + '</strong>, quien coordina el Legado.';
-    if (INFO.waCoordina) nota += ' <a href="' + txt(INFO.waCoordina) + '" target="_blank" rel="noopener">Escribirle por WhatsApp</a>';
-    card.appendChild(el('p', { 'class': 'nota' }, nota));
     card.appendChild(el('p', { 'class': 'preg' }, '¿Quieres mantenerte enterado de todo lo que pase con Henko y el Legado?'));
     var fila = el('div', { 'class': 'fila', role: 'radiogroup' });
     [['1', 'Sí'], ['0', 'No']].forEach(function (o) {
@@ -169,7 +165,7 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
         if (!j || !j.ok) { paso2(); card.querySelector('.err').textContent = (j && j.error) || 'No pudimos guardar tu respuesta.'; return; }
         if (j.tribu) return deLaTribu(j.correo);
         cabecera();
-        card.appendChild(el('p', { 'class': 'ok' }, '¡Gracias, ' + txt(j.nombre) + '! 💙<br><br>Recibimos tu apoyo. Te enviamos un correo con todos los detalles: cómo aportar y con quién coordinar.'));
+        card.appendChild(el('p', { 'class': 'ok' }, '¡Gracias, ' + txt(j.nombre) + '! 💙<br><br>Recibimos tu colaboración. Te enviamos un correo con el resumen de tu aporte.'));
       }).catch(function () { paso2(); card.querySelector('.err').textContent = 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'; });
     });
     card.appendChild(env);
