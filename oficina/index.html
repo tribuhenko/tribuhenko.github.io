@@ -305,6 +305,7 @@ const V = {
       S.kids.forEach((k, i) => {
         h += `<div class="caja"><h3>${k.s === 'F' ? 'Hija' : k.s === 'M' ? 'Hijo' : 'Hijo o hija'} ${i + 1}</h3>
           <div class="f"><label class="lb" for="kn${i}">Nombre</label><input id="kn${i}" type="text" autocapitalize="words" placeholder="Nombre" value="${esc(k.n)}" oninput="S.kids[${i}].n=this.value;suave()"></div>
+          <div class="f"><label class="lb" for="ka${i}">Apellido (opcional)</label><input id="ka${i}" type="text" autocapitalize="words" placeholder="Apellido" value="${esc(k.a)}" oninput="S.kids[${i}].a=this.value"></div>
           <div class="f"><label class="lb" for="ks${i}">Niño o niña</label>${sel('ks' + i, [['M', 'Niño'], ['F', 'Niña']], k.s, `S.kids[${i}].s=this.value;pintar()`)}</div>
           <div class="f" style="margin:0"><span class="lb">Fecha de nacimiento</span>${selFecha(`S.kids[${i}]`, k, 1950, AN)}<p class="vista" id="v_k${i}"></p><p class="er" id="e_k${i}"></p></div></div>`;
       });
@@ -520,7 +521,7 @@ function enviar(){
     link: D.link, rol: S.rol, nombre: S.nombre, apellidos: S.apellidos, sexo: S.sexo, nac: iso(S.dob),
     correo: String(S.correo || '').trim(), codigo: PAISES[S.pais][1], wa: S.wa, ig: S.ig, color: S.color,
     pareja: S.pareja || '', parejaNombre: S.parejaNombre || '', hijos: S.hijos || '',
-    kids: S.hijos === 'si' ? S.kids.map(k => ({n: k.n, s: k.s, f: fechaOk(k) ? iso(k) : ''})) : [],
+    kids: S.hijos === 'si' ? S.kids.map(k => ({n: k.n, a: k.a || '', s: k.s, f: fechaOk(k) ? iso(k) : ''})) : [],
     vision: S.vis === 'otro' ? {otro: S.visO} : S.vis === 'no' ? {num: S.visN, nombre: S.visT} : S.vis ? {num: S.vis} : null,
     contrato: sinPrefijo(S.contrato), estTA: OF ? [] : estLista('estTA'), est2: OF ? [] : estLista('est2'), aprecio: ap,
     fotos: S.f.filter(Boolean).map(d => ({data: d})), web: $('web').value,
