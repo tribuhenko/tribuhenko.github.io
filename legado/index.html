@@ -31,6 +31,7 @@ h1{margin:0 0 4px;font-size:22px;line-height:1.3;text-align:center}
 .preg{margin:18px 0 8px;font-weight:700;font-size:16px}
 .ayuda{margin:-4px 0 10px;color:var(--tx2);font-size:14px}
 .f{margin:0 0 12px}
+.tel{display:flex;gap:8px}.tel select.campo{flex:0 0 42%;width:42%;padding-right:30px}.tel input.campo{flex:1;min-width:0}
 .lb{display:block;font-weight:600;font-size:14px;margin:0 0 6px}
 .campo{width:100%;box-sizing:border-box;border:1.5px solid var(--bd);border-radius:12px;padding:12px 14px;font:16px Montserrat,system-ui,sans-serif;background:var(--card);color:var(--tx)}
 .campo:focus{outline:2px solid var(--ac);outline-offset:1px}
@@ -75,8 +76,10 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   var id = new URLSearchParams(location.search).get('a') || '';
   var card = document.getElementById('card');
   var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-  var INFO = null, NUEVO = false, NOMBRE = '';
-  var P = { correo: '', nombre: '', apellido: '', wa: '' };
+  var INFO = null, NUEVO = false, NOMBRE = '', INVITAN = [];
+  var P = { correo: '', nombre: '', apellido: '', wa: '', codigo: '+1' }, PAIS = 0;
+  // v36: WhatsApp con código de país, como el formulario de la tribu (República Dominicana por defecto)
+  var PAISES = [['República Dominicana','+1',10,10],['Alemania','+49',10,11],['Argentina','+54',10,10],['Aruba','+297',7,7],['Bolivia','+591',8,8],['Brasil','+55',10,11],['Canadá','+1',10,10],['Chile','+56',9,9],['Colombia','+57',10,10],['Costa Rica','+506',8,8],['Cuba','+53',8,8],['Curazao','+599',7,8],['Ecuador','+593',9,9],['El Salvador','+503',8,8],['España','+34',9,9],['Estados Unidos','+1',10,10],['Francia','+33',9,9],['Guatemala','+502',8,8],['Haití','+509',8,8],['Honduras','+504',8,8],['Italia','+39',9,10],['México','+52',10,10],['Nicaragua','+505',8,8],['Países Bajos','+31',9,9],['Panamá','+507',8,8],['Paraguay','+595',9,9],['Perú','+51',9,9],['Portugal','+351',9,9],['Puerto Rico','+1',10,10],['Reino Unido','+44',10,10],['Suiza','+41',9,9],['Uruguay','+598',8,8],['Venezuela','+58',10,10]];
   var I = { ciudad: '', otra: '', profesion: '', empresa: '', cumpleDia: '', cumpleMes: '', como: '', quien: '', comunidad: '', talento: '', acepto: false };
   var S = { areas: [], monto: '', detalle: '' };
 
@@ -137,7 +140,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   function amigos(link) {
     if (!link) return;
     var w = el('div', { 'class': 'coord' });
-    w.appendChild(el('p', {}, 'Únete a Amigos del Legado, nuestro grupo de WhatsApp: al entrar quedas en la comunidad y te llegan todos los avisos.'));
+    w.appendChild(el('p', {}, 'Únete a nuestro grupo de WhatsApp:'));
     w.appendChild(el('a', { 'class': 'b2 wa', href: link, target: '_blank', rel: 'noopener' }, 'Unirme a Amigos del Legado'));
     card.appendChild(w);
   }
@@ -146,59 +149,91 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   function aviso(er, msg, foco) { er.textContent = msg; if (foco && foco.focus) foco.focus(); return false; }
 
   // Tus datos (nombre, apellido, WhatsApp y correo)
+  // v36: (809) 555-1234 en RD, EE. UU. y Puerto Rico; en los demás países, de 3 en 3
+  function fmtTel(d) {
+    if (PAISES[PAIS][1] !== '+1') return d.replace(/(\d{3})(?=\d)/g, '$1 ');
+    return d.length > 6 ? '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6) : d.length > 3 ? '(' + d.slice(0, 3) + ') ' + d.slice(3) : d;
+  }
   function campos_datos() {
     seccion('Tus datos');
     var n = campo('nombre', 'Nombre', 'text', P.nombre, { autocomplete: 'given-name', autocapitalize: 'words', maxlength: '60', placeholder: 'Ej.: María' });
     var a = campo('apellido', 'Apellido', 'text', P.apellido, { autocomplete: 'family-name', autocapitalize: 'words', maxlength: '80', placeholder: 'Ej.: Pérez' });
-    var w = campo('wa', 'WhatsApp', 'tel', P.wa, { autocomplete: 'tel', inputmode: 'tel', maxlength: '25', placeholder: 'Ej.: 809 555 1234' });
+    var ww = el('div', { 'class': 'f' }); ww.appendChild(el('label', { 'class': 'lb', 'for': 'wa' }, 'WhatsApp'));
+    var tl = el('div', { 'class': 'tel' }), ps = el('select', { 'class': 'campo', 'aria-label': 'País' });
+    PAISES.forEach(function (x, k) { var op = el('option', { value: String(k) }, txt(x[1] + ' · ' + x[0])); if (k === PAIS) op.selected = true; ps.appendChild(op); });
+    var w = el('input', { id: 'wa', 'class': 'campo', type: 'tel', inputmode: 'numeric', autocomplete: 'tel-national', maxlength: '20', placeholder: 'Ej.: (809) 555-1234' }); w.value = fmtTel(P.wa || '');
+    w.oninput = function () { w.value = fmtTel(w.value.replace(/\D/g, '').slice(0, PAISES[PAIS][3])); };
+    ps.onchange = function () { PAIS = +ps.value; w.placeholder = PAISES[PAIS][1] === '+1' ? 'Ej.: (809) 555-1234' : 'Solo el número, sin el código'; w.oninput(); };
+    tl.appendChild(ps); tl.appendChild(w); ww.appendChild(tl); card.appendChild(ww);
     var c = campo('correo', 'Correo', 'email', P.correo, { autocomplete: 'email', inputmode: 'email', maxlength: '120', placeholder: 'Ej.: maria@ejemplo.com' });
     var hp = el('input', { 'class': 'hp', id: 'web', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' }); card.appendChild(hp);
     return function (er) {
-      P = { correo: c.value.trim(), nombre: n.value.trim(), apellido: a.value.trim(), wa: w.value.trim() };
+      P = { correo: c.value.trim().toLowerCase(), nombre: n.value.trim(), apellido: a.value.trim(), wa: w.value.replace(/\D/g, ''), codigo: PAISES[PAIS][1] };
       if (hp.value) return false;
       if (!P.nombre) return aviso(er, 'Escribe tu nombre.', n);
       if (!P.apellido) return aviso(er, 'Escribe tu apellido.', a);
-      if (P.wa.replace(/\D/g, '').length < 10) return aviso(er, 'Revisa tu número de WhatsApp.', w);
+      if (P.wa.length < PAISES[PAIS][2] || P.wa.length > PAISES[PAIS][3]) return aviso(er, 'Revisa tu número de WhatsApp: ' + (PAISES[PAIS][2] === PAISES[PAIS][3] ? PAISES[PAIS][2] : PAISES[PAIS][2] + ' a ' + PAISES[PAIS][3]) + ' números, sin el código del país.', w);
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(P.correo)) return aviso(er, 'Revisa tu correo.', c);
       return true;
     };
   }
-  // Sobre ti y Para mantenernos en contacto (la inscripción al Legado)
-  function campos_inscripcion() {
+  // v36: la inscripción va por bloques: Sobre ti → Para mantenernos en contacto
+  function campos_sobre() {
     seccion('Sobre ti');
-    var otraW = el('div', { 'class': 'f', style: 'display:none;margin-top:-2px' }), otra = el('input', { 'class': 'campo', id: 'ciudad', type: 'text', maxlength: '60', autocapitalize: 'words', placeholder: 'Ej.: La Romana' });
+    var otraW = el('div', { 'class': 'f', style: 'display:none;margin-top:-2px' }), otra = el('input', { 'class': 'campo', id: 'ciudad', type: 'text', maxlength: '60', autocapitalize: 'words', placeholder: 'Ej.: La Romana, Madrid, Nueva York' });
     otra.value = I.otra; otraW.appendChild(el('label', { 'class': 'lb', 'for': 'ciudad' }, '¿Cuál?')); otraW.appendChild(otra);
     radios('Ciudad donde vives', [['Santiago', 'Santiago'], ['Santo Domingo', 'Santo Domingo'], ['Otra', 'Otra']], I.ciudad, function (v) { I.ciudad = v; otraW.style.display = v === 'Otra' ? 'block' : 'none'; if (v === 'Otra') otra.focus(); });
     card.appendChild(otraW); otraW.style.display = I.ciudad === 'Otra' ? 'block' : 'none';
     var prof = campo('profesion', 'Profesión u oficio', 'text', I.profesion, { maxlength: '100', autocapitalize: 'sentences', placeholder: 'Ej.: Médica pediatra, chef, contador' });
     var emp = campo('empresa', opc('Empresa o lugar de trabajo'), 'text', I.empresa, { maxlength: '100', autocapitalize: 'words', placeholder: 'Ej.: Clínica Ejemplo' });
-    card.appendChild(el('p', { 'class': 'lb' }, opc('Cumpleaños')));
+    card.appendChild(el('p', { 'class': 'lb' }, 'Cumpleaños'));
     var fc = el('div', { 'class': 'fila', style: 'margin-bottom:12px' });
     var dia = el('select', { 'class': 'campo', 'aria-label': 'Día' }), mes = el('select', { 'class': 'campo', 'aria-label': 'Mes' });
     dia.appendChild(el('option', { value: '' }, 'Día')); for (var d = 1; d <= 31; d++) dia.appendChild(el('option', { value: String(d) }, String(d)));
     mes.appendChild(el('option', { value: '' }, 'Mes')); MESES.forEach(function (m, k) { mes.appendChild(el('option', { value: String(k + 1) }, m.charAt(0).toUpperCase() + m.slice(1))); });
     dia.value = I.cumpleDia; mes.value = I.cumpleMes; dia.style.flex = '1'; mes.style.flex = '2';
     fc.appendChild(dia); fc.appendChild(mes); card.appendChild(fc);
-
+    function guardar() { I.otra = otra.value.trim(); I.profesion = prof.value.trim(); I.empresa = emp.value.trim(); I.cumpleDia = dia.value; I.cumpleMes = mes.value; }
+    var leer = function (er) {
+      guardar();
+      if (!I.ciudad) return aviso(er, 'Dinos en qué ciudad vives.');
+      if (I.ciudad === 'Otra' && !I.otra) return aviso(er, 'Escribe tu ciudad.', otra);
+      if (!I.profesion) return aviso(er, 'Escribe tu profesión u oficio.', prof);
+      if (!I.cumpleDia || !I.cumpleMes) return aviso(er, 'Elige el día y el mes de tu cumpleaños.', I.cumpleDia ? mes : dia);
+      return true;
+    };
+    leer.guardar = guardar;
+    return leer;
+  }
+  function campos_contacto() {
     seccion('Para mantenernos en contacto');
-    var quienW = el('div', { 'class': 'f', style: 'margin-top:-2px' }), quien = el('input', { 'class': 'campo', id: 'quien', type: 'text', maxlength: '80', autocapitalize: 'words', placeholder: 'Ej.: Ana Gómez' });
-    quien.value = I.quien; quienW.appendChild(el('label', { 'class': 'lb', 'for': 'quien' }, opc('¿Quién te invitó?'))); quienW.appendChild(quien);
+    var quienW = el('div', { 'class': 'f', style: 'margin-top:-2px' }), otroW = el('div', { 'class': 'f', style: 'display:none' });
+    var lista = INVITAN || [], sel = null, quien = el('input', { 'class': 'campo', id: 'quien', type: 'text', maxlength: '80', autocapitalize: 'words', placeholder: 'Escribe su nombre' });
+    quienW.appendChild(el('label', { 'class': 'lb', 'for': lista.length ? 'quiensel' : 'quien' }, opc('¿Quién te invitó?')));
+    if (lista.length) {
+      sel = el('select', { 'class': 'campo', id: 'quiensel' });
+      sel.appendChild(el('option', { value: '' }, 'Elige a la persona'));
+      lista.forEach(function (x) { sel.appendChild(el('option', { value: x }, txt(x))); });
+      sel.appendChild(el('option', { value: '__otra' }, 'Otra persona de Henko'));
+      sel.value = I.quien && lista.indexOf(I.quien) < 0 ? '__otra' : I.quien;
+      sel.onchange = function () { otroW.style.display = sel.value === '__otra' ? 'block' : 'none'; if (sel.value === '__otra') quien.focus(); };
+      quienW.appendChild(sel);
+      if (sel.value === '__otra') quien.value = I.quien;
+      otroW.appendChild(quien); otroW.style.display = sel.value === '__otra' ? 'block' : 'none';
+    } else { quien.value = I.quien; quienW.appendChild(quien); }
     radios(opc('¿Cómo conociste el Legado?'), [['Por alguien de Henko', 'Por alguien de Henko'], ['Redes sociales', 'Redes sociales'], ['Otro', 'Otro']], I.como,
-      function (v) { I.como = v; quienW.style.display = v === 'Por alguien de Henko' ? 'block' : 'none'; });
-    card.appendChild(quienW); quienW.style.display = I.como === 'Por alguien de Henko' ? 'block' : 'none';
+      function (v) { I.como = v; quienW.style.display = v === 'Por alguien de Henko' ? 'block' : 'none'; otroW.style.display = v === 'Por alguien de Henko' && sel && sel.value === '__otra' ? 'block' : 'none'; });
+    card.appendChild(quienW); card.appendChild(otroW); quienW.style.display = I.como === 'Por alguien de Henko' ? 'block' : 'none';
+    if (I.como !== 'Por alguien de Henko') otroW.style.display = 'none';
     radios('¿Quieres unirte a nuestra comunidad de WhatsApp?', [['1', 'Sí'], ['0', 'No']], I.comunidad, function (v) { I.comunidad = v; }, true);
     var tal = campo('talento', opc('¿Tienes algún talento o recurso que quieras poner al servicio?'), 'area', I.talento, { maxlength: '300', placeholder: 'Ej.: tengo una camioneta, soy fotógrafo' });
     var lc = el('label', { 'class': 'chip' + (I.acepto ? ' on' : ''), style: 'margin-top:8px' }), ic = el('input', { type: 'checkbox' }); ic.checked = I.acepto;
     ic.onchange = function () { I.acepto = ic.checked; lc.classList.toggle('on', ic.checked); };
     lc.appendChild(ic); lc.appendChild(el('span', { style: 'font-size:15px' }, 'Acepto recibir noticias del Legado Piel de Ángel por correo.'));
     card.appendChild(lc);
-    function guardar() { I.otra = otra.value.trim(); I.profesion = prof.value.trim(); I.empresa = emp.value.trim(); I.cumpleDia = dia.value; I.cumpleMes = mes.value; I.quien = quien.value.trim(); I.talento = tal.value.trim(); }
+    function guardar() { I.quien = sel ? (sel.value === '__otra' ? quien.value.trim() : sel.value) : quien.value.trim(); I.talento = tal.value.trim(); }
     var leer = function (er) {
       guardar();
-      if (!I.ciudad) return aviso(er, 'Dinos en qué ciudad vives.');
-      if (I.ciudad === 'Otra' && !I.otra) return aviso(er, 'Escribe tu ciudad.', otra);
-      if (!I.profesion) return aviso(er, 'Escribe tu profesión u oficio.', prof);
-      if ((I.cumpleDia && !I.cumpleMes) || (!I.cumpleDia && I.cumpleMes)) return aviso(er, 'Completa el día y el mes de tu cumpleaños (o déjalos en blanco).', I.cumpleDia ? mes : dia);
       if (!I.comunidad) return aviso(er, 'Dinos si quieres unirte a la comunidad de WhatsApp.');
       if (!I.acepto) return aviso(er, 'Marca que aceptas recibir noticias del Legado.');
       return true;
@@ -216,33 +251,27 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       : '¡Eres parte de la tribu! 💙<br><br>No necesitas inscribirte: las invitaciones del Legado te llegan a tu correo con tu enlace personal.'));
   }
 
-  // ---- Inscripción (link general, sin actividad)
-  function inscripcion() {
+  // ---- v36: Gracias de la inscripción (formato de Juan Luis)
+  function graciasIns(j) {
     cabecera();
-    card.appendChild(el('p', { 'class': 'intro' }, 'Gracias por querer sumarte 💙 Inscríbete y te avisaremos de cada actividad para que nos digas cómo te gustaría apoyar.'));
-    var leerD = campos_datos(), leerI = campos_inscripcion();
-    var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
-    var env = boton('Inscribirme', function () {
-      leerI.guardar();
-      if (!leerD(er) || !leerI(er)) return;
-      env.disabled = true; cargando();
-      api('legadoInscribir', Object.assign({}, P, datosInscripcion())).then(function (j) {
-        if (!j || !j.ok) { inscripcion(); card.querySelector('.err').textContent = (j && j.error) || 'No pudimos guardar tu inscripción.'; return; }
-        if (j.tribu) return deLaTribu('');
-        cabecera();
-        card.appendChild(el('p', { 'class': 'ok' }, j.nuevo ? '¡Gracias, ' + txt(j.nombre) + '! 💙<br><br>Ya eres parte del Legado Piel de Ángel. Te enviamos un correo de bienvenida y te avisaremos de cada actividad.'
-          : '¡Gracias, ' + txt(j.nombre) + '! 💙<br><br>Actualizamos tus datos. Te avisaremos de cada actividad a tu correo.'));
-        amigos(j.amigos);
-        if (j.abiertas && j.abiertas.length) abiertas(j.abiertas);
-      }).catch(function () { inscripcion(); card.querySelector('.err').textContent = 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'; });
-    });
-    card.appendChild(env);
+    card.appendChild(el('p', { 'class': 'ok' }, '¡Gracias, ' + txt(j.nombre) + '!<br>💙 <strong>' + (j.nuevo ? 'Ya eres parte del Legado Piel de Ángel.' : 'Actualizamos tus datos.') + '</strong><br>'
+      + (j.nuevo ? 'Te enviamos un correo de bienvenida y te avisaremos de cada actividad.' : 'Te seguiremos avisando de cada actividad a tu correo.')));
+    amigos(j.amigos);
+    if (j.abiertas && j.abiertas.length) abiertas(j.abiertas);
+  }
+  function enviarIns(boton1) {
+    boton1.disabled = true; cargando();
+    api('legadoInscribir', Object.assign({}, P, datosInscripcion())).then(function (j) {
+      if (!j || !j.ok) { contacto(); card.querySelector('.err').textContent = (j && j.error) || 'No pudimos guardar tu inscripción.'; return; }
+      if (j.tribu) return deLaTribu('');
+      graciasIns(j);
+    }).catch(function () { contacto(); card.querySelector('.err').textContent = 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'; });
   }
   // v34: si hay una actividad abierta, se ofrece al terminar la inscripción (si no responde, la invitación le llega al día siguiente)
   function abiertas(l) {
     var w = el('div', { 'class': 'coord' });
-    w.appendChild(el('p', {}, l.length === 1 ? 'Ahora mismo estamos preparando <b>' + txt(l[0].titulo) + '</b>' + (l[0].fecha ? ' (' + txt(l[0].fecha) + ')' : '') + '. ¿Quieres apoyar?'
-      : 'Ahora mismo estamos preparando estas actividades. ¿Quieres apoyar?'));
+    w.appendChild(el('p', {}, l.length === 1 ? '¿Quieres apoyar nuestra próxima actividad que estamos preparando?<br><strong>' + txt(l[0].titulo) + '</strong>' + (l[0].fecha ? '<br>(' + txt(l[0].fecha) + ').' : '')
+      : '¿Quieres apoyar alguna de las actividades que estamos preparando?'));
     l.forEach(function (a) { w.appendChild(boton(l.length === 1 ? 'Quiero apoyar' : a.titulo, function () { irA(a.id); })); });
     card.appendChild(w);
   }
@@ -256,15 +285,16 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
         if (!k || !k.ok) return error((k && k.error) || 'No pudimos continuar.');
         if (k.tribu) return deLaTribu(k.correo);
         NUEVO = !k.inscrito; NOMBRE = k.nombre || P.nombre;
-        if (NUEVO) completar(); else apoyo();
+        if (NUEVO) sobre(); else apoyo();
       });
     }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
   }
 
-  // ---- Link de una actividad: Tus datos → (si es nuevo) la inscripción → Tu apoyo
+  // ---- v36: Bloque 1 · Tus datos (los dos links). Si ya está inscrito (3 o 4 datos iguales), vuelve a escribir sus datos y se actualizan
   function datos() {
     cabecera();
-    card.appendChild(el('p', { 'class': 'intro' }, 'Gracias por querer sumarte 💙 Cuéntanos quién eres y luego cómo te gustaría apoyar.'));
+    card.appendChild(el('p', { 'class': 'intro' }, id ? 'Gracias por querer sumarte 💙 Cuéntanos quién eres y luego cómo te gustaría apoyar.'
+      : 'Gracias por querer sumarte 💙 Inscríbete y te avisaremos de cada actividad para que nos digas cómo te gustaría apoyar.'));
     var leer = campos_datos();
     var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
     card.appendChild(boton('Continuar', function () {
@@ -274,17 +304,28 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
         if (!j || !j.ok) return error((j && j.error) || 'No pudimos continuar.');
         if (j.tribu) return deLaTribu(j.correo);
         NUEVO = !j.inscrito; NOMBRE = j.nombre || P.nombre;
-        if (NUEVO) completar(); else apoyo();
+        if (id && !NUEVO) apoyo(); else sobre();
       }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
     }));
   }
-  function completar() {
+  // Bloque 2 · Sobre ti
+  function sobre() {
     cabecera();
-    card.appendChild(el('p', { 'class': 'intro' }, '¡Qué bueno tenerte, ' + txt(P.nombre) + '! 💙 Como es tu primera vez, cuéntanos un poco de ti. Solo lo llenas esta vez.'));
-    var leer = campos_inscripcion();
+    card.appendChild(el('p', { 'class': 'intro' }, NUEVO ? '¡Qué bueno tenerte, ' + txt(P.nombre) + '! 💙 Cuéntanos un poco de ti.'
+      : '¡Qué bueno verte de nuevo, ' + txt(NOMBRE) + '! 💙 Ya estás inscrito. Escribe tus datos otra vez y los actualizamos.'));
+    var leer = campos_sobre();
     var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
-    card.appendChild(boton('Continuar', function () { if (leer(er)) apoyo(); }));
+    card.appendChild(boton('Continuar', function () { if (leer(er)) contacto(); }));
     volver('Volver a mis datos', function () { leer.guardar(); datos(); });
+  }
+  // Bloque 3 · Para mantenernos en contacto
+  function contacto() {
+    cabecera();
+    var leer = campos_contacto();
+    var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
+    var b1 = boton(id ? 'Continuar' : NUEVO ? 'Inscribirme' : 'Actualizar mis datos', function () { if (!leer(er)) return; if (id) apoyo(); else enviarIns(b1); });
+    card.appendChild(b1);
+    volver('Volver', function () { leer.guardar(); sobre(); });
   }
   function apoyo() {
     cabecera();
@@ -323,20 +364,21 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       }).catch(function () { apoyo(); card.querySelector('.err').textContent = 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'; });
     });
     card.appendChild(env);
-    volver('Volver', function () { guardar(); if (NUEVO) completar(); else datos(); });
+    volver('Volver', function () { guardar(); if (NUEVO) contacto(); else datos(); });
   }
 
   function inicio() {
     if (!id) {
       INFO = { titulo: 'Legado Piel de Ángel', sub: 'Inscripción' };
       document.title = 'Inscríbete · Legado Piel de Ángel';
-      inscripcion();
+      cargando();
+      api('legado', { a: '' }).then(function (j) { INVITAN = (j && j.info && j.info.invitan) || []; datos(); }).catch(function () { datos(); });
       return;
     }
     cargando();
     api('legado', { a: id }).then(function (j) {
       if (!j || !j.ok || !j.info || !j.info.valida) { card.innerHTML = '<p class="ok">Este enlace no es válido.</p>'; return; }
-      INFO = j.info;
+      INFO = j.info; INVITAN = INFO.invitan || [];
       document.title = INFO.titulo + ' · Legado Piel de Ángel';
       if (INFO.cerrada) {
         cabecera();
