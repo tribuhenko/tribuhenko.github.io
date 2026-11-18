@@ -50,6 +50,7 @@ h1{margin:0 0 4px;font-size:21px;line-height:1.3}
 .extra{border-top:1px solid var(--bd);margin-top:16px;padding-top:16px}
 .extra p{margin:0 0 12px;font-size:15px;line-height:1.5}
 .cargando{color:var(--tx2);font-size:15px;padding:18px 0}
+.det{white-space:pre-line;margin:8px auto 14px;padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--ac) 10%,var(--card));color:var(--tx);font-size:15px;line-height:1.6;text-align:left;display:inline-block}
 .hola{margin:2px 0 14px;text-align:center;font-size:16px;color:var(--tx)}
 .coord p{margin:0 0 10px}
 .punto{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ac);margin:0 3px;animation:p 1s infinite ease-in-out}
@@ -113,6 +114,12 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     return b;
   }
   // Saludo con el nombre: el enlace es personal y la respuesta queda a nombre de quien lo recibió
+  // v25: fecha, hora y lugar de la actividad (solo en el link de la tribu)
+  function cabeza(p) {
+    card.appendChild(el('h1', {}, txt(p.titulo)));
+    if (p.detalles) card.appendChild(el('div', { 'class': 'det' }, txt(p.detalles)));
+    else if (p.sub) card.appendChild(el('p', { 'class': 'sub' }, txt(p.sub)));
+  }
   function hola(p) { if (p.hola) card.appendChild(el('p', { 'class': 'hola' }, 'Hola, <strong>' + txt(p.hola) + '</strong> 👋')); }
   // Legado: botón para escribirle por WhatsApp a quien coordina (Elizabeth)
   function coordina(p) {
@@ -130,11 +137,10 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
   function formLegado(p) {
     var f = p.legadoForm, act = f.actual || {}, sel = { a: p.confirmar || act.a || '', areas: (act.areas || []).slice(), monto: act.monto || '', detalle: act.detalle || '' };
     card.innerHTML = '';
-    card.appendChild(el('h1', {}, txt(p.titulo)));
-    if (p.sub) card.appendChild(el('p', { 'class': 'sub' }, txt(p.sub)));
+    cabeza(p);
     hola(p);
     if (act.a) card.appendChild(el('p', { 'class': 'nota' }, 'Puedes cambiar tu respuesta aquí.'));
-    card.appendChild(el('p', { 'class': 'preg' }, '¿Cómo participarás en esta actividad?'));
+    card.appendChild(el('p', { 'class': 'preg' }, txt('¿Vas a ir a ' + p.titulo + '?')));
     var c1 = el('div', { 'class': 'chips', role: 'radiogroup' });
     Object.keys(f.opciones).forEach(function (k) {
       var l = el('label', { 'class': 'chip' + (sel.a === k ? ' on' : '') });
@@ -143,7 +149,7 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
       l.appendChild(i); l.appendChild(el('span', {}, txt(f.opciones[k]))); c1.appendChild(l);
     });
     card.appendChild(c1);
-    card.appendChild(el('p', { 'class': 'preg' }, '¿Cómo vas a apoyar esta actividad?'));
+    card.appendChild(el('p', { 'class': 'preg' }, 'Vayas o no, ¿cómo te gustaría apoyar?'));
     card.appendChild(el('p', { 'class': 'ayuda' }, 'Puedes elegir varias.'));
     var c2 = el('div', { 'class': 'chips' }), mw = el('div', { style: 'display:none;margin-top:10px' });
     var monto = el('input', { 'class': 'campo', type: 'text', inputmode: 'numeric', placeholder: 'Monto aproximado en RD$ (opcional)', maxlength: '12' }); monto.value = sel.monto || '';
@@ -162,7 +168,7 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
     var b = el('button', { 'class': 'b enviar', type: 'button', style: 'background:var(--ac)' }, 'Enviar mi respuesta');
     b.onclick = function () {
-      if (!sel.a) { er.textContent = 'Elige si vas al Legado.'; return; }
+      if (!sel.a) { er.textContent = 'Dinos si vas a ir.'; return; }
       pedir(sel.a, true, { areas: sel.areas, monto: monto.value.replace(/\D/g, ''), detalle: det.value.trim() });
     };
     card.appendChild(b);
@@ -173,8 +179,7 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     if (p.legadoForm && !p.cerrada && (p.confirmar || !p.legadoForm.actual || p.editar)) { formLegado(p); return; }
     document.title = p.titulo && p.titulo !== 'Tribu Henko V-120' ? p.titulo + ' · Tribu Henko V-120' : 'Tu respuesta · Tribu Henko V-120';
     card.innerHTML = '';
-    card.appendChild(el('h1', {}, txt(p.titulo)));
-    if (p.sub) card.appendChild(el('p', { 'class': 'sub' }, txt(p.sub)));
+    cabeza(p);
     if (!(p.legadoForm && !p.cerrada)) hola(p);
     card.appendChild(el('div', { 'class': 'msg' }, p.html));
     // v25: Legado ya respondido: agradecimiento → su apoyo → Elizabeth → calendario o comunidad → "Cambiar mi respuesta"
