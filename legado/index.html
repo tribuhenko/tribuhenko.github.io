@@ -83,13 +83,20 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   function txt(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
   function cargando() { card.innerHTML = '<div class="cargando"><span class="punto"></span><span class="punto"></span><span class="punto"></span><p>Un momento…</p></div>'; }
   // v25: el servidor a veces tarda: se espera hasta 90 segundos, se avisa si tarda y se intenta otra vez sola
-  function api(accion, datos, intento) {
+  function api(accion, datos, intento, ocup) {
     var ctl = window.AbortController ? new AbortController() : null, t = setTimeout(function () { if (ctl) ctl.abort(); }, 90000);
     var lento = setTimeout(function () { var c = card.querySelector('.cargando p'); if (c) c.textContent = 'Un momentito más…'; }, 8000);
     return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, credentials: 'omit', cache: 'no-store', redirect: 'follow',
       body: JSON.stringify({ accion: accion, datos: datos }), signal: ctl ? ctl.signal : undefined })
       .then(function (x) { clearTimeout(t); clearTimeout(lento); return x.json(); })
-      .catch(function (e) { clearTimeout(t); clearTimeout(lento); if (intento) throw e; return api(accion, datos, 1); });
+      .then(function (j) {
+        // v27: si el sistema está ocupado (salen muchos correos), se espera un poco y se intenta otra vez sola
+        if (j && j.ocupado && (ocup || 0) < 4) {
+          var c = card.querySelector('.cargando p'); if (c) c.textContent = 'Hay mucho movimiento… lo intentamos otra vez en unos segundos.';
+          return new Promise(function (ok) { setTimeout(ok, 5000); }).then(function () { return api(accion, datos, intento, (ocup || 0) + 1); });
+        }
+        return j;
+      }, function (e) { clearTimeout(t); clearTimeout(lento); if (intento) throw e; return api(accion, datos, 1, ocup); });
   }
   function cabecera() {
     card.innerHTML = '';
