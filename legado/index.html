@@ -65,6 +65,13 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
 .opc{font-weight:400;color:var(--tx3)}
 .campo::placeholder{color:var(--tx3);opacity:1}
 select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--tx2) 50%),linear-gradient(135deg,var(--tx2) 50%,transparent 50%);background-position:calc(100% - 18px) 52%,calc(100% - 13px) 52%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+.area .valor{display:none;margin:8px 0 6px 32px}.area.on .valor{display:block}
+.ayuda2{margin:4px 0 0;color:var(--tx3);font-size:13px}
+.opciones{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.opcion{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1.5px solid var(--bd);border-radius:16px;padding:16px;background:var(--card);color:var(--tx);cursor:pointer;font:16px Montserrat,system-ui,sans-serif}
+.opcion:hover,.opcion:focus-visible{border-color:var(--ac);outline:none;background:color-mix(in srgb,var(--ac) 6%,var(--card))}
+.opcion .ico{font-size:28px;line-height:1;flex:none}.opcion strong{display:block;font-size:17px}.opcion small{display:block;color:var(--tx2);font-size:14px;margin-top:2px}
+.cuentab{background:color-mix(in srgb,var(--ac) 8%,var(--card));border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.6;margin:0 0 6px;text-align:center}
 .volver{background:none;border:0;color:var(--tx2);font:600 14px Montserrat,system-ui,sans-serif;margin:14px auto 0;display:block;cursor:pointer}
 </style>
 </head>
@@ -81,11 +88,14 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   var card = document.getElementById('card');
   var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   var INFO = null, NUEVO = false, NOMBRE = '', INVITAN = [], YA = null;
+  // v41: persona o empresa (la empresa tiene un representante: a él le llegan las invitaciones)
+  var TIPO = '', E = { empresa: '', sector: '', ciudad: '', otra: '', rnc: '', sitio: '', cargo: '', tipos: [], menciona: '', talento: '' };
   var P = { correo: '', nombre: '', apellido: '', wa: '', codigo: '+1' }, PAIS = 0;
   // v36: WhatsApp con código de país, como el formulario de la tribu (República Dominicana por defecto)
   var PAISES = [["República Dominicana","+1",10,10],["Afganistán","+93",7,12],["Albania","+355",7,12],["Alemania","+49",10,11],["Andorra","+376",7,12],["Angola","+244",7,12],["Anguila","+1",10,10],["Antigua y Barbuda","+1",10,10],["Arabia Saudita","+966",7,12],["Argelia","+213",7,12],["Argentina","+54",10,11],["Armenia","+374",7,12],["Aruba","+297",7,7],["Australia","+61",9,9],["Austria","+43",7,12],["Azerbaiyán","+994",7,12],["Bahamas","+1",10,10],["Bangladés","+880",7,12],["Barbados","+1",10,10],["Baréin","+973",7,12],["Bélgica","+32",8,9],["Belice","+501",7,7],["Benín","+229",7,12],["Bermudas","+1",10,10],["Bielorrusia","+375",7,12],["Bolivia","+591",8,8],["Bonaire","+599",7,7],["Bosnia y Herzegovina","+387",7,12],["Botsuana","+267",7,12],["Brasil","+55",10,11],["Brunéi","+673",7,12],["Bulgaria","+359",7,12],["Burkina Faso","+226",7,12],["Burundi","+257",7,12],["Bután","+975",7,12],["Cabo Verde","+238",7,12],["Camboya","+855",7,12],["Camerún","+237",7,12],["Canadá","+1",10,10],["Catar","+974",7,12],["Chad","+235",7,12],["Chile","+56",9,9],["China","+86",11,11],["Chipre","+357",7,12],["Colombia","+57",10,10],["Comoras","+269",7,12],["Congo","+242",7,12],["Corea del Sur","+82",7,12],["Costa de Marfil","+225",7,12],["Costa Rica","+506",8,8],["Croacia","+385",7,12],["Cuba","+53",8,8],["Curazao","+599",7,8],["Dinamarca","+45",8,8],["Dominica","+1",10,10],["Ecuador","+593",9,9],["Egipto","+20",7,12],["El Salvador","+503",8,8],["Emiratos Árabes Unidos","+971",7,12],["Eritrea","+291",7,12],["Eslovaquia","+421",7,12],["Eslovenia","+386",7,12],["España","+34",9,9],["Estados Unidos","+1",10,10],["Estonia","+372",7,12],["Esuatini","+268",7,12],["Etiopía","+251",7,12],["Filipinas","+63",7,12],["Finlandia","+358",7,12],["Fiyi","+679",7,12],["Francia","+33",9,9],["Gabón","+241",7,12],["Gambia","+220",7,12],["Georgia","+995",7,12],["Ghana","+233",7,12],["Granada","+1",10,10],["Grecia","+30",10,10],["Groenlandia","+299",7,12],["Guadalupe","+590",9,9],["Guam","+1",10,10],["Guatemala","+502",8,8],["Guayana Francesa","+594",9,9],["Guinea","+224",7,12],["Guinea Ecuatorial","+240",7,12],["Guinea-Bisáu","+245",7,12],["Guyana","+592",7,7],["Haití","+509",8,8],["Honduras","+504",8,8],["Hong Kong","+852",8,8],["Hungría","+36",7,12],["India","+91",10,10],["Indonesia","+62",7,12],["Irak","+964",7,12],["Irán","+98",7,12],["Irlanda","+353",7,12],["Islandia","+354",7,12],["Islas Caimán","+1",10,10],["Islas Turcas y Caicos","+1",10,10],["Islas Vírgenes (EE. UU.)","+1",10,10],["Islas Vírgenes Británicas","+1",10,10],["Israel","+972",7,12],["Italia","+39",9,11],["Jamaica","+1",10,10],["Japón","+81",10,10],["Jordania","+962",7,12],["Kazajistán","+7",7,12],["Kenia","+254",7,12],["Kirguistán","+996",7,12],["Kuwait","+965",7,12],["Laos","+856",7,12],["Lesoto","+266",7,12],["Letonia","+371",7,12],["Líbano","+961",7,12],["Liberia","+231",7,12],["Libia","+218",7,12],["Liechtenstein","+423",7,12],["Lituania","+370",7,12],["Luxemburgo","+352",7,12],["Macao","+853",7,12],["Macedonia del Norte","+389",7,12],["Madagascar","+261",7,12],["Malasia","+60",7,12],["Malaui","+265",7,12],["Maldivas","+960",7,12],["Malí","+223",7,12],["Malta","+356",7,12],["Marruecos","+212",7,12],["Martinica","+596",9,9],["Mauricio","+230",7,12],["Mauritania","+222",7,12],["México","+52",10,10],["Moldavia","+373",7,12],["Mónaco","+377",7,12],["Mongolia","+976",7,12],["Montenegro","+382",7,12],["Montserrat","+1",10,10],["Mozambique","+258",7,12],["Myanmar","+95",7,12],["Namibia","+264",7,12],["Nepal","+977",7,12],["Nicaragua","+505",8,8],["Níger","+227",7,12],["Nigeria","+234",7,12],["Noruega","+47",8,8],["Nueva Zelanda","+64",7,12],["Omán","+968",7,12],["Países Bajos","+31",9,9],["Pakistán","+92",7,12],["Panamá","+507",8,8],["Papúa Nueva Guinea","+675",7,12],["Paraguay","+595",9,9],["Perú","+51",9,9],["Polonia","+48",9,9],["Portugal","+351",9,9],["Puerto Rico","+1",10,10],["Reino Unido","+44",10,10],["República Centroafricana","+236",7,12],["República Checa","+420",7,12],["República Democrática del Congo","+243",7,12],["Ruanda","+250",7,12],["Rumania","+40",7,12],["Rusia","+7",7,12],["San Cristóbal y Nieves","+1",10,10],["San Martín (Sint Maarten)","+1",10,10],["San Vicente y las Granadinas","+1",10,10],["Santa Lucía","+1",10,10],["Senegal","+221",7,12],["Serbia","+381",7,12],["Seychelles","+248",7,12],["Sierra Leona","+232",7,12],["Singapur","+65",8,8],["Siria","+963",7,12],["Somalia","+252",7,12],["Sri Lanka","+94",7,12],["Sudáfrica","+27",9,9],["Sudán","+249",7,12],["Suecia","+46",7,12],["Suiza","+41",9,9],["Surinam","+597",7,7],["Tailandia","+66",7,12],["Taiwán","+886",7,12],["Tanzania","+255",7,12],["Togo","+228",7,12],["Trinidad y Tobago","+1",10,10],["Túnez","+216",7,12],["Turkmenistán","+993",7,12],["Turquía","+90",10,10],["Ucrania","+380",7,12],["Uganda","+256",7,12],["Uruguay","+598",8,8],["Uzbekistán","+998",7,12],["Venezuela","+58",10,10],["Vietnam","+84",7,12],["Yemen","+967",7,12],["Zambia","+260",7,12],["Zimbabue","+263",7,12]];
   var I = { ciudad: '', otra: '', profesion: '', empresa: '', ig: '', sexo: '', talla: '', como: '', quien: '', comunidad: '', talento: '', acepto: false };
-  var S = { areas: [], monto: '', detalle: '' };
+  var S = { areas: [], valores: {}, forma: '', entrega: '', detalle: '' };
+  function esEmpresa() { return TIPO === 'empresa'; }
 
   function el(tag, attrs, html) { var e = document.createElement(tag); Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); }); if (html !== undefined) e.innerHTML = html; return e; }
   function txt(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
@@ -158,11 +168,14 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     if (PAISES[PAIS][1] !== '+1') return d.replace(/(\d{3})(?=\d)/g, '$1 ');
     return d.length > 6 ? '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6) : d.length > 3 ? '(' + d.slice(0, 3) + ') ' + d.slice(3) : d;
   }
-  function campos_datos() {
-    seccion('Tus datos');
+  // rep = true: datos del representante de la empresa (con su cargo; cumpleaños, sexo y talla opcionales)
+  function campos_datos(rep) {
+    seccion(rep ? 'El representante' : 'Tus datos');
+    if (rep) card.appendChild(el('p', { 'class': 'ayuda' }, 'La persona con quien coordinamos. A su correo llegan las invitaciones de cada actividad.'));
     var n = campo('nombre', 'Nombre', 'text', P.nombre, { autocomplete: 'given-name', autocapitalize: 'words', maxlength: '60', placeholder: 'Ej.: María' });
     var a = campo('apellido', 'Apellido', 'text', P.apellido, { autocomplete: 'family-name', autocapitalize: 'words', maxlength: '80', placeholder: 'Ej.: Pérez' });
-    card.appendChild(el('p', { 'class': 'lb' }, 'Cumpleaños'));
+    var cg = rep ? campo('cargo', 'Cargo en la empresa', 'text', E.cargo, { autocapitalize: 'words', maxlength: '80', placeholder: 'Ej.: Gerente general' }) : null;
+    card.appendChild(el('p', { 'class': 'lb' }, rep ? opc('Cumpleaños') : 'Cumpleaños'));
     var fc = el('div', { 'class': 'fila', style: 'margin-bottom:12px' });
     var dia = el('select', { 'class': 'campo', 'aria-label': 'Día' }), mes = el('select', { 'class': 'campo', 'aria-label': 'Mes' });
     dia.appendChild(el('option', { value: '' }, 'Día')); for (var d = 1; d <= 31; d++) dia.appendChild(el('option', { value: String(d) }, String(d)));
@@ -186,13 +199,23 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     ps.onchange = function () { w.placeholder = PAISES[PAIS][1] === '+1' ? 'Ej.: (809) 555-1234' : 'Solo el número, sin el código'; w.oninput(); };
     tl.appendChild(ps); tl.appendChild(w); tl.appendChild(ls); ww.appendChild(tl); pinta();
     var c = campo('correo', 'Correo', 'email', P.correo, { autocomplete: 'email', inputmode: 'email', maxlength: '120', placeholder: 'Ej.: maria@ejemplo.com' });
+    var talla = null;
+    if (rep) {
+      radios(opc('Sexo'), [['Hombre', 'Hombre'], ['Mujer', 'Mujer']], I.sexo, function (v) { I.sexo = v; }, true);
+      var tw = el('div', { 'class': 'f' }); talla = el('select', { 'class': 'campo', id: 'talla' });
+      talla.appendChild(el('option', { value: '' }, 'Elige la talla')); ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].forEach(function (x) { talla.appendChild(el('option', { value: x }, x)); });
+      talla.value = I.talla || ''; tw.appendChild(el('label', { 'class': 'lb', 'for': 'talla' }, opc('Talla de t-shirt'))); tw.appendChild(talla); card.appendChild(tw);
+    }
     var hp = el('input', { 'class': 'hp', id: 'web', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' }); card.appendChild(hp);
     return function (er) {
       P = { correo: c.value.trim().toLowerCase(), nombre: n.value.trim(), apellido: a.value.trim(), wa: w.value.replace(/\D/g, ''), codigo: PAISES[PAIS][1], cumpleDia: dia.value, cumpleMes: mes.value };
+      if (cg) E.cargo = cg.value.trim();
+      if (talla) I.talla = talla.value;
       if (hp.value) return false;
-      if (!P.nombre) return aviso(er, 'Escribe tu nombre.', n);
-      if (!P.apellido) return aviso(er, 'Escribe tu apellido.', a);
-      if (!P.cumpleDia || !P.cumpleMes) return aviso(er, 'Elige el día y el mes de tu cumpleaños.', P.cumpleDia ? mes : dia);
+      if (!P.nombre) return aviso(er, rep ? 'Escribe el nombre del representante.' : 'Escribe tu nombre.', n);
+      if (!P.apellido) return aviso(er, rep ? 'Escribe el apellido del representante.' : 'Escribe tu apellido.', a);
+      if (rep && !E.cargo) return aviso(er, 'Escribe el cargo del representante en la empresa.', cg);
+      if (!rep && (!P.cumpleDia || !P.cumpleMes)) return aviso(er, 'Elige el día y el mes de tu cumpleaños.', P.cumpleDia ? mes : dia);
       if (P.wa.length < PAISES[PAIS][2] || P.wa.length > PAISES[PAIS][3]) return aviso(er, 'Revisa tu número de WhatsApp: ' + (PAISES[PAIS][2] === PAISES[PAIS][3] ? PAISES[PAIS][2] : PAISES[PAIS][2] + ' a ' + PAISES[PAIS][3]) + ' números, sin el código del país.', w);
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(P.correo)) return aviso(er, 'Revisa tu correo.', c);
       return true;
@@ -233,7 +256,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     seccion('Para mantenernos en contacto');
     var quienW = el('div', { 'class': 'f', style: 'margin-top:-2px' }), otroW = el('div', { 'class': 'f', style: 'display:none' });
     var lista = INVITAN || [], sel = null, quien = el('input', { 'class': 'campo', id: 'quien', type: 'text', maxlength: '80', autocapitalize: 'words', placeholder: 'Escribe su nombre' });
-    quienW.appendChild(el('label', { 'class': 'lb', 'for': lista.length ? 'quiensel' : 'quien' }, opc('¿Quién te invitó?')));
+    quienW.appendChild(el('label', { 'class': 'lb', 'for': lista.length ? 'quiensel' : 'quien' }, opc(esEmpresa() ? '¿Quién los invitó?' : '¿Quién te invitó?')));
     if (lista.length) {
       sel = el('select', { 'class': 'campo', id: 'quiensel' });
       sel.appendChild(el('option', { value: '' }, 'Elige a la persona'));
@@ -245,11 +268,12 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       if (sel.value === '__otra') quien.value = I.quien;
       otroW.appendChild(quien); otroW.style.display = sel.value === '__otra' ? 'block' : 'none';
     } else { quien.value = I.quien; quienW.appendChild(quien); }
-    radios(opc('¿Cómo conociste el Legado?'), [['Por alguien de Henko', 'Por alguien de Henko'], ['Redes sociales', 'Redes sociales'], ['Otro', 'Otro']], I.como,
+    radios(opc(esEmpresa() ? '¿Cómo conocieron el Legado?' : '¿Cómo conociste el Legado?'), [['Por alguien de Henko', 'Por alguien de Henko'], ['Redes sociales', 'Redes sociales'], ['Otro', 'Otro']], I.como,
       function (v) { I.como = v; quienW.style.display = v === 'Por alguien de Henko' ? 'block' : 'none'; otroW.style.display = v === 'Por alguien de Henko' && sel && sel.value === '__otra' ? 'block' : 'none'; });
     card.appendChild(quienW); card.appendChild(otroW); quienW.style.display = I.como === 'Por alguien de Henko' ? 'block' : 'none';
     if (I.como !== 'Por alguien de Henko') otroW.style.display = 'none';
     radios('¿Quieres unirte a nuestra comunidad de WhatsApp?', [['1', 'Sí'], ['0', 'No']], I.comunidad, function (v) { I.comunidad = v; }, true);
+    if (esEmpresa()) radios('¿Podemos mencionar a la empresa como aliada del Legado?', [['Sí', 'Sí'], ['No', 'No']], E.menciona, function (v) { E.menciona = v; }, true);
     var lc = el('label', { 'class': 'chip' + (I.acepto ? ' on' : ''), style: 'margin-top:8px' }), ic = el('input', { type: 'checkbox' }); ic.checked = I.acepto;
     ic.onchange = function () { I.acepto = ic.checked; lc.classList.toggle('on', ic.checked); };
     lc.appendChild(ic); lc.appendChild(el('span', { style: 'font-size:15px' }, 'Acepto recibir noticias del Legado Piel de Ángel por correo.'));
@@ -258,6 +282,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     var leer = function (er) {
       guardar();
       if (!I.comunidad) return aviso(er, 'Dinos si quieres unirte a la comunidad de WhatsApp.');
+      if (esEmpresa() && !E.menciona) return aviso(er, 'Dinos si podemos mencionar a la empresa como aliada del Legado.');
       if (!I.acepto) return aviso(er, 'Marca que aceptas recibir noticias del Legado.');
       return true;
     };
@@ -265,6 +290,9 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     return leer;
   }
   function datosInscripcion() {
+    if (esEmpresa()) return { tipo: 'empresa', empresa: E.empresa, sector: E.sector, ciudad: E.ciudad === 'Otra' ? E.otra : E.ciudad, rnc: E.rnc, sitio: E.sitio, cargo: E.cargo, tipos: E.tipos,
+      menciona: E.menciona, talento: E.talento, cumpleDia: P.cumpleDia, cumpleMes: P.cumpleMes, sexo: I.sexo, talla: I.talla, como: I.como, quien: I.como === 'Por alguien de Henko' ? I.quien : '',
+      comunidad: I.comunidad === '1', acepto: I.acepto };
     return { ciudad: I.ciudad === 'Otra' ? I.otra : I.ciudad, profesion: I.profesion, empresa: I.empresa, cumpleDia: P.cumpleDia, cumpleMes: P.cumpleMes, ig: I.ig, sexo: I.sexo, talla: I.talla,
       como: I.como, quien: I.como === 'Por alguien de Henko' ? I.quien : '', comunidad: I.comunidad === '1', talento: I.talento, acepto: I.acepto };
   }
@@ -277,7 +305,9 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   // ---- v36: Gracias de la inscripción (formato de Juan Luis)
   function graciasIns(j) {
     cabecera();
-    card.appendChild(el('p', { 'class': 'ok' }, '¡Gracias, ' + txt(j.nombre) + '!<br>💙 <strong>' + (j.nuevo ? 'Ya eres parte del Legado Piel&nbsp;de&nbsp;Ángel.' : 'Actualizamos tus datos.') + '</strong><br>'
+    if (j.empresa) card.appendChild(el('p', { 'class': 'ok' }, '¡Gracias, ' + txt(j.nombre) + '!<br>💙 <strong>' + txt(j.empresa) + (j.nuevo ? ' ya es parte del Legado Piel&nbsp;de&nbsp;Ángel.' : ': actualizamos sus datos.') + '</strong><br>'
+      + (j.nuevo ? 'Te enviamos un correo de bienvenida y te avisaremos de cada actividad.' : 'Te seguiremos avisando de cada actividad a tu correo.')));
+    else card.appendChild(el('p', { 'class': 'ok' }, '¡Gracias, ' + txt(j.nombre) + '!<br>💙 <strong>' + (j.nuevo ? 'Ya eres parte del Legado Piel&nbsp;de&nbsp;Ángel.' : 'Actualizamos tus datos.') + '</strong><br>'
       + (j.nuevo ? 'Te enviamos un correo de bienvenida y te avisaremos de cada actividad.' : 'Te seguiremos avisando de cada actividad a tu correo.')));
     amigos(j.amigos);
     if (j.abiertas && j.abiertas.length) abiertas(j.abiertas);
@@ -285,10 +315,11 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   function enviarIns(boton1) {
     boton1.disabled = true; cargando();
     api('legadoInscribir', Object.assign({}, P, datosInscripcion())).then(function (j) {
-      if (!j || !j.ok) { contacto(); card.querySelector('.err').textContent = (j && j.error) || 'No pudimos guardar tu inscripción.'; return; }
+      var atras = esEmpresa() ? aporteEmpresa : contacto;
+      if (!j || !j.ok) { atras(); card.querySelector('.err').textContent = (j && j.error) || 'No pudimos guardar tu inscripción.'; return; }
       if (j.tribu) return deLaTribu('');
       graciasIns(j);
-    }).catch(function () { contacto(); card.querySelector('.err').textContent = 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'; });
+    }).catch(function () { (esEmpresa() ? aporteEmpresa : contacto)(); card.querySelector('.err').textContent = 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'; });
   }
   // v34: si hay una actividad abierta, se ofrece al terminar la inscripción (si no responde, la invitación le llega al día siguiente)
   function abiertas(l) {
@@ -304,11 +335,11 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     api('legado', { a: id }).then(function (j) {
       if (!j || !j.ok || !j.info || !j.info.valida || j.info.cerrada) return error('Las respuestas para esta actividad ya cerraron.');
       INFO = j.info; document.title = INFO.titulo + ' · Legado Piel de Ángel';
-      return api('legadoId', Object.assign({ a: id }, P)).then(function (k) {
+      return api('legadoId', esEmpresa() ? { a: id, tipo: 'empresa', empresa: E.empresa, rnc: E.rnc } : Object.assign({ a: id }, P)).then(function (k) {
         if (!k || !k.ok) return error((k && k.error) || 'No pudimos continuar.');
         if (k.tribu) return deLaTribu(k.correo);
-        NUEVO = !k.inscrito; NOMBRE = k.nombre || P.nombre;
-        if (NUEVO) sobre(); else apoyo();
+        NUEVO = !k.inscrito; NOMBRE = k.nombre || P.nombre; if (k.empresa) E.empresa = k.empresa;
+        if (NUEVO) { if (esEmpresa()) representante(); else sobre(); } else apoyo();
       });
     }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
   }
@@ -330,6 +361,97 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
         if (NUEVO) sobre(); else if (id) apoyo(); else yaInscrito();
       }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
     }));
+    volver('Volver', tipo);
+  }
+  // ---- v41: ¿como persona o como empresa?
+  function tipo() {
+    cabecera();
+    card.appendChild(el('p', { 'class': 'intro' }, id ? 'Gracias por querer sumarte 💙 ¿Cómo vas a apoyar esta actividad?' : 'Gracias por querer sumarte 💙 ¿Cómo te quieres inscribir?'));
+    var w = el('div', { 'class': 'opciones' });
+    [['persona', '👤', 'Como persona', 'Te inscribes a tu nombre.'], ['empresa', '🏢', 'Como empresa', 'Inscribes a tu empresa y quedas como su representante.']].forEach(function (o) {
+      var b = el('button', { type: 'button', 'class': 'opcion' }, '<span class="ico" aria-hidden="true">' + o[1] + '</span><span><strong>' + o[2] + '</strong><small>' + o[3] + '</small></span>');
+      b.onclick = function () { TIPO = o[0]; if (o[0] === 'empresa') empresa1(); else datos(); };
+      w.appendChild(b);
+    });
+    card.appendChild(w);
+  }
+  // Empresa · Bloque 1: la empresa (si ya está inscrita, se reconoce por el nombre o el RNC)
+  function empresa1() {
+    cabecera();
+    card.appendChild(el('p', { 'class': 'intro' }, '¡Gracias por sumar a tu empresa! 💙 Cuéntanos de ella.'));
+    seccion('La empresa');
+    var em = campo('empresa', 'Nombre de la empresa', 'text', E.empresa, { maxlength: '100', autocapitalize: 'words', placeholder: 'Ej.: Distribuidora Ejemplo' });
+    var se = campo('sector', '¿A qué se dedica?', 'text', E.sector, { maxlength: '100', autocapitalize: 'sentences', placeholder: 'Ej.: Distribución de alimentos' });
+    var otraW = el('div', { 'class': 'f', style: 'display:none;margin-top:-2px' }), otra = el('input', { 'class': 'campo', id: 'eciudad', type: 'text', maxlength: '60', autocapitalize: 'words', placeholder: 'Ej.: La Vega, Puerto Plata' });
+    otra.value = E.otra; otraW.appendChild(el('label', { 'class': 'lb', 'for': 'eciudad' }, '¿Cuál?')); otraW.appendChild(otra);
+    radios('Ciudad', [['Santiago', 'Santiago'], ['Santo Domingo', 'Santo Domingo'], ['Otra', 'Otra']], E.ciudad, function (v) { E.ciudad = v; otraW.style.display = v === 'Otra' ? 'block' : 'none'; if (v === 'Otra') otra.focus(); });
+    card.appendChild(otraW); otraW.style.display = E.ciudad === 'Otra' ? 'block' : 'none';
+    var rnc = campo('rnc', opc('RNC'), 'text', E.rnc, { inputmode: 'numeric', maxlength: '13', placeholder: 'Ej.: 101234567' });
+    rnc.oninput = function () { rnc.value = rnc.value.replace(/[^\d-]/g, ''); };
+    var si = campo('sitio', opc('Instagram o página web'), 'text', E.sitio, { maxlength: '120', autocapitalize: 'off', autocomplete: 'off', placeholder: 'Ej.: @empresa o www.empresa.com' });
+    var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
+    function guardar() { E.empresa = em.value.trim(); E.sector = se.value.trim(); E.otra = otra.value.trim(); E.rnc = rnc.value.replace(/\D/g, ''); E.sitio = si.value.trim(); }
+    card.appendChild(boton('Continuar', function () {
+      guardar();
+      if (!E.empresa) return aviso(er, 'Escribe el nombre de la empresa.', em);
+      if (!E.sector) return aviso(er, 'Dinos a qué se dedica la empresa.', se);
+      if (!E.ciudad) return aviso(er, 'Dinos en qué ciudad está la empresa.');
+      if (E.ciudad === 'Otra' && !E.otra) return aviso(er, 'Escribe la ciudad.', otra);
+      if (E.rnc && E.rnc.length !== 9 && E.rnc.length !== 11) return aviso(er, 'Revisa el RNC: tiene 9 u 11 números.', rnc);
+      cargando();
+      api('legadoId', { a: id, tipo: 'empresa', empresa: E.empresa, rnc: E.rnc }).then(function (j) {
+        if (!j || !j.ok) return error((j && j.error) || 'No pudimos continuar.');
+        NUEVO = !j.inscrito; NOMBRE = j.nombre || ''; YA = j;
+        if (!NUEVO) E.empresa = j.empresa || E.empresa;
+        if (NUEVO) representante(); else if (id) apoyo(); else yaEmpresa();
+      }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
+    }));
+    volver('Volver', function () { guardar(); tipo(); });
+  }
+  function yaEmpresa() {
+    cabecera();
+    card.appendChild(el('p', { 'class': 'ok' }, '¡Qué bueno verte de nuevo! 💙<br><strong>' + txt(E.empresa) + ' ya es parte del Legado Piel&nbsp;de&nbsp;Ángel.</strong><br>Le seguiremos avisando de cada actividad a su representante.'));
+    var w = el('div', { 'class': 'coord' });
+    w.appendChild(el('p', {}, '¿Deseas actualizar los datos de la empresa?'));
+    w.appendChild(boton('Actualizar los datos', representante));
+    card.appendChild(w);
+    if (YA && YA.abiertas && YA.abiertas.length) abiertas(YA.abiertas);
+  }
+  // Empresa · Bloque 2: el representante
+  function representante() {
+    cabecera();
+    card.appendChild(el('p', { 'class': 'intro' }, NUEVO ? '¿Quién representa a <strong>' + txt(E.empresa) + '</strong>?' : 'Actualiza los datos de <strong>' + txt(E.empresa) + '</strong> 💙 Escríbelos como están ahora y los guardamos.'));
+    var leer = campos_datos(true);
+    var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
+    card.appendChild(boton('Continuar', function () { if (leer(er)) aporteEmpresa(); }));
+    volver('Volver', function () { if (NUEVO || id) empresa1(); else yaEmpresa(); });
+  }
+  // Empresa · Bloque 3: cómo apoya y para mantenernos en contacto
+  function aporteEmpresa() {
+    cabecera();
+    seccion('Cómo apoya la empresa');
+    card.appendChild(el('p', { 'class': 'lb' }, 'Tipo de aporte'));
+    card.appendChild(el('p', { 'class': 'ayuda' }, 'Puedes elegir varios.'));
+    var g = el('div', { 'class': 'chips', style: 'margin-bottom:12px' });
+    ['Dinero', 'Patrocinio', 'Productos', 'Servicios'].forEach(function (x) {
+      var l = el('label', { 'class': 'chip' + (E.tipos.indexOf(x) >= 0 ? ' on' : '') }), i = el('input', { type: 'checkbox' }); i.checked = E.tipos.indexOf(x) >= 0;
+      i.onchange = function () { var k = E.tipos.indexOf(x); if (i.checked && k < 0) E.tipos.push(x); if (!i.checked && k >= 0) E.tipos.splice(k, 1); l.classList.toggle('on', i.checked); };
+      l.appendChild(i); l.appendChild(el('span', {}, txt(x))); g.appendChild(l);
+    });
+    card.appendChild(g);
+    var tal = campo('etalento', opc('¿Qué puede ofrecer la empresa?'), 'area', E.talento, { rows: '4', maxlength: '500', placeholder: 'Ej.: Podemos donar productos para las actividades. · Prestamos un vehículo para el transporte. · Patrocinamos los regalos de Navidad.' });
+    var cta = el('p', { 'class': 'cuenta' }); card.appendChild(cta);
+    tal.oninput = function () { cta.textContent = tal.value.length + '/500'; }; tal.oninput();
+    var leer = campos_contacto();
+    var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
+    var b1 = boton(id ? 'Continuar' : NUEVO ? 'Inscribir a la empresa' : 'Actualizar los datos', function () {
+      E.talento = tal.value.trim();
+      if (!E.tipos.length) return aviso(er, 'Elige al menos un tipo de aporte.');
+      if (!leer(er)) return;
+      if (id) apoyo(); else enviarIns(b1);
+    });
+    card.appendChild(b1);
+    volver('Volver', function () { E.talento = tal.value.trim(); leer.guardar(); representante(); });
   }
   // v40: ya está inscrito (link general): no tiene que escribir todo otra vez; actualiza sus datos solo si quiere
   function yaInscrito() {
@@ -360,44 +482,88 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     card.appendChild(b1);
     volver('Volver', function () { leer.guardar(); sobre(); });
   }
+  // v41: cada área que marque abre su cajita: la donación pide el monto y cómo la entrega (efectivo → a quién de la tribu; transferencia → la cuenta al final);
+  // las demás, el valor aproximado (opcional)
+  function fmtNum(d) { d = String(d || '').replace(/\D/g, '').slice(0, 9); return d ? Number(d).toLocaleString('en-US') : ''; }
+  function bloqueApoyo(areas, S, tribu) {
+    var c2 = el('div', { 'class': 'chips' });
+    areas.forEach(function (ar) {
+      var don = /donaci/i.test(ar), on = S.areas.indexOf(ar) >= 0;
+      var w = el('div', { 'class': 'area' + (on ? ' on' : '') });
+      var l = el('label', { 'class': 'chip' + (on ? ' on' : '') }), i = el('input', { type: 'checkbox' }); i.checked = on;
+      l.appendChild(i); l.appendChild(el('span', {}, txt(ar))); w.appendChild(l);
+      var box = el('div', { 'class': 'valor' });
+      var v = el('input', { 'class': 'campo', type: 'text', inputmode: 'numeric', maxlength: '12', placeholder: don ? 'Monto en RD$. Ej.: 2,000' : 'Valor aproximado en RD$', 'aria-label': (don ? 'Monto de la donación en RD$' : 'Valor aproximado en RD$') + ': ' + ar });
+      v.value = fmtNum(S.valores[ar]);
+      v.oninput = function () { v.value = fmtNum(v.value); S.valores[ar] = v.value.replace(/\D/g, ''); };
+      box.appendChild(v);
+      if (!don) box.appendChild(el('p', { 'class': 'ayuda2' }, 'Opcional: si no sabes cuánto vale, déjalo en blanco.'));
+      else {
+        box.appendChild(el('p', { 'class': 'lb', style: 'margin:12px 0 6px' }, '¿Cómo vas a entregar tu donación?'));
+        var fg = el('div', { 'class': 'fila', role: 'radiogroup' }), ew = el('div', { style: 'display:none;margin-top:10px' });
+        [['Efectivo', '💵 Efectivo'], ['Transferencia', '🏦 Transferencia']].forEach(function (o) {
+          var lo = el('label', { 'class': 'chip' + (S.forma === o[0] ? ' on' : '') }), io = el('input', { type: 'radio', name: 'forma' }); io.checked = S.forma === o[0];
+          io.onchange = function () { S.forma = o[0]; [].forEach.call(fg.children, function (x) { x.classList.toggle('on', x === lo); }); ew.style.display = o[0] === 'Efectivo' && tribu.length ? 'block' : 'none'; };
+          lo.appendChild(io); lo.appendChild(el('span', {}, txt(o[1]))); fg.appendChild(lo);
+        });
+        box.appendChild(fg);
+        if (tribu && tribu.length) {
+          ew.appendChild(el('label', { 'class': 'lb', 'for': 'entrega' }, opc('¿A quién de la tribu se lo entregas?')));
+          var se = el('select', { 'class': 'campo', id: 'entrega' }); se.appendChild(el('option', { value: '' }, 'Elige a la persona'));
+          tribu.forEach(function (n) { se.appendChild(el('option', { value: n }, txt(n))); });
+          se.value = S.entrega || ''; se.onchange = function () { S.entrega = se.value; };
+          ew.appendChild(se); ew.style.display = S.forma === 'Efectivo' ? 'block' : 'none';
+          box.appendChild(ew);
+        }
+      }
+      w.appendChild(box);
+      i.onchange = function () { var k = S.areas.indexOf(ar); if (i.checked && k < 0) S.areas.push(ar); if (!i.checked && k >= 0) S.areas.splice(k, 1); l.classList.toggle('on', i.checked); w.classList.toggle('on', i.checked); };
+      c2.appendChild(w);
+    });
+    return c2;
+  }
+  function valoresDe(S) { var o = {}; S.areas.forEach(function (a) { if (S.valores[a]) o[a] = S.valores[a]; }); return o; }
+  // Transferencia: la cuenta del Legado y el botón para enviar el comprobante
+  function pagoBox(pg) {
+    if (!pg) return;
+    var w = el('div', { 'class': 'coord' });
+    if (pg.cuenta) { w.appendChild(el('p', {}, '<strong>🏦 Puedes hacer tu transferencia a nuestra cuenta:</strong>')); w.appendChild(el('div', { 'class': 'cuentab' }, pg.cuenta)); }
+    if (pg.comprobante) { w.appendChild(el('p', { style: 'margin-top:14px' }, '¿Ya la hiciste? Envíanos tu comprobante:')); w.appendChild(el('a', { 'class': 'b2 wa', href: pg.comprobante, target: '_blank', rel: 'noopener' }, 'Enviar comprobante')); }
+    card.appendChild(w);
+  }
   function apoyo() {
     cabecera();
-    if (!NUEVO) card.appendChild(el('p', { 'class': 'intro' }, '¡Qué bueno verte de nuevo, ' + txt(NOMBRE) + '! 💙'));
-    seccion('Tu apoyo');
-    card.appendChild(el('p', { 'class': 'preg' }, '¿Cómo vas a apoyar esta actividad?'));
+    if (!NUEVO) card.appendChild(el('p', { 'class': 'intro' }, esEmpresa() ? '¡Qué bueno verte de nuevo! 💙' : '¡Qué bueno verte de nuevo, ' + txt(NOMBRE) + '! 💙'));
+    seccion(esEmpresa() ? 'El apoyo de la empresa' : 'Tu apoyo');
+    card.appendChild(el('p', { 'class': 'preg' }, esEmpresa() ? '¿Cómo va a apoyar ' + txt(E.empresa) + ' esta actividad?' : '¿Cómo vas a apoyar esta actividad?'));
     card.appendChild(el('p', { 'class': 'ayuda' }, 'Puedes elegir varias.'));
-    var c2 = el('div', { 'class': 'chips' }), mw = el('div', { style: 'display:none;margin-top:10px' });
-    var monto = el('input', { 'class': 'campo', type: 'text', inputmode: 'numeric', placeholder: 'Monto aproximado en RD$ (opcional). Ej.: 2,000', maxlength: '12' }); monto.value = S.monto;
-    mw.appendChild(monto);
-    function verMonto() { mw.style.display = S.areas.some(function (x) { return /donaci/i.test(x); }) ? 'block' : 'none'; }
-    INFO.areas.forEach(function (ar) {
-      var l = el('label', { 'class': 'chip' + (S.areas.indexOf(ar) >= 0 ? ' on' : '') }), i = el('input', { type: 'checkbox' });
-      i.checked = S.areas.indexOf(ar) >= 0;
-      i.onchange = function () { var k = S.areas.indexOf(ar); if (i.checked && k < 0) S.areas.push(ar); if (!i.checked && k >= 0) S.areas.splice(k, 1); l.classList.toggle('on', i.checked); verMonto(); };
-      l.appendChild(i); l.appendChild(el('span', {}, txt(ar))); c2.appendChild(l);
-    });
-    card.appendChild(c2); card.appendChild(mw); verMonto();
+    card.appendChild(bloqueApoyo(INFO.areas, S, INFO.tribu || []));
     card.appendChild(el('p', { 'class': 'preg' }, '¿Puedes especificar cómo puedes colaborar?'));
     var det = el('textarea', { 'class': 'campo', rows: '3', maxlength: '600', placeholder: 'Ej.: llevo 10 juguetes y 2 cajas de jugo' }); det.value = S.detalle;
     card.appendChild(det);
     var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
-    function guardar() { S.monto = monto.value.replace(/\D/g, ''); S.detalle = det.value.trim(); }
+    function guardar() { S.detalle = det.value.trim(); }
     var env = boton('Enviar', function () {
       guardar();
       if (!S.areas.length) { er.textContent = 'Elige al menos una forma de apoyar.'; return; }
+      var don = S.areas.some(function (x) { return /donaci/i.test(x); });
+      if (don && !S.forma) { er.textContent = 'Dinos cómo vas a entregar tu donación: en efectivo o por transferencia.'; return; }
       env.disabled = true; cargando();
-      api('legadoApoyo', Object.assign({ a: id, areas: S.areas, monto: S.monto, detalle: S.detalle }, P, NUEVO ? datosInscripcion() : {})).then(function (j) {
+      var d = Object.assign({ a: id, areas: S.areas, valores: valoresDe(S), forma: don ? S.forma : '', entrega: don && S.forma === 'Efectivo' ? S.entrega : '', detalle: S.detalle },
+        esEmpresa() ? { tipo: 'empresa', empresa: E.empresa, rnc: E.rnc } : {}, NUEVO || !esEmpresa() ? P : {}, NUEVO ? datosInscripcion() : {});
+      api('legadoApoyo', d).then(function (j) {
         if (!j || !j.ok) { apoyo(); card.querySelector('.err').textContent = (j && j.error) || 'No pudimos guardar tu respuesta.'; return; }
         if (j.tribu) return deLaTribu(j.correo);
         cabecera();
         card.appendChild(el('div', { 'class': 'ok' }, j.gracias || ('¡Gracias, ' + txt(j.nombre) + '! 💙')));
         card.appendChild(el('p', { 'class': 'ayuda', style: 'text-align:center' }, 'Te enviamos un correo con el resumen de tu aporte.'));
+        pagoBox(j.pago);   // transferencia: cuenta y comprobante; efectivo: nada más
         amigos(j.amigos);
-        coordina('¿Quieres entregar una donación o tienes alguna pregunta?');
+        if (j.coordinar) coordina('¿Necesitas coordinar la entrega de tu aporte?');
       }).catch(function () { apoyo(); card.querySelector('.err').textContent = 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'; });
     });
     card.appendChild(env);
-    volver('Volver', function () { guardar(); if (NUEVO) contacto(); else datos(); });
+    volver('Volver', function () { guardar(); if (NUEVO) { if (esEmpresa()) aporteEmpresa(); else contacto(); } else if (esEmpresa()) empresa1(); else datos(); });
   }
 
   function inicio() {
@@ -405,7 +571,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       INFO = { titulo: 'Legado Piel de Ángel', sub: 'Inscripción' };
       document.title = 'Inscríbete · Legado Piel de Ángel';
       cargando();
-      api('legado', { a: '' }).then(function (j) { INVITAN = (j && j.info && j.info.invitan) || []; datos(); }).catch(function () { datos(); });
+      api('legado', { a: '' }).then(function (j) { INVITAN = (j && j.info && j.info.invitan) || []; tipo(); }).catch(function () { tipo(); });
       return;
     }
     cargando();
@@ -420,7 +586,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
         card.appendChild(el('p', { 'class': 'ok' }, msg));
         return;
       }
-      datos();
+      tipo();
     }).catch(function () { card.innerHTML = ''; card.appendChild(el('p', { 'class': 'ok' }, 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.')); card.appendChild(boton('Intentar de nuevo', inicio)); });
   }
   inicio();

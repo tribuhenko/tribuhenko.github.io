@@ -58,6 +58,13 @@ h1{margin:0 0 4px;font-size:21px;line-height:1.3}
 @keyframes p{0%,80%,100%{opacity:.25;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.punto{animation:none}}
 footer{margin-top:18px;color:var(--tx3);font-size:13px}
+.area .valor{display:none;margin:8px 0 6px 32px;text-align:left}.area.on .valor{display:block}
+.ayuda2{margin:4px 0 0;color:var(--tx3);font-size:13px;text-align:left}
+.lb{display:block;font-weight:600;font-size:14px;margin:12px 0 6px;text-align:left}
+.opc{font-weight:400;color:var(--tx3)}
+.fila{display:flex;gap:8px}.fila .chip{flex:1;justify-content:center}
+select.campo{appearance:none;-webkit-appearance:none}
+.cuentab{background:color-mix(in srgb,var(--ac) 8%,var(--card));border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.6;margin:0 0 10px}
 </style>
 </head>
 <body>
@@ -138,9 +145,63 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
   function enlace(url, texto, color) {
     return el('a', { 'class': 'b', href: url, target: '_blank', rel: 'noopener', style: 'background:' + color }, txt(texto));
   }
+  // v41: cada área que marque abre su cajita: la donación pide el monto y cómo la entrega (efectivo → a quién de la tribu; transferencia → la cuenta);
+  // las demás, el valor aproximado (opcional)
+  function opc(t) { return txt(t) + ' <span class="opc">(opcional)</span>'; }
+  function fmtNum(d) { d = String(d || '').replace(/\D/g, '').slice(0, 9); return d ? Number(d).toLocaleString('en-US') : ''; }
+  function bloqueApoyo(areas, S, tribu) {
+    var c2 = el('div', { 'class': 'chips' });
+    areas.forEach(function (ar) {
+      var don = /donaci/i.test(ar), on = S.areas.indexOf(ar) >= 0;
+      var w = el('div', { 'class': 'area' + (on ? ' on' : '') });
+      var l = el('label', { 'class': 'chip' + (on ? ' on' : '') }), i = el('input', { type: 'checkbox' }); i.checked = on;
+      l.appendChild(i); l.appendChild(el('span', {}, txt(ar))); w.appendChild(l);
+      var box = el('div', { 'class': 'valor' });
+      var v = el('input', { 'class': 'campo', type: 'text', inputmode: 'numeric', maxlength: '12', placeholder: don ? 'Monto en RD$. Ej.: 2,000' : 'Valor aproximado en RD$', 'aria-label': (don ? 'Monto de la donación en RD$' : 'Valor aproximado en RD$') + ': ' + ar });
+      v.value = fmtNum(S.valores[ar]);
+      v.oninput = function () { v.value = fmtNum(v.value); S.valores[ar] = v.value.replace(/\D/g, ''); };
+      box.appendChild(v);
+      if (!don) box.appendChild(el('p', { 'class': 'ayuda2' }, 'Opcional: si no sabes cuánto vale, déjalo en blanco.'));
+      else {
+        box.appendChild(el('p', { 'class': 'lb' }, '¿Cómo vas a entregar tu donación?'));
+        var fg = el('div', { 'class': 'fila', role: 'radiogroup' }), ew = el('div', { style: 'display:none;margin-top:4px' });
+        [['Efectivo', '💵 Efectivo'], ['Transferencia', '🏦 Transferencia']].forEach(function (o) {
+          var lo = el('label', { 'class': 'chip' + (S.forma === o[0] ? ' on' : '') }), io = el('input', { type: 'radio', name: 'forma' }); io.checked = S.forma === o[0];
+          io.onchange = function () { S.forma = o[0]; [].forEach.call(fg.children, function (x) { x.classList.toggle('on', x === lo); }); ew.style.display = o[0] === 'Efectivo' && tribu.length ? 'block' : 'none'; };
+          lo.appendChild(io); lo.appendChild(el('span', {}, txt(o[1]))); fg.appendChild(lo);
+        });
+        box.appendChild(fg);
+        if (tribu && tribu.length) {
+          ew.appendChild(el('label', { 'class': 'lb', 'for': 'entrega' }, opc('¿A quién de la tribu se lo entregas?')));
+          var se = el('select', { 'class': 'campo', id: 'entrega' }); se.appendChild(el('option', { value: '' }, 'Elige a la persona'));
+          tribu.forEach(function (n) { se.appendChild(el('option', { value: n }, txt(n))); });
+          se.value = S.entrega || ''; se.onchange = function () { S.entrega = se.value; };
+          ew.appendChild(se); ew.style.display = S.forma === 'Efectivo' ? 'block' : 'none';
+          box.appendChild(ew);
+        }
+      }
+      w.appendChild(box);
+      i.onchange = function () { var k = S.areas.indexOf(ar); if (i.checked && k < 0) S.areas.push(ar); if (!i.checked && k >= 0) S.areas.splice(k, 1); l.classList.toggle('on', i.checked); w.classList.toggle('on', i.checked); };
+      c2.appendChild(w);
+    });
+    return c2;
+  }
+  // "Tu apoyo: …" con el valor de cada área y la forma de la donación
+  function tuApoyo(lf) {
+    var l = (lf.areas || []).map(function (a) { var v = lf.valores && lf.valores[a]; return a + (v ? ' (RD$' + Number(v).toLocaleString('en-US') + ')' : '') + (/donaci/i.test(a) && lf.forma ? ' · ' + lf.forma.toLowerCase() : ''); });
+    return 'Tu apoyo: ' + l.join(', ') + (lf.detalle ? ' · ' + lf.detalle : '');
+  }
+  // Transferencia: la cuenta del Legado y el botón para enviar el comprobante
+  function pago(p) {
+    if (!p.pago) return;
+    var w = el('div', { 'class': 'extra' });
+    if (p.pago.cuenta) { w.appendChild(el('p', {}, '<strong>🏦 Puedes hacer tu transferencia a nuestra cuenta:</strong>')); w.appendChild(el('div', { 'class': 'cuentab' }, p.pago.cuenta)); }
+    if (p.pago.comprobante) { w.appendChild(el('p', {}, '¿Ya la hiciste? Envíanos tu comprobante:')); var bw = el('div', { 'class': 'btns' }); bw.appendChild(enlace(p.pago.comprobante, 'Enviar comprobante', '#1E9E5A')); w.appendChild(bw); }
+    card.appendChild(w);
+  }
   // Legado: ¿cómo participarás? + ¿cómo vas a apoyar? (varias) + monto si es donación + detalle
   function formLegado(p) {
-    var f = p.legadoForm, act = f.actual || {}, sel = { a: p.confirmar || act.a || '', areas: (act.areas || []).slice(), monto: act.monto || '', detalle: act.detalle || '' };
+    var f = p.legadoForm, act = f.actual || {}, sel = { a: p.confirmar || act.a || '', areas: (act.areas || []).slice(), valores: Object.assign({}, act.valores || {}), forma: act.forma || '', entrega: act.entrega || '', detalle: act.detalle || '' };
     card.innerHTML = '';
     cabeza(p);
     hola(p);
@@ -156,17 +217,7 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     card.appendChild(c1);
     card.appendChild(el('p', { 'class': 'preg' }, 'Vayas o no, ¿cómo te gustaría apoyar?'));
     card.appendChild(el('p', { 'class': 'ayuda' }, 'Puedes elegir varias.'));
-    var c2 = el('div', { 'class': 'chips' }), mw = el('div', { style: 'display:none;margin-top:10px' });
-    var monto = el('input', { 'class': 'campo', type: 'text', inputmode: 'numeric', placeholder: 'Monto aproximado en RD$ (opcional)', maxlength: '12' }); monto.value = sel.monto || '';
-    mw.appendChild(monto);
-    function verMonto() { mw.style.display = sel.areas.some(function (a) { return /donaci/i.test(a); }) ? 'block' : 'none'; }
-    f.areas.forEach(function (a) {
-      var l = el('label', { 'class': 'chip' + (sel.areas.indexOf(a) >= 0 ? ' on' : '') });
-      var i = el('input', { type: 'checkbox', value: a }); if (sel.areas.indexOf(a) >= 0) i.checked = true;
-      i.onchange = function () { var k = sel.areas.indexOf(a); if (i.checked && k < 0) sel.areas.push(a); if (!i.checked && k >= 0) sel.areas.splice(k, 1); l.classList.toggle('on', i.checked); verMonto(); };
-      l.appendChild(i); l.appendChild(el('span', {}, txt(a))); c2.appendChild(l);
-    });
-    card.appendChild(c2); card.appendChild(mw); verMonto();
+    card.appendChild(bloqueApoyo(f.areas, sel, f.tribu || []));
     card.appendChild(el('p', { 'class': 'preg' }, '¿Puedes especificar cómo vas a apoyar tu Legado?'));
     var det = el('textarea', { 'class': 'campo', rows: '3', maxlength: '600', placeholder: 'Opcional: qué vas a aportar, cuánto o cualquier detalle' }); det.value = sel.detalle;
     card.appendChild(det);
@@ -174,7 +225,10 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     var b = el('button', { 'class': 'b enviar', type: 'button', style: 'background:var(--ac)' }, 'Enviar mi respuesta');
     b.onclick = function () {
       if (!sel.a) { er.textContent = 'Dinos si vas a ir.'; return; }
-      pedir(sel.a, true, { areas: sel.areas, monto: monto.value.replace(/\D/g, ''), detalle: det.value.trim() });
+      var don = sel.areas.some(function (x) { return /donaci/i.test(x); });
+      if (don && !sel.forma) { er.textContent = 'Dinos cómo vas a entregar tu donación: en efectivo o por transferencia.'; return; }
+      var vs = {}; sel.areas.forEach(function (x) { if (sel.valores[x]) vs[x] = sel.valores[x]; });
+      pedir(sel.a, true, { areas: sel.areas, valores: vs, forma: don ? sel.forma : '', entrega: don && sel.forma === 'Efectivo' ? sel.entrega : '', detalle: det.value.trim() });
     };
     card.appendChild(b);
   }
@@ -190,7 +244,8 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     // v25: Legado ya respondido: agradecimiento → su apoyo → Elizabeth → calendario o comunidad → "Cambiar mi respuesta"
     if (p.legadoForm && !p.cerrada && !p.confirmar) {
       var lf0 = p.legadoForm.actual;
-      if (lf0 && (lf0.areas.length || lf0.detalle)) card.appendChild(el('p', { 'class': 'nota' }, txt('Tu apoyo: ' + lf0.areas.join(', ') + (lf0.monto ? ' (RD$' + Number(lf0.monto).toLocaleString('en-US') + ')' : '') + (lf0.detalle ? ' · ' + lf0.detalle : ''))));
+      if (lf0 && (lf0.areas.length || lf0.detalle)) card.appendChild(el('p', { 'class': 'nota' }, txt(tuApoyo(lf0))));
+      pago(p);
       coordina(p);
       if (p.calendario) {
         var k0 = el('div', { 'class': 'extra' }); k0.appendChild(el('p', {}, p.calendario.texto));
@@ -232,7 +287,8 @@ footer{margin-top:18px;color:var(--tx3);font-size:13px}
     }
     if (p.legadoForm && !p.cerrada) {
       var lf = p.legadoForm.actual;
-      if (lf && (lf.areas.length || lf.detalle)) card.appendChild(el('p', { 'class': 'nota' }, txt('Tu apoyo: ' + lf.areas.join(', ') + (lf.monto ? ' (RD$' + Number(lf.monto).toLocaleString('en-US') + ')' : '') + (lf.detalle ? ' · ' + lf.detalle : ''))));
+      if (lf && (lf.areas.length || lf.detalle)) card.appendChild(el('p', { 'class': 'nota' }, txt(tuApoyo(lf))));
+      pago(p);
       var cb = el('button', { 'class': 'b', type: 'button', style: 'background:var(--ac)' }, 'Cambiar mi respuesta');
       cb.onclick = function () { pintar(Object.assign({}, p, { editar: true, confirmar: '' })); };
       var w0 = el('div', { 'class': 'extra' }); w0.appendChild(cb); card.appendChild(w0);
