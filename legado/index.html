@@ -94,7 +94,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   var P = { correo: '', nombre: '', apellido: '', wa: '', codigo: '+1' }, PAIS = 0;
   // v36: WhatsApp con código de país, como el formulario de la tribu (República Dominicana por defecto)
   var PAISES = [["República Dominicana","+1",10,10],["Afganistán","+93",7,12],["Albania","+355",7,12],["Alemania","+49",10,11],["Andorra","+376",7,12],["Angola","+244",7,12],["Anguila","+1",10,10],["Antigua y Barbuda","+1",10,10],["Arabia Saudita","+966",7,12],["Argelia","+213",7,12],["Argentina","+54",10,11],["Armenia","+374",7,12],["Aruba","+297",7,7],["Australia","+61",9,9],["Austria","+43",7,12],["Azerbaiyán","+994",7,12],["Bahamas","+1",10,10],["Bangladés","+880",7,12],["Barbados","+1",10,10],["Baréin","+973",7,12],["Bélgica","+32",8,9],["Belice","+501",7,7],["Benín","+229",7,12],["Bermudas","+1",10,10],["Bielorrusia","+375",7,12],["Bolivia","+591",8,8],["Bonaire","+599",7,7],["Bosnia y Herzegovina","+387",7,12],["Botsuana","+267",7,12],["Brasil","+55",10,11],["Brunéi","+673",7,12],["Bulgaria","+359",7,12],["Burkina Faso","+226",7,12],["Burundi","+257",7,12],["Bután","+975",7,12],["Cabo Verde","+238",7,12],["Camboya","+855",7,12],["Camerún","+237",7,12],["Canadá","+1",10,10],["Catar","+974",7,12],["Chad","+235",7,12],["Chile","+56",9,9],["China","+86",11,11],["Chipre","+357",7,12],["Colombia","+57",10,10],["Comoras","+269",7,12],["Congo","+242",7,12],["Corea del Sur","+82",7,12],["Costa de Marfil","+225",7,12],["Costa Rica","+506",8,8],["Croacia","+385",7,12],["Cuba","+53",8,8],["Curazao","+599",7,8],["Dinamarca","+45",8,8],["Dominica","+1",10,10],["Ecuador","+593",9,9],["Egipto","+20",7,12],["El Salvador","+503",8,8],["Emiratos Árabes Unidos","+971",7,12],["Eritrea","+291",7,12],["Eslovaquia","+421",7,12],["Eslovenia","+386",7,12],["España","+34",9,9],["Estados Unidos","+1",10,10],["Estonia","+372",7,12],["Esuatini","+268",7,12],["Etiopía","+251",7,12],["Filipinas","+63",7,12],["Finlandia","+358",7,12],["Fiyi","+679",7,12],["Francia","+33",9,9],["Gabón","+241",7,12],["Gambia","+220",7,12],["Georgia","+995",7,12],["Ghana","+233",7,12],["Granada","+1",10,10],["Grecia","+30",10,10],["Groenlandia","+299",7,12],["Guadalupe","+590",9,9],["Guam","+1",10,10],["Guatemala","+502",8,8],["Guayana Francesa","+594",9,9],["Guinea","+224",7,12],["Guinea Ecuatorial","+240",7,12],["Guinea-Bisáu","+245",7,12],["Guyana","+592",7,7],["Haití","+509",8,8],["Honduras","+504",8,8],["Hong Kong","+852",8,8],["Hungría","+36",7,12],["India","+91",10,10],["Indonesia","+62",7,12],["Irak","+964",7,12],["Irán","+98",7,12],["Irlanda","+353",7,12],["Islandia","+354",7,12],["Islas Caimán","+1",10,10],["Islas Turcas y Caicos","+1",10,10],["Islas Vírgenes (EE. UU.)","+1",10,10],["Islas Vírgenes Británicas","+1",10,10],["Israel","+972",7,12],["Italia","+39",9,11],["Jamaica","+1",10,10],["Japón","+81",10,10],["Jordania","+962",7,12],["Kazajistán","+7",7,12],["Kenia","+254",7,12],["Kirguistán","+996",7,12],["Kuwait","+965",7,12],["Laos","+856",7,12],["Lesoto","+266",7,12],["Letonia","+371",7,12],["Líbano","+961",7,12],["Liberia","+231",7,12],["Libia","+218",7,12],["Liechtenstein","+423",7,12],["Lituania","+370",7,12],["Luxemburgo","+352",7,12],["Macao","+853",7,12],["Macedonia del Norte","+389",7,12],["Madagascar","+261",7,12],["Malasia","+60",7,12],["Malaui","+265",7,12],["Maldivas","+960",7,12],["Malí","+223",7,12],["Malta","+356",7,12],["Marruecos","+212",7,12],["Martinica","+596",9,9],["Mauricio","+230",7,12],["Mauritania","+222",7,12],["México","+52",10,10],["Moldavia","+373",7,12],["Mónaco","+377",7,12],["Mongolia","+976",7,12],["Montenegro","+382",7,12],["Montserrat","+1",10,10],["Mozambique","+258",7,12],["Myanmar","+95",7,12],["Namibia","+264",7,12],["Nepal","+977",7,12],["Nicaragua","+505",8,8],["Níger","+227",7,12],["Nigeria","+234",7,12],["Noruega","+47",8,8],["Nueva Zelanda","+64",7,12],["Omán","+968",7,12],["Países Bajos","+31",9,9],["Pakistán","+92",7,12],["Panamá","+507",8,8],["Papúa Nueva Guinea","+675",7,12],["Paraguay","+595",9,9],["Perú","+51",9,9],["Polonia","+48",9,9],["Portugal","+351",9,9],["Puerto Rico","+1",10,10],["Reino Unido","+44",10,10],["República Centroafricana","+236",7,12],["República Checa","+420",7,12],["República Democrática del Congo","+243",7,12],["Ruanda","+250",7,12],["Rumania","+40",7,12],["Rusia","+7",7,12],["San Cristóbal y Nieves","+1",10,10],["San Martín (Sint Maarten)","+1",10,10],["San Vicente y las Granadinas","+1",10,10],["Santa Lucía","+1",10,10],["Senegal","+221",7,12],["Serbia","+381",7,12],["Seychelles","+248",7,12],["Sierra Leona","+232",7,12],["Singapur","+65",8,8],["Siria","+963",7,12],["Somalia","+252",7,12],["Sri Lanka","+94",7,12],["Sudáfrica","+27",9,9],["Sudán","+249",7,12],["Suecia","+46",7,12],["Suiza","+41",9,9],["Surinam","+597",7,7],["Tailandia","+66",7,12],["Taiwán","+886",7,12],["Tanzania","+255",7,12],["Togo","+228",7,12],["Trinidad y Tobago","+1",10,10],["Túnez","+216",7,12],["Turkmenistán","+993",7,12],["Turquía","+90",10,10],["Ucrania","+380",7,12],["Uganda","+256",7,12],["Uruguay","+598",8,8],["Uzbekistán","+998",7,12],["Venezuela","+58",10,10],["Vietnam","+84",7,12],["Yemen","+967",7,12],["Zambia","+260",7,12],["Zimbabue","+263",7,12]];
-  var I = { ciudad: '', otra: '', profesion: '', empresa: '', ig: '', sexo: '', talla: '', como: '', quien: '', comunidad: '', talento: '', acepto: false };
+  var I = { ciudad: '', otra: '', profesion: '', empresa: '', ig: '', sexo: '', talla: '', como: '', quien: '', detalle: '', red: '', comunidad: '', talento: '', acepto: false };
   var S = { areas: [], valores: {}, forma: '', entrega: '', detalle: '' };
   function esEmpresa() { return TIPO === 'empresa'; }
 
@@ -169,14 +169,14 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     if (PAISES[PAIS][1] !== '+1') return d.replace(/(\d{3})(?=\d)/g, '$1 ');
     return d.length > 6 ? '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6) : d.length > 3 ? '(' + d.slice(0, 3) + ') ' + d.slice(3) : d;
   }
-  // rep = true: datos del representante de la empresa (con su cargo; cumpleaños, sexo y talla opcionales)
+  // rep = true: datos del representante de la empresa (con su cargo). v45: cumpleaños, sexo y talla obligatorios, igual que una persona
   function campos_datos(rep) {
     seccion(rep ? 'El representante' : 'Tus datos');
     if (rep) card.appendChild(el('p', { 'class': 'ayuda' }, 'La persona con quien coordinamos. A su correo llegan las invitaciones de cada actividad.'));
     var n = campo('nombre', 'Nombre', 'text', P.nombre, { autocomplete: 'given-name', autocapitalize: 'words', maxlength: '60', placeholder: 'Ej.: María' });
     var a = campo('apellido', 'Apellido', 'text', P.apellido, { autocomplete: 'family-name', autocapitalize: 'words', maxlength: '80', placeholder: 'Ej.: Pérez' });
     var cg = rep ? campo('cargo', 'Cargo en la empresa', 'text', E.cargo, { autocapitalize: 'words', maxlength: '80', placeholder: 'Ej.: Gerente general' }) : null;
-    card.appendChild(el('p', { 'class': 'lb' }, rep ? opc('Cumpleaños') : 'Cumpleaños'));
+    card.appendChild(el('p', { 'class': 'lb' }, 'Cumpleaños'));
     var fc = el('div', { 'class': 'fila', style: 'margin-bottom:12px' });
     var dia = el('select', { 'class': 'campo', 'aria-label': 'Día' }), mes = el('select', { 'class': 'campo', 'aria-label': 'Mes' });
     dia.appendChild(el('option', { value: '' }, 'Día')); for (var d = 1; d <= 31; d++) dia.appendChild(el('option', { value: String(d) }, String(d)));
@@ -202,10 +202,10 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     var c = campo('correo', 'Correo', 'email', P.correo, { autocomplete: 'email', inputmode: 'email', maxlength: '120', placeholder: 'Ej.: maria@ejemplo.com' });
     var talla = null;
     if (rep) {
-      radios(opc('Sexo'), [['Hombre', 'Hombre'], ['Mujer', 'Mujer']], I.sexo, function (v) { I.sexo = v; }, true);
+      radios('Sexo', [['Hombre', 'Hombre'], ['Mujer', 'Mujer']], I.sexo, function (v) { I.sexo = v; }, true);
       var tw = el('div', { 'class': 'f' }); talla = el('select', { 'class': 'campo', id: 'talla' });
       talla.appendChild(el('option', { value: '' }, 'Elige la talla')); ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].forEach(function (x) { talla.appendChild(el('option', { value: x }, x)); });
-      talla.value = I.talla || ''; tw.appendChild(el('label', { 'class': 'lb', 'for': 'talla' }, opc('Talla de t-shirt'))); tw.appendChild(talla); card.appendChild(tw);
+      talla.value = I.talla || ''; tw.appendChild(el('label', { 'class': 'lb', 'for': 'talla' }, 'Talla de t-shirt')); tw.appendChild(talla); card.appendChild(tw);
     }
     var hp = el('input', { 'class': 'hp', id: 'web', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' }); card.appendChild(hp);
     return function (er) {
@@ -216,9 +216,11 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       if (!P.nombre) return aviso(er, rep ? 'Escribe el nombre del representante.' : 'Escribe tu nombre.', n);
       if (!P.apellido) return aviso(er, rep ? 'Escribe el apellido del representante.' : 'Escribe tu apellido.', a);
       if (rep && !E.cargo) return aviso(er, 'Escribe el cargo del representante en la empresa.', cg);
-      if (!rep && (!P.cumpleDia || !P.cumpleMes)) return aviso(er, 'Elige el día y el mes de tu cumpleaños.', P.cumpleDia ? mes : dia);
+      if (!P.cumpleDia || !P.cumpleMes) return aviso(er, rep ? 'Elige el día y el mes del cumpleaños del representante.' : 'Elige el día y el mes de tu cumpleaños.', P.cumpleDia ? mes : dia);
       if (P.wa.length < PAISES[PAIS][2] || P.wa.length > PAISES[PAIS][3]) return aviso(er, 'Revisa tu número de WhatsApp: ' + (PAISES[PAIS][2] === PAISES[PAIS][3] ? PAISES[PAIS][2] : PAISES[PAIS][2] + ' a ' + PAISES[PAIS][3]) + ' números, sin el código del país.', w);
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(P.correo)) return aviso(er, 'Revisa tu correo.', c);
+      if (rep && !I.sexo) return aviso(er, 'Dinos si el representante es hombre o mujer.');
+      if (rep && !I.talla) return aviso(er, 'Elige la talla de t-shirt del representante.', talla);
       return true;
     };
   }
@@ -253,35 +255,67 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     leer.guardar = guardar;
     return leer;
   }
+  // v45: ¿Cómo conociste el Legado? (obligatoria). Alguien de la tribu → lista de Henko con buscador; Redes → Facebook o Instagram; Evento → cuál; Otro → cuéntanos
+  var COMO = ['A través de alguien de la tribu', 'Evento o actividad del Legado o de la tribu', 'Otro', 'Redes sociales'];
   function campos_contacto() {
     seccion('Para mantenernos en contacto');
-    var quienW = el('div', { 'class': 'f', style: 'margin-top:-2px' }), otroW = el('div', { 'class': 'f', style: 'display:none' });
-    var lista = INVITAN || [], sel = null, quien = el('input', { 'class': 'campo', id: 'quien', type: 'text', maxlength: '80', autocapitalize: 'words', placeholder: 'Escribe su nombre' });
-    quienW.appendChild(el('label', { 'class': 'lb', 'for': lista.length ? 'quiensel' : 'quien' }, opc(esEmpresa() ? '¿Quién los invitó?' : '¿Quién te invitó?')));
-    if (lista.length) {
-      sel = el('select', { 'class': 'campo', id: 'quiensel' });
-      sel.appendChild(el('option', { value: '' }, 'Elige a la persona'));
-      lista.forEach(function (x) { sel.appendChild(el('option', { value: x }, txt(x))); });
-      sel.appendChild(el('option', { value: '__otra' }, 'Otra persona de Henko'));
-      sel.value = I.quien && lista.indexOf(I.quien) < 0 ? '__otra' : I.quien;
-      sel.onchange = function () { otroW.style.display = sel.value === '__otra' ? 'block' : 'none'; if (sel.value === '__otra') quien.focus(); };
-      quienW.appendChild(sel);
-      if (sel.value === '__otra') quien.value = I.quien;
-      otroW.appendChild(quien); otroW.style.display = sel.value === '__otra' ? 'block' : 'none';
-    } else { quien.value = I.quien; quienW.appendChild(quien); }
-    radios(opc(esEmpresa() ? '¿Cómo conocieron el Legado?' : '¿Cómo conociste el Legado?'), [['Por alguien de Henko', 'Por alguien de Henko'], ['Redes sociales', 'Redes sociales'], ['Otro', 'Otro']], I.como,
-      function (v) { I.como = v; quienW.style.display = v === 'Por alguien de Henko' ? 'block' : 'none'; otroW.style.display = v === 'Por alguien de Henko' && sel && sel.value === '__otra' ? 'block' : 'none'; });
-    card.appendChild(quienW); card.appendChild(otroW); quienW.style.display = I.como === 'Por alguien de Henko' ? 'block' : 'none';
-    if (I.como !== 'Por alguien de Henko') otroW.style.display = 'none';
+    if (I.como === 'Por alguien de Henko') I.como = COMO[0];
+    var sinT = function (t) { return String(t).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim(); };
+    var lista = INVITAN || [], hay = function (x) { var q = sinT(x); for (var k = 0; k < lista.length; k++) if (sinT(lista[k]) === q) return lista[k]; return ''; };
+    var otraP = !!I.quien && !hay(I.quien);
+    radios(esEmpresa() ? '¿Cómo conocieron el Legado?' : '¿Cómo conociste el Legado?', COMO.map(function (x) { return [x, x]; }), I.como, function (v) { I.como = v; pinta(); });
+    // Alguien de la tribu: escribe y elige de la lista
+    var quienW = el('div', { 'class': 'f', style: 'margin-top:-2px' }), caja = el('div', { 'class': 'tel' }), ls = el('div', { 'class': 'lista', role: 'listbox' });
+    var quien = el('input', { 'class': 'campo', id: 'quien', type: 'text', maxlength: '80', autocapitalize: 'words', autocomplete: 'off', placeholder: 'Escribe su nombre y elígelo' });
+    quienW.appendChild(el('label', { 'class': 'lb', 'for': 'quien' }, esEmpresa() ? '¿Quién de la tribu los invitó?' : '¿Quién de la tribu te invitó?'));
+    ls.hidden = true; caja.appendChild(quien); caja.appendChild(ls); quienW.appendChild(caja);
+    var otraW = el('div', { 'class': 'f' }), otra = el('input', { 'class': 'campo', id: 'quienotra', type: 'text', maxlength: '80', autocapitalize: 'words', placeholder: 'Escribe su nombre completo' });
+    otraW.appendChild(el('label', { 'class': 'lb', 'for': 'quienotra' }, 'Nombre de esa persona de Henko')); otraW.appendChild(otra);
+    if (otraP) { quien.value = 'Otra persona de Henko'; otra.value = I.quien; } else quien.value = I.quien || '';
+    function opciones() {
+      var q = sinT(quien.value), n = 0; ls.innerHTML = '';
+      lista.forEach(function (x) { if (q && sinT(x).indexOf(q) < 0) return; if (n++ >= 60) return;
+        var o = el('button', { type: 'button', role: 'option' }, '<span>' + txt(x) + '</span>'); o.onmousedown = function (ev) { ev.preventDefault(); }; o.onclick = function () { quien.value = x; otraP = false; ls.hidden = true; pinta(); }; ls.appendChild(o); });
+      var ot = el('button', { type: 'button', role: 'option' }, '<span>Otra persona de Henko</span><span>no aparece</span>'); ot.onmousedown = function (ev) { ev.preventDefault(); };
+      ot.onclick = function () { quien.value = 'Otra persona de Henko'; otraP = true; ls.hidden = true; pinta(); otra.focus(); }; ls.appendChild(ot);
+    }
+    quien.onfocus = function () { if (otraP) { quien.select(); } opciones(); ls.hidden = false; };
+    quien.oninput = function () { otraP = false; opciones(); ls.hidden = false; pinta(); };
+    quien.onblur = function () { setTimeout(function () { ls.hidden = true; }, 150); };
+    // Redes sociales: Facebook o Instagram
+    var redW = el('div', { 'class': 'f' }), redG = el('div', { 'class': 'fila', role: 'radiogroup' }), nm = 'red' + Math.random().toString(36).slice(2);
+    redW.appendChild(el('p', { 'class': 'lb' }, '¿Por cuál?'));
+    ['Facebook', 'Instagram'].forEach(function (x) { var l = el('label', { 'class': 'chip' + (I.como === 'Redes sociales' && I.detalle === x ? ' on' : '') }), i = el('input', { type: 'radio', name: nm }); i.checked = I.como === 'Redes sociales' && I.detalle === x;
+      i.onchange = function () { [].forEach.call(redG.children, function (z) { z.classList.toggle('on', z === l); }); I.red = x; }; l.appendChild(i); l.appendChild(el('span', {}, x)); redG.appendChild(l); });
+    if (I.como === 'Redes sociales') I.red = I.detalle;
+    redW.appendChild(redG);
+    var evW = el('div', { 'class': 'f' }), ev = el('input', { 'class': 'campo', id: 'evento', type: 'text', maxlength: '120', autocapitalize: 'sentences', placeholder: 'Ej.: Navidad entre Ángeles' });
+    evW.appendChild(el('label', { 'class': 'lb', 'for': 'evento' }, opc('¿Cuál?'))); evW.appendChild(ev);
+    var otW = el('div', { 'class': 'f' }), ot2 = el('input', { 'class': 'campo', id: 'otro', type: 'text', maxlength: '120', autocapitalize: 'sentences', placeholder: 'Ej.: Por una amiga, en la radio' });
+    otW.appendChild(el('label', { 'class': 'lb', 'for': 'otro' }, 'Cuéntanos cómo')); otW.appendChild(ot2);
+    if (I.como === COMO[1]) ev.value = I.detalle || ''; if (I.como === 'Otro') ot2.value = I.detalle || '';
+    [quienW, otraW, redW, evW, otW].forEach(function (w) { card.appendChild(w); });
+    function pinta() {
+      quienW.style.display = I.como === COMO[0] ? 'block' : 'none'; otraW.style.display = I.como === COMO[0] && otraP ? 'block' : 'none';
+      redW.style.display = I.como === 'Redes sociales' ? 'block' : 'none'; evW.style.display = I.como === COMO[1] ? 'block' : 'none'; otW.style.display = I.como === 'Otro' ? 'block' : 'none';
+    }
+    pinta();
     radios('¿Quieres unirte a nuestra comunidad de WhatsApp?', [['1', 'Sí'], ['0', 'No']], I.comunidad, function (v) { I.comunidad = v; }, true);
     if (esEmpresa()) radios('¿Podemos mencionar a la empresa como aliada del Legado?', [['Sí', 'Sí'], ['No', 'No']], E.menciona, function (v) { E.menciona = v; }, true);
     var lc = el('label', { 'class': 'chip' + (I.acepto ? ' on' : ''), style: 'margin-top:8px' }), ic = el('input', { type: 'checkbox' }); ic.checked = I.acepto;
     ic.onchange = function () { I.acepto = ic.checked; lc.classList.toggle('on', ic.checked); };
     lc.appendChild(ic); lc.appendChild(el('span', { style: 'font-size:15px' }, 'Acepto recibir noticias del Legado Piel de Ángel por correo.'));
     card.appendChild(lc);
-    function guardar() { I.quien = sel ? (sel.value === '__otra' ? quien.value.trim() : sel.value) : quien.value.trim(); }
+    function guardar() {
+      I.quien = I.como !== COMO[0] ? '' : otraP ? otra.value.trim() : hay(quien.value) || '';
+      I.detalle = I.como === 'Redes sociales' ? I.red || '' : I.como === COMO[1] ? ev.value.trim() : I.como === 'Otro' ? ot2.value.trim() : '';
+    }
     var leer = function (er) {
       guardar();
+      if (!I.como) return aviso(er, esEmpresa() ? 'Dinos cómo conocieron el Legado.' : 'Dinos cómo conociste el Legado.');
+      if (I.como === COMO[0] && !I.quien) return aviso(er, otraP ? 'Escribe el nombre de esa persona de Henko.' : 'Escribe el nombre de quien te invitó y elígelo de la lista (o "Otra persona de Henko").', otraP ? otra : quien);
+      if (I.como === 'Redes sociales' && !I.detalle) return aviso(er, 'Dinos por cuál red social: Facebook o Instagram.');
+      if (I.como === 'Otro' && !I.detalle) return aviso(er, 'Cuéntanos cómo conociste el Legado.', ot2);
       if (!I.comunidad) return aviso(er, 'Dinos si quieres unirte a la comunidad de WhatsApp.');
       if (esEmpresa() && !E.menciona) return aviso(er, 'Dinos si podemos mencionar a la empresa como aliada del Legado.');
       if (!I.acepto) return aviso(er, 'Marca que aceptas recibir noticias del Legado.');
@@ -292,10 +326,10 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   }
   function datosInscripcion() {
     if (esEmpresa()) return { tipo: 'empresa', empresa: E.empresa, sector: E.sector, ciudad: E.ciudad === 'Otra' ? E.otra : E.ciudad, rnc: E.rnc, sitio: E.sitio, cargo: E.cargo, tipos: E.tipos,
-      menciona: E.menciona, talento: E.talento, cumpleDia: P.cumpleDia, cumpleMes: P.cumpleMes, sexo: I.sexo, talla: I.talla, como: I.como, quien: I.como === 'Por alguien de Henko' ? I.quien : '',
+      menciona: E.menciona, talento: E.talento, cumpleDia: P.cumpleDia, cumpleMes: P.cumpleMes, sexo: I.sexo, talla: I.talla, como: I.como, quien: I.como === COMO[0] ? I.quien : '', detalle: I.detalle || '',
       comunidad: I.comunidad === '1', acepto: I.acepto };
     return { ciudad: I.ciudad === 'Otra' ? I.otra : I.ciudad, profesion: I.profesion, empresa: I.empresa, cumpleDia: P.cumpleDia, cumpleMes: P.cumpleMes, ig: I.ig, sexo: I.sexo, talla: I.talla,
-      como: I.como, quien: I.como === 'Por alguien de Henko' ? I.quien : '', comunidad: I.comunidad === '1', talento: I.talento, acepto: I.acepto };
+      como: I.como, quien: I.como === COMO[0] ? I.quien : '', detalle: I.detalle || '', comunidad: I.comunidad === '1', talento: I.talento, acepto: I.acepto };
   }
   function deLaTribu(correo) {
     cabecera();
@@ -538,7 +572,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     seccion(esEmpresa() ? 'El apoyo de la empresa' : 'Tu apoyo');
     card.appendChild(el('p', { 'class': 'preg' }, esEmpresa() ? '¿Cómo va a apoyar ' + txt(E.empresa) + ' esta actividad?' : '¿Cómo vas a apoyar esta actividad?'));
     card.appendChild(el('p', { 'class': 'ayuda' }, 'Puedes elegir varias.'));
-    var tri = INFO.tribu || [], cto = CONTACTO || (I.como === 'Por alguien de Henko' ? I.quien : '');
+    var tri = INFO.tribu || [], cto = CONTACTO || (I.como === COMO[0] ? I.quien : '');
     if (!S.entrega && cto && tri.indexOf(cto) >= 0) S.entrega = cto;   // v42: precargado con quien lo trajo (lo puede cambiar)
     card.appendChild(bloqueApoyo(INFO.areas, S, tri));
     card.appendChild(el('p', { 'class': 'preg' }, '¿Puedes especificar cómo puedes colaborar?'));
