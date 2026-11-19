@@ -202,6 +202,7 @@ select.campo{appearance:none;-webkit-appearance:none}
   // Legado: ¿cómo participarás? + ¿cómo vas a apoyar? (varias) + monto si es donación + detalle
   function formLegado(p) {
     var f = p.legadoForm, act = f.actual || {}, sel = { a: p.confirmar || act.a || '', areas: (act.areas || []).slice(), valores: Object.assign({}, act.valores || {}), forma: act.forma || '', entrega: act.entrega || '', detalle: act.detalle || '' };
+    if (!sel.entrega && f.contacto && (f.tribu || []).indexOf(f.contacto) >= 0) sel.entrega = f.contacto;   // v42: precargado con quien lo trajo al Legado
     card.innerHTML = '';
     cabeza(p);
     hola(p);

@@ -89,6 +89,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   var MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   var INFO = null, NUEVO = false, NOMBRE = '', INVITAN = [], YA = null;
   // v41: persona o empresa (la empresa tiene un representante: a él le llegan las invitaciones)
+  var CONTACTO = '';   // v42: quien lo trajo al Legado: llega precargado en "¿A quién de la tribu se lo entregas?"
   var TIPO = '', E = { empresa: '', sector: '', ciudad: '', otra: '', rnc: '', sitio: '', cargo: '', tipos: [], menciona: '', talento: '' };
   var P = { correo: '', nombre: '', apellido: '', wa: '', codigo: '+1' }, PAIS = 0;
   // v36: WhatsApp con código de país, como el formulario de la tribu (República Dominicana por defecto)
@@ -338,7 +339,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       return api('legadoId', esEmpresa() ? { a: id, tipo: 'empresa', empresa: E.empresa, rnc: E.rnc } : Object.assign({ a: id }, P)).then(function (k) {
         if (!k || !k.ok) return error((k && k.error) || 'No pudimos continuar.');
         if (k.tribu) return deLaTribu(k.correo);
-        NUEVO = !k.inscrito; NOMBRE = k.nombre || P.nombre; if (k.empresa) E.empresa = k.empresa;
+        NUEVO = !k.inscrito; NOMBRE = k.nombre || P.nombre; if (k.empresa) E.empresa = k.empresa; if (k.contacto) CONTACTO = k.contacto;
         if (NUEVO) { if (esEmpresa()) representante(); else sobre(); } else apoyo();
       });
     }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
@@ -357,7 +358,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       api('legadoId', Object.assign({ a: id }, P)).then(function (j) {
         if (!j || !j.ok) return error((j && j.error) || 'No pudimos continuar.');
         if (j.tribu) return deLaTribu(j.correo);
-        NUEVO = !j.inscrito; NOMBRE = j.nombre || P.nombre; YA = j;
+        NUEVO = !j.inscrito; NOMBRE = j.nombre || P.nombre; YA = j; CONTACTO = j.contacto || '';
         if (NUEVO) sobre(); else if (id) apoyo(); else yaInscrito();
       }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
     }));
@@ -401,7 +402,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       cargando();
       api('legadoId', { a: id, tipo: 'empresa', empresa: E.empresa, rnc: E.rnc }).then(function (j) {
         if (!j || !j.ok) return error((j && j.error) || 'No pudimos continuar.');
-        NUEVO = !j.inscrito; NOMBRE = j.nombre || ''; YA = j;
+        NUEVO = !j.inscrito; NOMBRE = j.nombre || ''; YA = j; CONTACTO = j.contacto || '';
         if (!NUEVO) E.empresa = j.empresa || E.empresa;
         if (NUEVO) representante(); else if (id) apoyo(); else yaEmpresa();
       }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
@@ -537,7 +538,9 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     seccion(esEmpresa() ? 'El apoyo de la empresa' : 'Tu apoyo');
     card.appendChild(el('p', { 'class': 'preg' }, esEmpresa() ? '¿Cómo va a apoyar ' + txt(E.empresa) + ' esta actividad?' : '¿Cómo vas a apoyar esta actividad?'));
     card.appendChild(el('p', { 'class': 'ayuda' }, 'Puedes elegir varias.'));
-    card.appendChild(bloqueApoyo(INFO.areas, S, INFO.tribu || []));
+    var tri = INFO.tribu || [], cto = CONTACTO || (I.como === 'Por alguien de Henko' ? I.quien : '');
+    if (!S.entrega && cto && tri.indexOf(cto) >= 0) S.entrega = cto;   // v42: precargado con quien lo trajo (lo puede cambiar)
+    card.appendChild(bloqueApoyo(INFO.areas, S, tri));
     card.appendChild(el('p', { 'class': 'preg' }, '¿Puedes especificar cómo puedes colaborar?'));
     var det = el('textarea', { 'class': 'campo', rows: '3', maxlength: '600', placeholder: 'Ej.: llevo 10 juguetes y 2 cajas de jugo' }); det.value = S.detalle;
     card.appendChild(det);
