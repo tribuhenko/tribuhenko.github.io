@@ -96,7 +96,10 @@ main{transition:opacity .45s ease}
 .portada .ir{margin:14px 0 4px}
 .bloque{background:var(--card);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sombra);padding:18px 18px 20px;margin-top:14px}
 .bloque h2{margin:0 0 8px;font-size:18px;line-height:1.35}
-.bloque p{margin:0;font-size:16px;line-height:1.6}
+.bloque p{margin:0;font-size:16px;line-height:1.6}.bloque p+p{margin-top:10px}
+.bloque h2{letter-spacing:.02em}
+.impulsa{margin:4px 0 14px;padding-left:22px}.impulsa li{font-size:16px;line-height:1.55;margin:5px 0}.impulsa li::marker{color:var(--ac)}
+.bloque .cita{margin:4px 0 0}
 .tags{list-style:none;padding:0;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:8px}
 .tags li{padding:8px 14px;border-radius:999px;background:color-mix(in srgb,var(--ac) 11%,var(--card));font-size:15px;font-weight:600}
 .cita{margin:18px 4px 2px;padding:4px 0 4px 14px;border-left:3px solid var(--ac);font-size:16px;line-height:1.55;color:var(--tx2)}
@@ -481,14 +484,19 @@ main{transition:opacity .45s ease}
       '<h1 class="sr" id="h-legado">Legado Piel de Ángel</h1>' +
       '<p class="lema"><strong><em>Trascender</em></strong> a través de nuestra identidad, impactando <em>nuestra familia, nuestro país y el mundo.</em></p>' +
       '<button type="button" class="b ir">Quiero sumarme</button>' +
-      '<div class="bloque"><h2><span aria-hidden="true">🌸</span> ¿Quiénes somos?</h2><p><strong>HENKO</strong> es una tribu que nace de un proceso de <em>transformación personal, crecimiento y liderazgo</em>. ' +
-      'Es ese momento en que reconoces que <strong><em>la persona que has sido no tiene por qué limitar a la persona que puedes llegar a ser</em></strong>: atreverte a romper tus miedos, ' +
-      'cuestionar tus creencias y descubrir tu verdadera esencia. Pero HENKO no se trata solo de transformar nuestras vidas, sino de <strong>usar esa transformación para impactar la vida de los demás.</strong></p></div>' +
-      '<div class="bloque"><h2><span aria-hidden="true">💙</span> ¿Qué es el Legado Piel de Ángel?</h2><p>Es el <strong>legado social de HENKO V-120</strong>: apoyar a niños y niñas que han sufrido quemaduras graves ' +
-      'y reciben atención en Santiago de los Caballeros. No queríamos que nuestra experiencia terminara con nuestro proceso de liderazgo; <strong><em>queríamos dejar algo que trascendiera.</em></strong> ' +
-      'Por eso <strong>generamos conciencia, movilizamos voluntades y creamos puentes</strong> con personas, empresas e instituciones que pueden ayudar.</p></div>' +
-      '<div class="bloque"><h2>Lo que hacemos</h2><ul class="tags"><li>Charlas</li><li>Conciencia</li><li>Legado</li><li>Liderazgo</li><li>Superación personal</li></ul></div>' +
-      '<blockquote class="cita"><em>Queremos que nuestro legado no sea solo lo que hicimos, sino</em> <strong><em>lo que inspiremos a otros a continuar haciendo.</em></strong></blockquote>');
+      // v47b (20/11, 6:27 PM): el texto de Juan Luis, tal cual (con negrita y cursiva en las frases clave)
+      '<div class="bloque"><h2><span aria-hidden="true">🌸</span> ¿QUIÉNES SOMOS?</h2>' +
+      '<p><strong>HENKO</strong> es una tribu que nace de un proceso de <em>transformación personal, crecimiento y liderazgo</em>.</p>' +
+      '<p>Representa ese momento en el que reconoces que <strong><em>la persona que has sido no tiene por qué limitar a la persona que puedes llegar a ser</em></strong>. ' +
+      'Es atreverte a romper tus miedos, cuestionar tus creencias, descubrir tu verdadera esencia y asumir el compromiso de convertirte en una mejor versión de ti mismo.</p>' +
+      '<p>Pero HENKO no se trata solo de transformar nuestras vidas, sino de <strong>usar esa transformación para impactar la vida de los demás.</strong></p></div>' +
+      '<div class="bloque"><h2><span aria-hidden="true">💙</span> ¿QUÉ ES EL LEGADO PIEL DE ÁNGEL?</h2>' +
+      '<p>Piel de Ángel es el <strong>legado social de HENKO V-120</strong>, una iniciativa que nace del compromiso de apoyar a niños y niñas que han sufrido quemaduras graves y reciben atención en Santiago de los Caballeros.</p>' +
+      '<p>No queríamos que nuestra experiencia terminara con nuestro proceso de liderazgo. <strong><em>Queríamos dejar algo que trascendiera</em></strong>, que tuviera un propósito y que continuara generando impacto más allá de nuestra propia historia.</p>' +
+      '<p>Por eso, trabajamos para <strong>generar conciencia, movilizar voluntades y crear puentes</strong> con personas, empresas e instituciones que quieran sumarse a esta causa.</p></div>' +
+      '<div class="bloque"><h2><span aria-hidden="true">🌱</span> ¿QUÉ IMPULSAMOS?</h2><ul class="impulsa">' +
+      '<li>Charlas y espacios de sensibilización.</li><li>Conciencia y responsabilidad social.</li><li>Liderazgo con propósito.</li><li>Transformación y superación personal.</li><li>Acciones que construyan un legado.</li></ul>' +
+      '<p class="cita"><em>Nuestro propósito es que el legado no sea solamente lo que hicimos, sino también</em> <strong><em>aquello que inspiremos a otros a continuar haciendo.</em></strong></p></div>');
     card.parentNode.insertBefore(p, card);
     p.querySelector('.ir').onclick = function () {
       card.scrollIntoView({ behavior: poco() ? 'auto' : 'smooth', block: 'start' });

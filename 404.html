@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tribu Henko V-120</title>
+<link rel="icon" type="image/png" href="/assets/logo.png">
+<script>
+// Si el link llegó con una mayúscula o con algo pegado al final (un punto, un paréntesis, un emoji…), lleva a la página correcta
+(function () {
+  var p = location.pathname, b = p.toLowerCase();
+  try { b = decodeURIComponent(p).toLowerCase(); } catch (e) {}
+  var m = b.match(/(legado|respuesta|registro|oficina)/);
+  if (m) location.replace('/' + m[1] + '/' + location.search + location.hash);
+})();
+</script>
+<style>
+:root{--bg:#EEF6FA;--card:#FFFFFF;--tx:#14232C;--tx2:#4C5E69;--ac:#0E6E8E;--bd:#D5E3EA}
+@media (prefers-color-scheme:dark){:root{--bg:#0A1116;--card:#121C23;--tx:#E8F0F4;--tx2:#A9BAC4;--ac:#6FD0F0;--bd:#24343E}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:460px;margin:0 auto;padding:48px 16px;text-align:center}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:26px 20px}
+h1{font-size:21px;margin:0 0 8px;text-wrap:balance}
+p{margin:0 0 18px;color:var(--tx2)}
+a.b{display:flex;align-items:center;justify-content:center;min-height:48px;margin:10px 0 0;border-radius:12px;background:var(--ac);color:#fff;font-weight:600;text-decoration:none;padding:10px 14px}
+a.b.s{background:none;color:var(--ac);border:1.5px solid var(--ac)}
+@media (prefers-color-scheme:dark){a.b{color:#06202B}a.b.s{color:var(--ac)}}
+</style></head>
+<body><main><div class="card">
+<h1>No encontramos esa página</h1>
+<p>Puede que el link se haya copiado incompleto. Elige a dónde quieres ir:</p>
+<a class="b" href="/legado/">💙 Legado Piel de Ángel</a>
+<a class="b s" href="/registro/">🌸 Registro de la Tribu Henko</a>
+</div></main></body></html>
