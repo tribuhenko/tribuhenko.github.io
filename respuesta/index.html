@@ -71,6 +71,17 @@ select.campo{appearance:none;-webkit-appearance:none}
 .err-campo{margin:6px 0 10px;color:#B3261E;font-size:14px;font-weight:600;text-align:left}
 @media (prefers-color-scheme:dark){.err-campo{color:#F2B8B5}}
 @media (prefers-color-scheme:dark){.legado .b.enviar{color:#06202B}}   /* v47: texto oscuro sobre el azul claro (contraste) */
+/* v47c (pedido de Juan Luis): que todo se vea fluido y coherente. Títulos parejos, palabras enteras, franja recta arriba, respuesta al tocar */
+body{-webkit-hyphens:manual;hyphens:manual;word-break:normal;overflow-wrap:break-word}
+h1,h2,.preg,.lb,.opcion strong{text-wrap:balance}
+p,li,small,.ds{text-wrap:pretty}
+.card{border-top-width:1px;background:linear-gradient(var(--ac),var(--ac)) top/100% 5px no-repeat,var(--card);padding-top:28px}
+button,.b,.chip,.opcion,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.b,.opcion,.chip{transition:transform .12s ease,opacity .12s ease,background-color .15s ease,border-color .15s ease}
+.b:active{transform:scale(.98);opacity:.9}
+.opcion:active,.chip:active{transform:scale(.99);background:color-mix(in srgb,var(--ac) 10%,var(--card))}
+@media (prefers-reduced-motion:reduce){.b,.opcion,.chip{transition:none}.b:active,.opcion:active,.chip:active{transform:none}}
+
 [aria-invalid="true"]{border-color:#B3261E!important}
 .apoyo-areas[hidden]{display:none}
 </style>
