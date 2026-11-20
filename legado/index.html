@@ -72,12 +72,44 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
 .opcion:hover,.opcion:focus-visible{border-color:var(--ac);outline:none;background:color-mix(in srgb,var(--ac) 6%,var(--card))}
 .opcion .ico{font-size:28px;line-height:1;flex:none}.opcion strong{display:block;font-size:17px}.opcion small{display:block;color:var(--tx2);font-size:14px;margin-top:2px}
 .cuentab{background:color-mix(in srgb,var(--ac) 8%,var(--card));border-radius:12px;padding:12px 14px;font-size:15px;line-height:1.6;margin:0 0 6px;text-align:center}
-.volver{background:none;border:0;color:var(--tx2);font:600 14px Montserrat,system-ui,sans-serif;margin:14px auto 0;display:block;cursor:pointer}
+.volver{background:none;border:0;color:var(--tx2);font:600 14px Montserrat,system-ui,sans-serif;margin:14px auto 0;display:block;cursor:pointer;min-height:44px;padding:0 12px}
+/* v47: cada área con su descripción; Otro aporte con su cajita; el error debajo del campo */
+.chip .nm{display:block;line-height:1.35}.chip .ds{display:block;margin-top:3px;color:var(--tx2);font-size:13.5px;font-weight:400;line-height:1.45}
+.area .valor textarea{margin-bottom:8px}
+.err-campo{margin:-4px 0 10px;color:#B3261E;font-size:14px;font-weight:600}
+@media (prefers-color-scheme:dark){.err-campo{color:#F2B8B5}}
+[aria-invalid="true"]{border-color:#B3261E!important}
+/* v47: la entrada: el logo grande "respira" mientras carga y luego sube a su lugar */
+.splash{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.splash .fondo{position:absolute;inset:0;background:var(--bg)}
+.splash picture,.splash img{position:relative;display:block}
+.splash img{width:min(62vw,260px);height:auto;animation:respira 1.8s ease-in-out infinite;transform-origin:center center}
+.splash p{position:relative;margin:18px 0 0;min-height:1.4em;color:var(--tx2);font-size:15px}
+@keyframes respira{0%,100%{opacity:1}50%{opacity:.45}}
+body.inicio main{opacity:0}
+main{transition:opacity .45s ease}
+@media (prefers-reduced-motion:reduce){.splash img{animation:none}main{transition:none}}
+/* v47: la portada (solo en el link general) */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.portada{text-align:left;margin-top:10px}
+.lema{text-align:center;font-size:19px;line-height:1.5;margin:6px 6px 4px;text-wrap:balance}
+.portada .ir{margin:14px 0 4px}
+.bloque{background:var(--card);border:1px solid var(--bd);border-radius:18px;box-shadow:var(--sombra);padding:18px 18px 20px;margin-top:14px}
+.bloque h2{margin:0 0 8px;font-size:18px;line-height:1.35}
+.bloque p{margin:0;font-size:16px;line-height:1.6}
+.tags{list-style:none;padding:0;margin:6px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.tags li{padding:8px 14px;border-radius:999px;background:color-mix(in srgb,var(--ac) 11%,var(--card));font-size:15px;font-weight:600}
+.cita{margin:18px 4px 2px;padding:4px 0 4px 14px;border-left:3px solid var(--ac);font-size:16px;line-height:1.55;color:var(--tx2)}
+.cita strong{color:var(--tx)}
+.card h2.titulo{margin:0 0 4px;font-size:22px;line-height:1.3;text-align:center;text-wrap:balance}
+@media (prefers-color-scheme:dark){.b{color:#06202B}}   /* v47: texto oscuro sobre el azul claro (contraste) */
+.card .c{text-align:center}
 </style>
 </head>
-<body>
+<body class="inicio">
+<div class="splash" id="splash" aria-hidden="true"><div class="fondo"></div><picture><source type="image/webp" srcset="../assets/logo-legado-600.webp"><img src="../assets/logo-legado-600.png" alt="" width="260" height="262"></picture><p></p></div>
 <main>
-  <div class="logos"><img class="piel" src="../assets/logo-legado.png" alt="Legado Piel de Ángel"></div>
+  <div class="logos"><picture><source type="image/webp" srcset="../assets/logo-legado-600.webp"><img class="piel" src="../assets/logo-legado-600.png" alt="Legado Piel de Ángel" width="135" height="136"></picture></div>
   <div class="card" id="card" aria-live="polite"><div class="cargando"><span class="punto"></span><span class="punto"></span><span class="punto"></span><p>Cargando…</p></div></div>
   <footer>Legado Piel de Ángel · Tribu Henko V-120</footer>
 </main>
@@ -97,6 +129,27 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   var I = { ciudad: '', otra: '', profesion: '', empresa: '', ig: '', sexo: '', talla: '', como: '', quien: '', detalle: '', red: '', comunidad: '', talento: '', acepto: false };
   var S = { areas: [], valores: {}, forma: '', entrega: '', detalle: '' };
   function esEmpresa() { return TIPO === 'empresa'; }
+  // v47: el área de dinero ("Aporte económico"; antes "Donaciones y aportes") y la de texto libre ("Otro aporte")
+  var DIN = /donaci|econ[oó]mic/i, OTRO = /otro aporte/i;
+  function poco() { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } }
+  // v47: la entrada: el logo respira mientras carga; cuando hay algo que mostrar, sube a su lugar arriba (mínimo ~0.8 s para que no parpadee)
+  var T0 = Date.now();
+  function listo() {
+    var sp = document.getElementById('splash'); if (!sp || sp.getAttribute('data-fuera')) return; sp.setAttribute('data-fuera', '1');
+    setTimeout(function () {
+      var a = sp.querySelector('img'), b = document.querySelector('.logos .piel'), fondo = sp.querySelector('.fondo');
+      document.body.classList.remove('inicio');
+      if (poco() || !a || !b || !a.animate) { sp.remove(); return; }
+      var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
+      var dx = rb.left + rb.width / 2 - (ra.left + ra.width / 2), dy = rb.top + rb.height / 2 - (ra.top + ra.height / 2), k = rb.width / ra.width;
+      b.style.visibility = 'hidden'; a.style.animation = 'none'; sp.querySelector('p').textContent = '';
+      a.animate([{ transform: 'none', opacity: 1 }, { transform: 'translate(' + dx + 'px,' + dy + 'px) scale(' + k + ')', opacity: 1 }], { duration: 560, easing: 'cubic-bezier(.2,.75,.25,1)', fill: 'forwards' });
+      var f = fondo.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 420, easing: 'ease-out', fill: 'forwards' });
+      setTimeout(function () { b.style.visibility = ''; sp.remove(); }, 580);
+      if (f && f.finished) f.finished.catch(function () {});
+    }, Math.max(0, 800 - (Date.now() - T0)));
+  }
+  function msgCarga(t) { var c = card.querySelector('.cargando p') || (document.getElementById('splash') && document.querySelector('#splash p')); if (c) c.textContent = t; }
 
   function el(tag, attrs, html) { var e = document.createElement(tag); Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); }); if (html !== undefined) e.innerHTML = html; return e; }
   function txt(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
@@ -104,14 +157,14 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   // v25: el servidor a veces tarda: se espera hasta 90 segundos, se avisa si tarda y se intenta otra vez sola
   function api(accion, datos, intento, ocup) {
     var ctl = window.AbortController ? new AbortController() : null, t = setTimeout(function () { if (ctl) ctl.abort(); }, 90000);
-    var lento = setTimeout(function () { var c = card.querySelector('.cargando p'); if (c) c.textContent = 'Un momentito más…'; }, 8000);
+    var lento = setTimeout(function () { msgCarga('Un momentito más…'); }, 8000);
     return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, credentials: 'omit', cache: 'no-store', redirect: 'follow',
       body: JSON.stringify({ accion: accion, datos: datos }), signal: ctl ? ctl.signal : undefined })
       .then(function (x) { clearTimeout(t); clearTimeout(lento); return x.json(); })
       .then(function (j) {
         // v27: si el sistema está ocupado (salen muchos correos), se espera un poco y se intenta otra vez sola
         if (j && j.ocupado && (ocup || 0) < 4) {
-          var c = card.querySelector('.cargando p'); if (c) c.textContent = 'Hay mucho movimiento… lo intentamos otra vez en unos segundos.';
+          msgCarga('Hay mucho movimiento… lo intentamos otra vez en unos segundos.');
           return new Promise(function (ok) { setTimeout(ok, 5000); }).then(function () { return api(accion, datos, intento, (ocup || 0) + 1); });
         }
         return j;
@@ -161,7 +214,22 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   }
   function volver(texto, fn) { var b = el('button', { type: 'button', 'class': 'volver' }, txt(texto)); b.onclick = fn; card.appendChild(b); }
   function error(msg) { cabecera(); card.appendChild(el('p', { 'class': 'intro' }, txt(msg))); card.appendChild(boton('Intentar de nuevo', inicio)); }
-  function aviso(er, msg, foco) { er.textContent = msg; if (foco && foco.focus) foco.focus(); return false; }
+  // v47: el aviso sale también debajo del campo que falta (y la página baja hasta él)
+  function aviso(er, msg, foco) {
+    er.textContent = msg;
+    [].forEach.call(card.querySelectorAll('.err-campo'), function (x) { x.parentNode.removeChild(x); });
+    [].forEach.call(card.querySelectorAll('[aria-invalid]'), function (x) { x.removeAttribute('aria-invalid'); x.removeAttribute('aria-describedby'); });
+    if (foco && foco.parentNode) {
+      var p = el('p', { 'class': 'err-campo', id: 'err-' + (foco.id || 'campo') }, txt(msg)), ancla = foco.type === 'radio' ? (foco.closest('.chips, .fila') || foco) : ((foco.closest && foco.closest('.tel')) || foco);
+      ancla.parentNode.insertBefore(p, ancla.nextSibling);
+      foco.setAttribute('aria-invalid', 'true'); foco.setAttribute('aria-describedby', p.id);
+      var quita = function () { if (p.parentNode) p.parentNode.removeChild(p); foco.removeAttribute('aria-invalid'); foco.removeAttribute('aria-describedby'); foco.removeEventListener('input', quita); foco.removeEventListener('change', quita); };
+      foco.addEventListener('input', quita); foco.addEventListener('change', quita);
+      if (foco.focus) foco.focus({ preventScroll: true });
+      if (foco.scrollIntoView) foco.scrollIntoView({ block: 'center', behavior: poco() ? 'auto' : 'smooth' });
+    }
+    return false;
+  }
 
   // Tus datos (nombre, apellido, WhatsApp y correo)
   // v36: (809) 555-1234 en RD, EE. UU. y Puerto Rico; en los demás países, de 3 en 3
@@ -208,10 +276,13 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       talla.value = I.talla || ''; tw.appendChild(el('label', { 'class': 'lb', 'for': 'talla' }, 'Talla de t-shirt')); tw.appendChild(talla); card.appendChild(tw);
     }
     var hp = el('input', { 'class': 'hp', id: 'web', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' }); card.appendChild(hp);
-    return function (er) {
+    function guardar() {   // v47: Volver también guarda lo escrito (persona ↔ empresa)
       P = { correo: c.value.trim().toLowerCase(), nombre: n.value.trim(), apellido: a.value.trim(), wa: w.value.replace(/\D/g, ''), codigo: PAISES[PAIS][1], cumpleDia: dia.value, cumpleMes: mes.value };
       if (cg) E.cargo = cg.value.trim();
       if (talla) I.talla = talla.value;
+    }
+    var leer = function (er) {
+      guardar();
       if (hp.value) return false;
       if (!P.nombre) return aviso(er, rep ? 'Escribe el nombre del representante.' : 'Escribe tu nombre.', n);
       if (!P.apellido) return aviso(er, rep ? 'Escribe el apellido del representante.' : 'Escribe tu apellido.', a);
@@ -223,6 +294,8 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       if (rep && !I.talla) return aviso(er, 'Elige la talla de t-shirt del representante.', talla);
       return true;
     };
+    leer.guardar = guardar;
+    return leer;
   }
   // v36: la inscripción va por bloques: Sobre ti → Para mantenernos en contacto
   function campos_sobre() {
@@ -257,7 +330,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
   }
   // v45: ¿Cómo conociste el Legado? (obligatoria). Alguien de la tribu → lista de Henko con buscador; Redes → Facebook o Instagram; Evento → cuál; Otro → cuéntanos
   var COMO = ['A través de alguien de la tribu', 'Evento o actividad del Legado o de la tribu', 'Otro', 'Redes sociales'];
-  function campos_contacto() {
+  function campos_contacto(extra) {
     seccion('Para mantenernos en contacto');
     if (I.como === 'Por alguien de Henko') I.como = COMO[0];
     var sinT = function (t) { return String(t).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim(); };
@@ -300,6 +373,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       redW.style.display = I.como === 'Redes sociales' ? 'block' : 'none'; evW.style.display = I.como === COMO[1] ? 'block' : 'none'; otW.style.display = I.como === 'Otro' ? 'block' : 'none';
     }
     pinta();
+    if (extra) extra();   // v47: la empresa: "¿Cómo puede la empresa apoyar al Legado?"
     radios('¿Quieres unirte a nuestra comunidad de WhatsApp?', [['1', 'Sí'], ['0', 'No']], I.comunidad, function (v) { I.comunidad = v; }, true);
     if (esEmpresa()) radios('¿Podemos mencionar a la empresa como aliada del Legado?', [['Sí', 'Sí'], ['No', 'No']], E.menciona, function (v) { E.menciona = v; }, true);
     var lc = el('label', { 'class': 'chip' + (I.acepto ? ' on' : ''), style: 'margin-top:8px' }), ic = el('input', { type: 'checkbox' }); ic.checked = I.acepto;
@@ -396,16 +470,50 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
         if (NUEVO) sobre(); else if (id) apoyo(); else yaInscrito();
       }).catch(function () { error('No pudimos conectar. Revisa tu internet e inténtalo de nuevo.'); });
     }));
-    volver('Volver', tipo);
+    volver('Volver', function () { leer.guardar(); tipo(); });   // v47: lo escrito se queda
   }
   // ---- v41: ¿como persona o como empresa?
+  // v47: la portada (quiénes somos y qué es el Legado): solo en el link general, hasta que escoja cómo inscribirse. Textos aprobados por Juan Luis (20/11)
+  var PORTADA = !id;
+  function portada() {
+    if (document.getElementById('portada')) return;
+    var p = el('section', { id: 'portada', 'class': 'portada', 'aria-labelledby': 'h-legado' },
+      '<h1 class="sr" id="h-legado">Legado Piel de Ángel</h1>' +
+      '<p class="lema"><strong><em>Trascender</em></strong> a través de nuestra identidad, impactando <em>nuestra familia, nuestro país y el mundo.</em></p>' +
+      '<button type="button" class="b ir">Quiero sumarme</button>' +
+      '<div class="bloque"><h2><span aria-hidden="true">🌸</span> ¿Quiénes somos?</h2><p><strong>HENKO</strong> es una tribu que nace de un proceso de <em>transformación personal, crecimiento y liderazgo</em>. ' +
+      'Es ese momento en que reconoces que <strong><em>la persona que has sido no tiene por qué limitar a la persona que puedes llegar a ser</em></strong>: atreverte a romper tus miedos, ' +
+      'cuestionar tus creencias y descubrir tu verdadera esencia. Pero HENKO no se trata solo de transformar nuestras vidas, sino de <strong>usar esa transformación para impactar la vida de los demás.</strong></p></div>' +
+      '<div class="bloque"><h2><span aria-hidden="true">💙</span> ¿Qué es el Legado Piel de Ángel?</h2><p>Es el <strong>legado social de HENKO V-120</strong>: apoyar a niños y niñas que han sufrido quemaduras graves ' +
+      'y reciben atención en Santiago de los Caballeros. No queríamos que nuestra experiencia terminara con nuestro proceso de liderazgo; <strong><em>queríamos dejar algo que trascendiera.</em></strong> ' +
+      'Por eso <strong>generamos conciencia, movilizamos voluntades y creamos puentes</strong> con personas, empresas e instituciones que pueden ayudar.</p></div>' +
+      '<div class="bloque"><h2>Lo que hacemos</h2><ul class="tags"><li>Charlas</li><li>Conciencia</li><li>Legado</li><li>Liderazgo</li><li>Superación personal</li></ul></div>' +
+      '<blockquote class="cita"><em>Queremos que nuestro legado no sea solo lo que hicimos, sino</em> <strong><em>lo que inspiremos a otros a continuar haciendo.</em></strong></blockquote>');
+    card.parentNode.insertBefore(p, card);
+    p.querySelector('.ir').onclick = function () {
+      card.scrollIntoView({ behavior: poco() ? 'auto' : 'smooth', block: 'start' });
+      var b = card.querySelector('.opcion'); if (b) setTimeout(function () { b.focus({ preventScroll: true }); }, poco() ? 0 : 450);
+    };
+  }
+  function sinPortada() { if (!PORTADA) return; PORTADA = false; var p = document.getElementById('portada'); if (p) p.parentNode.removeChild(p); window.scrollTo(0, 0); }
+  // v47: al cambiar de persona a empresa (o al revés) quedan llenos los campos que están en los dos caminos
+  function pasarDatos(a) {
+    if (a === 'empresa') { if (!E.empresa && I.empresa) E.empresa = I.empresa; if (!E.talento && I.talento) E.talento = I.talento; }
+    else { if (!I.empresa && E.empresa) I.empresa = E.empresa; if (!I.talento && E.talento) I.talento = E.talento; }
+  }
   function tipo() {
-    cabecera();
-    card.appendChild(el('p', { 'class': 'intro' }, id ? 'Gracias por querer sumarte 💙 ¿Cómo vas a apoyar esta actividad?' : 'Gracias por querer sumarte 💙 ¿Cómo te quieres inscribir?'));
+    if (PORTADA) {
+      portada(); card.innerHTML = '';
+      card.appendChild(el('h2', { 'class': 'titulo' }, 'Súmate como Amigo del Legado'));
+      card.appendChild(el('p', { 'class': 'intro c' }, '¿Cómo deseas inscribirte?'));
+    } else {
+      cabecera();
+      card.appendChild(el('p', { 'class': 'intro' }, id ? 'Gracias por querer sumarte 💙 ¿Cómo vas a apoyar esta actividad?' : 'Gracias por querer sumarte 💙 ¿Cómo deseas inscribirte?'));
+    }
     var w = el('div', { 'class': 'opciones' });
     [['persona', '👤', 'Como persona', 'Te inscribes a tu nombre.'], ['empresa', '🏢', 'Como empresa', 'Inscribes a tu empresa y quedas como su representante.']].forEach(function (o) {
       var b = el('button', { type: 'button', 'class': 'opcion' }, '<span class="ico" aria-hidden="true">' + o[1] + '</span><span><strong>' + o[2] + '</strong><small>' + o[3] + '</small></span>');
-      b.onclick = function () { TIPO = o[0]; if (o[0] === 'empresa') empresa1(); else datos(); };
+      b.onclick = function () { sinPortada(); if (TIPO && TIPO !== o[0]) pasarDatos(o[0]); TIPO = o[0]; if (o[0] === 'empresa') empresa1(); else datos(); };
       w.appendChild(b);
     });
     card.appendChild(w);
@@ -459,29 +567,20 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     var leer = campos_datos(true);
     var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
     card.appendChild(boton('Continuar', function () { if (leer(er)) aporteEmpresa(); }));
-    volver('Volver', function () { if (NUEVO || id) empresa1(); else yaEmpresa(); });
+    volver('Volver', function () { leer.guardar(); if (NUEVO || id) empresa1(); else yaEmpresa(); });   // v47: lo escrito se queda
   }
-  // Empresa · Bloque 3: cómo apoya y para mantenernos en contacto
+  // Empresa · Bloque 3: para mantenernos en contacto. v47 (pedido de Juan Luis): sin "Tipo de aporte"; "¿Cómo puede la empresa apoyar al Legado?" va después de cómo nos conocieron
   function aporteEmpresa() {
     cabecera();
-    seccion('Cómo apoya la empresa');
-    card.appendChild(el('p', { 'class': 'lb' }, 'Tipo de aporte'));
-    card.appendChild(el('p', { 'class': 'ayuda' }, 'Puedes elegir varios.'));
-    var g = el('div', { 'class': 'chips', style: 'margin-bottom:12px' });
-    ['Dinero', 'Patrocinio', 'Productos', 'Servicios'].forEach(function (x) {
-      var l = el('label', { 'class': 'chip' + (E.tipos.indexOf(x) >= 0 ? ' on' : '') }), i = el('input', { type: 'checkbox' }); i.checked = E.tipos.indexOf(x) >= 0;
-      i.onchange = function () { var k = E.tipos.indexOf(x); if (i.checked && k < 0) E.tipos.push(x); if (!i.checked && k >= 0) E.tipos.splice(k, 1); l.classList.toggle('on', i.checked); };
-      l.appendChild(i); l.appendChild(el('span', {}, txt(x))); g.appendChild(l);
+    var tal = null;
+    var leer = campos_contacto(function () {
+      tal = campo('etalento', opc('¿Cómo puede la empresa apoyar al Legado?'), 'area', E.talento, { rows: '4', maxlength: '500', placeholder: 'Ej.: Podemos donar productos para las actividades. · Prestamos un vehículo para el transporte. · Patrocinamos los regalos de Navidad.' });
+      var cta = el('p', { 'class': 'cuenta' }); card.appendChild(cta);
+      tal.oninput = function () { cta.textContent = tal.value.length + '/500'; }; tal.oninput();
     });
-    card.appendChild(g);
-    var tal = campo('etalento', opc('¿Qué puede ofrecer la empresa?'), 'area', E.talento, { rows: '4', maxlength: '500', placeholder: 'Ej.: Podemos donar productos para las actividades. · Prestamos un vehículo para el transporte. · Patrocinamos los regalos de Navidad.' });
-    var cta = el('p', { 'class': 'cuenta' }); card.appendChild(cta);
-    tal.oninput = function () { cta.textContent = tal.value.length + '/500'; }; tal.oninput();
-    var leer = campos_contacto();
     var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
     var b1 = boton(id ? 'Continuar' : NUEVO ? 'Inscribir a la empresa' : 'Actualizar los datos', function () {
       E.talento = tal.value.trim();
-      if (!E.tipos.length) return aviso(er, 'Elige al menos un tipo de aporte.');
       if (!leer(er)) return;
       if (id) apoyo(); else enviarIns(b1);
     });
@@ -517,45 +616,66 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     card.appendChild(b1);
     volver('Volver', function () { leer.guardar(); sobre(); });
   }
-  // v41: cada área que marque abre su cajita: la donación pide el monto y cómo la entrega (efectivo → a quién de la tribu; transferencia → la cuenta al final);
-  // las demás, el valor aproximado (opcional)
+  // v47 (pedido de Juan Luis, 20/11): cada área con su descripción. Al marcarla:
+  // · Aporte económico → el monto, Efectivo o Transferencia y, si es efectivo, el Líder de la tribu que lo recibe (queda como responsable)
+  // · Otro aporte → ¿Qué otro aporte harás? (obligatorio) y el valor aproximado (opcional)
+  // · las demás → solo el valor aproximado (opcional)
   function fmtNum(d) { d = String(d || '').replace(/\D/g, '').slice(0, 9); return d ? Number(d).toLocaleString('en-US') : ''; }
-  function bloqueApoyo(areas, S, tribu) {
-    var c2 = el('div', { 'class': 'chips' });
-    areas.forEach(function (ar) {
-      var don = /donaci/i.test(ar), on = S.areas.indexOf(ar) >= 0;
+  function bloqueApoyo(areas, S, tribu, desc) {
+    var c2 = el('div', { 'class': 'chips' }), campos = {};
+    areas.forEach(function (ar, k) {
+      var don = DIN.test(ar), otro = OTRO.test(ar), on = S.areas.indexOf(ar) >= 0;
       var w = el('div', { 'class': 'area' + (on ? ' on' : '') });
       var l = el('label', { 'class': 'chip' + (on ? ' on' : '') }), i = el('input', { type: 'checkbox' }); i.checked = on;
-      l.appendChild(i); l.appendChild(el('span', {}, txt(ar))); w.appendChild(l);
+      l.appendChild(i); l.appendChild(el('span', { 'class': 'nm' }, txt(ar) + (desc && desc[ar] ? '<small class="ds">' + txt(desc[ar]) + '</small>' : ''))); w.appendChild(l);
       var box = el('div', { 'class': 'valor' });
-      var v = el('input', { 'class': 'campo', type: 'text', inputmode: 'numeric', maxlength: '12', placeholder: don ? 'Monto en RD$. Ej.: 2,000' : 'Valor aproximado en RD$', 'aria-label': (don ? 'Monto de la donación en RD$' : 'Valor aproximado en RD$') + ': ' + ar });
+      if (otro) {
+        box.appendChild(el('label', { 'class': 'lb', 'for': 'otro' + k }, '¿Qué otro aporte harás?'));
+        var t = el('textarea', { 'class': 'campo', id: 'otro' + k, rows: '2', maxlength: '300', autocapitalize: 'sentences', placeholder: 'Ej.: llevar las cosas a Santiago, prestar el sonido para la fiesta' });
+        t.value = S.detalle || ''; t.oninput = function () { S.detalle = t.value; };
+        box.appendChild(t); campos.otro = t;
+      }
+      box.appendChild(el('label', { 'class': 'lb', 'for': 'valor' + k }, don ? 'Monto en RD$' : opc('Valor aproximado en RD$')));   // etiqueta visible (no solo el ejemplo)
+      var v = el('input', { 'class': 'campo', id: 'valor' + k, type: 'text', inputmode: 'numeric', maxlength: '12', placeholder: don ? 'Ej.: 2,000' : 'Ej.: 1,500' });
       v.value = fmtNum(S.valores[ar]);
       v.oninput = function () { v.value = fmtNum(v.value); S.valores[ar] = v.value.replace(/\D/g, ''); };
       box.appendChild(v);
-      if (!don) box.appendChild(el('p', { 'class': 'ayuda2' }, 'Opcional: si no sabes cuánto vale, déjalo en blanco.'));
-      else {
-        box.appendChild(el('p', { 'class': 'lb', style: 'margin:12px 0 6px' }, '¿Cómo vas a entregar tu donación?'));
-        var fg = el('div', { 'class': 'fila', role: 'radiogroup' }), ew = el('div', { style: 'display:none;margin-top:10px' });
+      if (don) {
+        campos.monto = v; campos.dinero = ar;
+        box.appendChild(el('p', { 'class': 'lb', style: 'margin:12px 0 6px' }, '¿Cómo vas a entregar tu aporte?'));
+        var fg = el('div', { 'class': 'chips', role: 'radiogroup', 'aria-label': '¿Cómo vas a entregar tu aporte?' }), ew = el('div', { style: 'display:none;margin-top:10px' });
         [['Efectivo', '💵 Efectivo'], ['Transferencia', '🏦 Transferencia']].forEach(function (o) {
           var lo = el('label', { 'class': 'chip' + (S.forma === o[0] ? ' on' : '') }), io = el('input', { type: 'radio', name: 'forma' }); io.checked = S.forma === o[0];
           io.onchange = function () { S.forma = o[0]; [].forEach.call(fg.children, function (x) { x.classList.toggle('on', x === lo); }); ew.style.display = o[0] === 'Efectivo' && tribu.length ? 'block' : 'none'; };
           lo.appendChild(io); lo.appendChild(el('span', {}, txt(o[1]))); fg.appendChild(lo);
+          if (!campos.forma) campos.forma = io;
         });
         box.appendChild(fg);
         if (tribu && tribu.length) {
-          ew.appendChild(el('label', { 'class': 'lb', 'for': 'entrega' }, opc('¿A quién de la tribu se lo entregas?')));
-          var se = el('select', { 'class': 'campo', id: 'entrega' }); se.appendChild(el('option', { value: '' }, 'Elige a la persona'));
+          ew.appendChild(el('label', { 'class': 'lb', 'for': 'entrega' }, '¿A qué líder de la tribu se lo entregas?'));
+          var se = el('select', { 'class': 'campo', id: 'entrega' }); se.appendChild(el('option', { value: '' }, 'Elige al líder'));
           tribu.forEach(function (n) { se.appendChild(el('option', { value: n }, txt(n))); });
-          se.value = S.entrega || ''; se.onchange = function () { S.entrega = se.value; };
-          ew.appendChild(se); ew.style.display = S.forma === 'Efectivo' ? 'block' : 'none';
-          box.appendChild(ew);
+          se.value = tribu.indexOf(S.entrega) >= 0 ? S.entrega : ''; S.entrega = se.value; se.onchange = function () { S.entrega = se.value; };
+          ew.appendChild(se); ew.appendChild(el('p', { 'class': 'ayuda2' }, 'Esa persona será la responsable de hacerlo llegar.'));
+          ew.style.display = S.forma === 'Efectivo' ? 'block' : 'none';
+          box.appendChild(ew); campos.entrega = se;
         }
       }
       w.appendChild(box);
-      i.onchange = function () { var k = S.areas.indexOf(ar); if (i.checked && k < 0) S.areas.push(ar); if (!i.checked && k >= 0) S.areas.splice(k, 1); l.classList.toggle('on', i.checked); w.classList.toggle('on', i.checked); };
+      i.onchange = function () { var x = S.areas.indexOf(ar); if (i.checked && x < 0) S.areas.push(ar); if (!i.checked && x >= 0) S.areas.splice(x, 1); l.classList.toggle('on', i.checked); w.classList.toggle('on', i.checked); };
       c2.appendChild(w);
     });
+    c2.campos = campos; c2.tribu = tribu || [];
     return c2;
+  }
+  // v47: lo que hace falta según lo que marcó (el aviso sale debajo del campo)
+  function revisarApoyo(S, bq, er) {
+    var c = bq.campos || {}, din = S.areas.filter(function (x) { return DIN.test(x); })[0], otro = S.areas.some(function (x) { return OTRO.test(x); });
+    if (din && !S.valores[din]) return aviso(er, 'Escribe el monto de tu aporte económico.', c.monto);
+    if (din && !S.forma) return aviso(er, 'Dinos cómo vas a entregar tu aporte: en efectivo o por transferencia.', c.forma);
+    if (din && S.forma === 'Efectivo' && bq.tribu.length && !S.entrega) return aviso(er, 'Elige a qué líder de la tribu le entregas el efectivo.', c.entrega);
+    if (otro && !String(S.detalle || '').trim()) return aviso(er, 'Cuéntanos qué otro aporte harás.', c.otro);
+    return true;
   }
   function valoresDe(S) { var o = {}; S.areas.forEach(function (a) { if (S.valores[a]) o[a] = S.valores[a]; }); return o; }
   // Transferencia: la cuenta del Legado y el botón para enviar el comprobante
@@ -574,19 +694,16 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
     card.appendChild(el('p', { 'class': 'ayuda' }, 'Puedes elegir varias.'));
     var tri = INFO.tribu || [], cto = CONTACTO || (I.como === COMO[0] ? I.quien : '');
     if (!S.entrega && cto && tri.indexOf(cto) >= 0) S.entrega = cto;   // v42: precargado con quien lo trajo (lo puede cambiar)
-    card.appendChild(bloqueApoyo(INFO.areas, S, tri));
-    card.appendChild(el('p', { 'class': 'preg' }, '¿Puedes especificar cómo puedes colaborar?'));
-    var det = el('textarea', { 'class': 'campo', rows: '3', maxlength: '600', placeholder: 'Ej.: llevo 10 juguetes y 2 cajas de jugo' }); det.value = S.detalle;
-    card.appendChild(det);
+    var bq = bloqueApoyo(INFO.areas, S, tri, INFO.desc || {});   // v47: con descripciones; ya no hay caja general al final (solo Otro aporte lleva texto)
+    card.appendChild(bq);
     var er = el('p', { 'class': 'err', role: 'alert' }); card.appendChild(er);
-    function guardar() { S.detalle = det.value.trim(); }
+    function guardar() { }
     var env = boton('Enviar', function () {
-      guardar();
       if (!S.areas.length) { er.textContent = 'Elige al menos una forma de apoyar.'; return; }
-      var don = S.areas.some(function (x) { return /donaci/i.test(x); });
-      if (don && !S.forma) { er.textContent = 'Dinos cómo vas a entregar tu donación: en efectivo o por transferencia.'; return; }
+      if (!revisarApoyo(S, bq, er)) return;
+      var don = S.areas.some(function (x) { return DIN.test(x); }), otro = S.areas.some(function (x) { return OTRO.test(x); });
       env.disabled = true; cargando();
-      var d = Object.assign({ a: id, areas: S.areas, valores: valoresDe(S), forma: don ? S.forma : '', entrega: don && S.forma === 'Efectivo' ? S.entrega : '', detalle: S.detalle },
+      var d = Object.assign({ a: id, areas: S.areas, valores: valoresDe(S), forma: don ? S.forma : '', entrega: don && S.forma === 'Efectivo' ? S.entrega : '', otro: otro ? String(S.detalle || '').trim() : '' },
         esEmpresa() ? { tipo: 'empresa', empresa: E.empresa, rnc: E.rnc } : {}, NUEVO || !esEmpresa() ? P : {}, NUEVO ? datosInscripcion() : {});
       api('legadoApoyo', d).then(function (j) {
         if (!j || !j.ok) { apoyo(); card.querySelector('.err').textContent = (j && j.error) || 'No pudimos guardar tu respuesta.'; return; }
@@ -608,7 +725,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
       INFO = { titulo: 'Legado Piel de Ángel', sub: 'Inscripción' };
       document.title = 'Inscríbete · Legado Piel de Ángel';
       cargando();
-      api('legado', { a: '' }).then(function (j) { INVITAN = (j && j.info && j.info.invitan) || []; tipo(); }).catch(function () { tipo(); });
+      api('legado', { a: '' }).then(function (j) { INVITAN = (j && j.info && j.info.invitan) || []; tipo(); }).catch(function () { tipo(); }).then(listo);
       return;
     }
     cargando();
@@ -624,7 +741,7 @@ select.campo{appearance:none;-webkit-appearance:none;background-image:linear-gra
         return;
       }
       tipo();
-    }).catch(function () { card.innerHTML = ''; card.appendChild(el('p', { 'class': 'ok' }, 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.')); card.appendChild(boton('Intentar de nuevo', inicio)); });
+    }).catch(function () { card.innerHTML = ''; card.appendChild(el('p', { 'class': 'ok' }, 'No pudimos conectar. Revisa tu internet e inténtalo de nuevo.')); card.appendChild(boton('Intentar de nuevo', inicio)); }).then(listo);
   }
   inicio();
 })();
