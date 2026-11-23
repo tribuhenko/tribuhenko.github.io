@@ -245,7 +245,20 @@ const prefijo = () => S.sexo === 'F' ? 'Yo soy una Mujer' : 'Yo soy un Hombre';
 const sinPrefijo = s => { let t = String(s || '').trim(); for (let i = 0; i < 2; i++) t = t.replace(/^(yo\s+)?soy\s+(un|una)\s+(hombre|mujer)\s*[,:]?\s*/i, ''); return t; };
 const CON = ['a','al','de','del','el','la','las','lo','los','que','y','e','o','u','en','con','para','por','sin','mi','mis','su','sus','tu','tus','un','una','unos','unas','se','me','te','le','les','nos','como'];
 const capC = s => String(s || '').trim().replace(/\s+,/g, ',').replace(/,(?=\S)/g, ', ').replace(/\s+/g, ' ').toLowerCase().split(' ').filter(Boolean).map(w => CON.includes(w) ? w : w.replace(/^([^a-záéíóúüñ]*)([a-záéíóúüñ])/, (x, a, b) => a + b.toUpperCase())).join(' ');
-const contrato = () => prefijo() + ' ' + capC(sinPrefijo(S.contrato));
+// v49: así como queda en el registro: comas entre las palabras y "y" antes de la última ("e" si empieza con i o hi). Los acentos los pone el sistema.
+const CON2 = CON.filter(w => !['y','e','o','u'].includes(w));
+function formaC(t) {
+  const l = String(t || '').replace(/[^A-Za-zÀ-ÿ\s,'-]/g, ' ').replace(/\s*,\s*/g, ', ').replace(/\s+/g, ' ').replace(/^[\s,]+|[\s,]+$/g, '');
+  const comas = /,/.test(l);
+  let ps = (comas ? l.split(',') : [l]).map(x => x.trim()).filter(Boolean);
+  ps = ps.flatMap(x => x.split(/\s+(?:y|e)\s+/i)).map(x => x.trim()).filter(Boolean);
+  if (!comas) ps = ps.flatMap(x => { const w = x.split(' '), out = []; let cur = null, pega = false;
+    w.forEach(p => { if (CON2.includes(p.toLowerCase())) { cur = (cur || []).concat(p); pega = true; } else if (cur && pega) { cur.push(p); pega = false; } else { if (cur) out.push(cur.join(' ')); cur = [p]; } });
+    if (cur) out.push(cur.join(' ')); return out; });
+  const e = s => /^h?i(?![aeiou])/.test(sinTilde(String(s).split(' ')[0]));
+  return ps.length <= 1 ? (ps[0] || '') : ps.slice(0, -1).join(', ') + (e(ps[ps.length - 1]) ? ' e ' : ' y ') + ps[ps.length - 1];
+}
+const contrato = () => prefijo() + ' ' + formaC(capC(sinPrefijo(S.contrato)));
 function fechaOk(o){ if(!o || !o.d || !o.m || !o.y) return false; const f = new Date(+o.y, o.m-1, +o.d); return f.getDate() == o.d && f.getMonth() == o.m-1 && f <= HOY; }
 function edad(o){ let a = AN - o.y; const m = HOY.getMonth()+1; if (m < o.m || (m == o.m && HOY.getDate() < o.d)) a--; return a; }
 const iso = o => o.y + '-' + String(o.m).padStart(2,'0') + '-' + String(o.d).padStart(2,'0');
@@ -510,7 +523,7 @@ function validar(pg){
     if (S.vis === 'no') { const n = +S.visN; if (!(n >= 1 && n <= 119)) b |= mal('visN', 'Del 1 al 119'); if (!String(S.visT || '').trim()) b |= mal('visT', 'Escribe el nombre de tu tribu'); }
     if (!S.conf) b |= mal('conf', S.vis === 'otro' ? 'Confirma tu proceso y tu tribu' : 'Confirma tu Visión y tu Tribu');
   }
-  if (pg === 'contrato' && !String(S.contrato || '').trim()) b |= mal('contrato', 'Escribe tu contrato');
+  if (pg === 'contrato' && !/[a-záéíóúüñ]{2,}/i.test(sinPrefijo(S.contrato))) b |= mal('contrato', 'Escribe las palabras de tu contrato');
   if (pg === 'proceso') {
     ['estTA', 'est2'].forEach(k => { if (S[k].some(x => x.v === '__otro' && !String(x.t || '').trim())) b |= mal(k, 'Escribe tu estiramiento o quítalo'); });
     if (esLider()) {
