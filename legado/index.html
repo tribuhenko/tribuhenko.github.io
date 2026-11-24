@@ -282,6 +282,8 @@ button,.b,.chip,.opcion,a{touch-action:manipulation;-webkit-tap-highlight-color:
     ps.onchange = function () { w.placeholder = PAISES[PAIS][1] === '+1' ? 'Ej.: (809) 555-1234' : 'Solo el número, sin el código'; w.oninput(); };
     tl.appendChild(ps); tl.appendChild(w); tl.appendChild(ls); ww.appendChild(tl); pinta();
     var c = campo('correo', 'Correo', 'email', P.correo, { autocomplete: 'email', inputmode: 'email', maxlength: '120', placeholder: 'Ej.: maria@ejemplo.com' });
+    // v52: el correo dos veces (si no coinciden, no deja seguir): así no se pierden las invitaciones por un correo mal escrito
+    var c2 = campo('correo2', 'Confirma tu correo', 'email', P.correo2 || '', { autocomplete: 'off', inputmode: 'email', maxlength: '120', placeholder: 'Escríbelo otra vez' });
     var talla = null;
     if (rep) {
       radios('Sexo', [['Hombre', 'Hombre'], ['Mujer', 'Mujer']], I.sexo, function (v) { I.sexo = v; }, true);
@@ -291,7 +293,7 @@ button,.b,.chip,.opcion,a{touch-action:manipulation;-webkit-tap-highlight-color:
     }
     var hp = el('input', { 'class': 'hp', id: 'web', tabindex: '-1', autocomplete: 'off', 'aria-hidden': 'true' }); card.appendChild(hp);
     function guardar() {   // v47: Volver también guarda lo escrito (persona ↔ empresa)
-      P = { correo: c.value.trim().toLowerCase(), nombre: n.value.trim(), apellido: a.value.trim(), wa: w.value.replace(/\D/g, ''), codigo: PAISES[PAIS][1], cumpleDia: dia.value, cumpleMes: mes.value };
+      P = { correo: c.value.trim().toLowerCase(), correo2: c2.value.trim().toLowerCase(), nombre: n.value.trim(), apellido: a.value.trim(), wa: w.value.replace(/\D/g, ''), codigo: PAISES[PAIS][1], cumpleDia: dia.value, cumpleMes: mes.value };
       if (cg) E.cargo = cg.value.trim();
       if (talla) I.talla = talla.value;
     }
@@ -304,6 +306,7 @@ button,.b,.chip,.opcion,a{touch-action:manipulation;-webkit-tap-highlight-color:
       if (!P.cumpleDia || !P.cumpleMes) return aviso(er, rep ? 'Elige el día y el mes del cumpleaños del representante.' : 'Elige el día y el mes de tu cumpleaños.', P.cumpleDia ? mes : dia);
       if (P.wa.length < PAISES[PAIS][2] || P.wa.length > PAISES[PAIS][3]) return aviso(er, 'Revisa tu número de WhatsApp: ' + (PAISES[PAIS][2] === PAISES[PAIS][3] ? PAISES[PAIS][2] : PAISES[PAIS][2] + ' a ' + PAISES[PAIS][3]) + ' números, sin el código del país.', w);
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(P.correo)) return aviso(er, 'Revisa tu correo.', c);
+      if (P.correo2 !== P.correo) return aviso(er, rep ? 'Los dos correos del representante no son iguales: revísalos.' : 'Los dos correos no son iguales: revísalos.', c2);
       if (rep && !I.sexo) return aviso(er, 'Dinos si el representante es hombre o mujer.');
       if (rep && !I.talla) return aviso(er, 'Elige la talla de t-shirt del representante.', talla);
       return true;

@@ -216,7 +216,7 @@ const ROLES_TODOS = OF
   : [['Líder','Hiciste tu proceso en Henko V-120.'],['Senior','Eres de otra tribu y fuiste Senior de Henko.'],['SVT','Eres de otra tribu y serviste en nuestro proceso.']];
 const TIT = {inicio: OF ? 'Registro del Equipo VIVE' : 'Registro de Líderes', rol: OF ? '¿Cuál es tu cargo?' : '¿Quién eres?', datos:'Tus datos', sobre:'Sobre ti', tribu:'Tu tribu', contrato:'Tu contrato', proceso:'Tu proceso', fotos:'Tus fotos', revisa:'Revisa y envía', fin:''};
 
-let S = {pais:0, dob:{}, kids:[], estTA:[], est2:[], f:[null,null,null], buscaV:''};
+let S = {pais:0, dob:{}, kids:[], estTA:[], est2:[], f:[null,null,null], buscaV:'', correo:'', correo2:''};
 let paso = 0, enviando = false, buscando = false, ultimo = '', dir = 1;
 
 const $ = id => document.getElementById(id);
@@ -344,6 +344,7 @@ const V = {
     + campo('sexo', 'Sexo', sel('sexo', [['F', 'Femenino'], ['M', 'Masculino']], S.sexo, "S.sexo=this.value;pintar()"))
     + `<div class="f"><span class="lb">¿Cuándo naciste?</span>${selFecha('S.dob', S.dob, 1930, AN - 15)}<p class="vista" id="v_dob"></p><p class="er" id="e_dob"></p></div>`
     + campo('correo', 'Tu correo', entrada('correo', 'email', 'nombre@hotmail.com', 'autocomplete="email" autocapitalize="off" spellcheck="false"'), 'Cualquier correo: Gmail, Hotmail, Outlook, iCloud…')
+    + campo('correo2', 'Confirma tu correo', entrada('correo2', 'email', 'Escríbelo otra vez', 'autocomplete="off" autocapitalize="off" spellcheck="false"'), 'Así nos aseguramos de que te lleguen los correos')
     + `<div class="f"><label class="lb" for="wa">Tu WhatsApp</label><div class="tel"><button type="button" class="cod" id="cod" aria-label="Código de país" aria-haspopup="listbox" aria-expanded="false" onclick="abrirPais()">${esc(PAISES[S.pais][1])} ▾</button><input id="wa" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="${PAISES[S.pais][1] === '+1' ? '8095550101' : 'Solo el número, sin el código'}" value="${esc(S.wa)}" oninput="this.value=this.value.replace(/\\D/g,'');S.wa=this.value;suave()"><div class="lista" id="lp" role="listbox" hidden></div></div><p class="vista" id="v_wa"></p><p class="er" id="e_wa"></p></div>`
     + campo('ig', 'Tu usuario de Instagram <small>(opcional)</small>', entrada('ig', 'text', 'tu_usuario', 'autocapitalize="off" spellcheck="false"'), 'Lo usamos para etiquetarte en los posts de la tribu'),
   sobre: () => {
@@ -508,6 +509,7 @@ function validar(pg){
     if (!fechaOk(S.dob)) b |= mal('dob', 'Elige una fecha válida');
     else if (edad(S.dob) < 15 || edad(S.dob) > 100) b |= mal('dob', 'Revisa el año');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(S.correo || '').trim())) b |= mal('correo', 'Escribe un correo válido');
+    else if (String(S.correo2 || '').trim().toLowerCase() !== String(S.correo || '').trim().toLowerCase()) b |= mal('correo2', 'Los dos correos no son iguales');   // v52
     const p = PAISES[S.pais], d = S.wa || '';
     if (d.length < p[2] || d.length > p[3]) b |= mal('wa', 'Debe tener ' + (p[2] === p[3] ? p[2] : p[2] + ' a ' + p[3]) + ' números');
     else if (p[4] && !/^(809|829|849)/.test(d)) b |= mal('wa', 'En República Dominicana empieza con 809, 829 u 849');
